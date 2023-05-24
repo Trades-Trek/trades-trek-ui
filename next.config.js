@@ -10,16 +10,16 @@ const nextConfig = {
   },
   images: {
     loader: 'imgix',
-    path: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://trades-trek-client.vercel.app/',
+    path: process.env.NODE_ENV === 'development' ? 'http://localhost:6000/' : 'https://trades-trek-client.vercel.app/',
   },
   env: {
-    baseApiUrl: 'https://api.tradestrek.com',
+    baseApiUrl: 'https://energetic-bat-pants.cyclic.app',
   },
   publicRuntimeConfig: {
     apiUrl:
       process.env.NODE_ENV === 'development'
-        ? 'http://localhost:5000' // development api
-        : 'https://api.tradestrek.com', // production api
+        ? 'http://localhost:6000' // development api
+        : 'https://energetic-bat-pants.cyclic.app', // production api
   },
 };
 
