@@ -10,7 +10,7 @@ const nextConfig = {
   },
   images: {
     loader: 'imgix',
-    path: process.env.NODE_ENV === 'development' ? 'http://localhost:6000/' : 'https://trades-trek-client.vercel.app/',
+    path: process.env.NODE_ENV === 'development' ? 'http://localhost:6000/' : 'https://client-staging-green.vercel.app/',
   },
   env: {
     baseApiUrl: 'https://energetic-bat-pants.cyclic.app',
