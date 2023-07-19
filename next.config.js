@@ -13,13 +13,13 @@ const nextConfig = {
     path: process.env.NODE_ENV === 'development' ? 'http://localhost:4000/' : 'https://n-t2re.onrender.com/',
   },
   env: {
-    baseApiUrl: 'https://n-t2re.onrender.com/',
+    baseApiUrl: 'https://n-t2re.onrender.com',
   },
   publicRuntimeConfig: {
     apiUrl:
       process.env.NODE_ENV === 'development'
-        ? 'http://localhost:4000/' // development api
-        : 'https://tiny-tan-boa-belt.cyclic.app', // production api
+        ? 'http://localhost:4000' // development api
+        : 'https://n-t2re.onrender.com', // production api
   },
 };
 
