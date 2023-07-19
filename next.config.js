@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+
+const url = 'https://tiny-tan-boa-belt.cyclic.app'
 const nextConfig = {
   reactStrictMode: true,
   trailingSlash: true,
@@ -13,13 +15,13 @@ const nextConfig = {
     path: process.env.NODE_ENV === 'development' ? 'http://localhost:4000/' : 'https://client-staging-green.vercel.app',
   },
   env: {
-    baseApiUrl: 'https://n-t2re.onrender.com',
+    baseApiUrl: url,
   },
   publicRuntimeConfig: {
     apiUrl:
       process.env.NODE_ENV === 'development'
         ? 'http://localhost:4000' // development api
-        : 'https://n-t2re.onrender.com', // production api
+        : url, // production api
   },
 };
 
