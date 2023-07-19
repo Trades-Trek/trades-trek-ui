@@ -10,7 +10,7 @@ const nextConfig = {
   },
   images: {
     loader: 'imgix',
-    path: process.env.NODE_ENV === 'development' ? 'http://localhost:6000/' : 'https://client-staging-green.vercel.app/',
+    path: process.env.NODE_ENV === 'development' ? 'http://localhost:4000/' : 'https://client-staging-green.vercel.app/',
   },
   env: {
     baseApiUrl: 'https://tiny-tan-boa-belt.cyclic.app',
@@ -18,7 +18,7 @@ const nextConfig = {
   publicRuntimeConfig: {
     apiUrl:
       process.env.NODE_ENV === 'development'
-        ? 'http://localhost:6000' // development api
+        ? 'http://localhost:4000/' // development api
         : 'https://tiny-tan-boa-belt.cyclic.app', // production api
   },
 };
