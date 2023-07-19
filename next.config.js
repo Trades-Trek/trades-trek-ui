@@ -10,7 +10,7 @@ const nextConfig = {
   },
   images: {
     loader: 'imgix',
-    path: process.env.NODE_ENV === 'development' ? 'http://localhost:4000/' : 'https://n-t2re.onrender.com/',
+    path: process.env.NODE_ENV === 'development' ? 'http://localhost:4000/' : 'https://client-staging-green.vercel.app',
   },
   env: {
     baseApiUrl: 'https://n-t2re.onrender.com',
