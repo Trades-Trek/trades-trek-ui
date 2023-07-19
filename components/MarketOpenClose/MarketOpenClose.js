@@ -52,13 +52,13 @@ const MarketOpenClose = () => {
 
     today = new Date(moment(temp).format("YYYY-MM-DD"));
     var newDate = new Date(moment(temp).format("YYYY-MM-DD HH:mm:ss"));
-    if (moment(today).format("dddd")== "Saturday") {
-        
+    if (moment(today).format("dddd")== "Saturday") {    
       today.setDate(today.getDate() + 2);
     } else if (moment(today).format("dddd") == "Sunday") {
-      today.setDate(today.getDate() + 1);
+      // today.setDate(today.getDate() + 1);
     }
     while (holiday.includes(moment(today).format("YYYY-MM-DD"))) {
+     
       today.setDate(today.getDate() + 1);
       let day = moment(today).format("dddd");
       if (day == "Saturday") {
@@ -72,13 +72,15 @@ const MarketOpenClose = () => {
     if (
       marketOpenTime <= formatDate &&
       marketCloseTime >= formatDate &&
-      moment(today).format("YYYY-MM-DD")   != moment(newDate).format("YYYY-MM-DD")
+      moment(today).format("YYYY-MM-DD") != moment(newDate).format("YYYY-MM-DD")
     ) {
+
       today.setHours(9);
       today.setMinutes(30);
       setmarketOpen(false);
       setMarketMessage(`${timeDiffCalc(newDate, today)} ${message?`(${message})`:""}`);
     } else if (marketOpenTime <= formatDate && marketCloseTime >= formatDate) {
+ 
       today.setHours(14);
       today.setMinutes(30);
       setmarketOpen(true);
@@ -86,6 +88,7 @@ const MarketOpenClose = () => {
 
 
     } else if (marketOpenTime > formatDate) {
+
       today.setHours(9);
       today.setMinutes(30);
       setmarketOpen(false);
@@ -93,6 +96,7 @@ const MarketOpenClose = () => {
 
 
     } else {
+     
       today.setDate(today.getDate() + 1);
       today.setHours(9);
       today.setMinutes(30);

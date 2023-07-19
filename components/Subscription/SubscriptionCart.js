@@ -90,6 +90,7 @@ const SubscriptionCart = ({ item, user }) => {
     doc.save("a4.pdf");
   };
 
+  console.log(item?.result, '...item?.result?.packageAmount....')
   return (
     <div
       className={`block--info subscription ${item?.result?._id ==

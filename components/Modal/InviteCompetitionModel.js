@@ -78,7 +78,6 @@ function InviteCompetitionModel({ modelOpened, setModelOpened, id, data }) {
     if (data[0].competitionType == "Private") {
       formdata.password = password;
     }
-    console.log(formdata);
 
     gameService
       .inviteGame(formdata)

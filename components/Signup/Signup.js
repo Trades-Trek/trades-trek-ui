@@ -82,7 +82,6 @@ export default function Signup() {
       })
       .catch((error) => {
         setValidate(true);
-
         setError(error.message);
         setBtnStatus(false);
         setIsLoading(false);
@@ -386,7 +385,7 @@ export default function Signup() {
                   Refferal Code (Optional*)
                 </label>
               </div>
-              <div className="form--item">
+              {/* <div className="form--item">
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <input
                     style={{
@@ -411,15 +410,15 @@ export default function Signup() {
                 <div className="invalid-feedback">
                   {errors.age?.type === "required" && "Are you 18 years old"}
                 </div>
-              </div>
+              </div> */}
               <div className="form--content">
                 <p>
                   By registering, you agree to the{" "}
-                  <Link href="javascript:void(0)">
+                  <Link href="#">
                     <a>Terms Of Use</a>
                   </Link>{" "}
                   and{" "}
-                  <Link href="javascript:void(0)">
+                  <Link href="#">
                     <a>Privacy Policy.</a>
                   </Link>
                 </p>
@@ -432,7 +431,7 @@ export default function Signup() {
               <div className="form--bottom--content">
                 <p>
                   Already have an account?{" "}
-                  <Link href="/">
+                  <Link href="/login">
                     <a>Login</a>
                   </Link>
                 </p>

@@ -121,7 +121,7 @@ export default function PerformanceHistory() {
                           <td>{item.marginInterest?.toFixed(2)}</td>
                           <td>{item.cashInterest?.toFixed(2)}</td>
 
-                          <td>{item.accountValue.toFixed(2)}</td>
+                          <td>{(item.cash + item.stockPortfolio).toFixed(2)}</td>
                         </tr>
                       ))}
                     </tbody>

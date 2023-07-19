@@ -48,7 +48,8 @@ const  SelectGame = ({value}) => {
 
 
   return (
-    <div className="grid-block-right right-align rightSelect">
+
+    <div className="grid-block-right right-align rightSelect ">
     {/* <label>Current Competition</label> */}
     <select
             className="form--control"

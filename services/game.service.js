@@ -217,10 +217,10 @@ function inviteGame(data) {
       return error;
     });
 }
-function inviteFriends(data) {
+function inviteFriends(emails) {
   // console
   return fetchWrapper
-    .post(`${baseUrl}/userrefferal`, data)
+    .post(`${baseUrl}/userrefferal`, {emails})
 
     .then((res) => {
       if (res.success) {

@@ -24,7 +24,7 @@ export default function ForgotPassword() {
           if (res?.success === true) {
             setEmailValid(true)
             setSuccess(true)
-            setError(`OTP has been sent to their email address`)
+            setError(`We have sent a verification code to the email address linked to your Trades Trek account`)
             setTimeout(() => {
               setEmailValid(false)
               setSuccess(false)
@@ -50,7 +50,7 @@ export default function ForgotPassword() {
 
     } else {
       setEmailValid(true)
-      setError("Please Fill Valid Email")
+      setError("You must enter a valid Email")
     }
 
 

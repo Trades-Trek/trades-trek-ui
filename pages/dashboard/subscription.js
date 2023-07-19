@@ -14,7 +14,7 @@ import SubscriptionCart from "../../components/Subscription/SubscriptionCart";
 export default function Sub() {
   let { user } = useSelector((state) => state.userWrapper);
 
-  const [allSubscription, setAllSubscription] = useState();
+  const [allSubscription, setAllSubscription] = useState([]);
   const [modelOpened, setModelOpened] = useState(false);
   const [subscriptionId, setSubscriptionId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -49,6 +49,37 @@ export default function Sub() {
     setSubscriptionId(id);
   };
 
+  const renderView = (item, user) => {
+
+    const itemId = item?._id;
+    const userSubscriptionId = user?.user?.subscriptionId;
+    const userSubscriptionDuration = user?.user.subscriptionDuration;
+
+    const nonPaidSubscriptions = ["free-lifetime", "trial"];
+    if (itemId == userSubscriptionId) {
+      if (nonPaidSubscriptions.includes(userSubscriptionDuration)) {
+        return "";
+      } else {
+        return (
+          <Link href="#">
+            <a onClick={() => Unsubscribe(item?._id)} className="btn">
+              {`${item?.packageDuration.toUpperCase()} UNSUBSCRIBE`}{" "}
+            </a>
+          </Link>
+        );
+      }
+    } else {
+      if (!nonPaidSubscriptions.includes(item?.packageDuration)) {
+        return (
+          <Link
+            href={`https://paystack.com/pay/${item.slug}?email=${user.user.email}&first_name=${user.user.firstName}&last_name=${user.user.lastName}&readonly=email,first_name,last_name`}
+          >
+            <a className="btn">{`${item?.packageDuration.toUpperCase()} SUBSCRIPTION`}</a>
+          </Link>
+        );
+      }
+    }
+  };
 
   return (
     <>
@@ -56,10 +87,9 @@ export default function Sub() {
       <div className="site--content">
         <div className="page--title--block">
           <div className="card-no-gap">
-            {/* we are removing trial subscription for Baisc */}
-            {/* <SubscriptionExpiredMessage /> */}
+            <SubscriptionExpiredMessage />
 
-            {isLoading ? (
+            {isLoading || !user?.user?.subscriptionDuration ? (
               <div
                 style={{
                   width: "100%",
@@ -73,8 +103,15 @@ export default function Sub() {
               </div>
             ) : (
               <div className="trade-data wrapper--text card--grid card-col-gap">
+                {/* When on free trial let's not make any other subscription available  */}
                 {allSubscription &&
-                  allSubscription?.map((item, index) => {
+                  [
+                    ...(user?.user?.subscriptionDuration === "trial"
+                      ? allSubscription.filter(
+                          (e) => e.packageDuration === "trial"
+                        )
+                      : allSubscription),
+                  ].map((item, index) => {
                     return (
                       <div
                         key={index}
@@ -101,29 +138,9 @@ export default function Sub() {
                             className="info--button"
                             style={{ marginBottom: "20px" }}
                           >
-                            {item?._id == user?.user?.subscriptionId ? (
-                              user?.user.subscriptionDuration !==
-                                "free-lifetime" && (
-                                <Link href="#">
-                                  <a
-                                    onClick={() => Unsubscribe(item?._id)}
-                                    className="btn"
-                                  >
-                                    {`${item?.packageDuration.toUpperCase()} UNSUBSCRIBE`}{" "}
-                                  </a>
-                                </Link>
-                              )
-                            ) : (
-                              <Link
-                                href={`https://paystack.com/pay/${item.slug}?email=${user.user.email}&first_name=${user.user.firstName}&last_name=${user.user.lastName}&readonly=email,first_name,last_name`}
-                              >
-                                <a className="btn">{`${item?.packageDuration.toUpperCase()} SUBSCRIPTION`}</a>
-                              </Link>
-                            )}
+                            {renderView(item, user)}
                           </div>
                         )}
-
-                        {/* {item?._id==user?.user?.subscriptionId && <SubscriptionExpire /> } */}
                       </div>
                     );
                   })}

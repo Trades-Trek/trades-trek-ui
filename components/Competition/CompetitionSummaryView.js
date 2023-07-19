@@ -28,7 +28,7 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
   const [myGame, setMyGame] = useState();
   const [userName, setUserName] = useState("");
   const [historyName, setHistoryName] = useState("");
-  const [perform,setPerform]=useState('')
+  const [perform, setPerform] = useState("");
   const [loadingLeaderboard, setLoadingLeaderboard] = useState(false);
   const [csvData, setCsvData] = useState([]);
   const linktarget = useRef();
@@ -57,8 +57,8 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
     if (router?.query?.username) {
       setHistoryName(router?.query?.history);
     }
-    if(router?.query?.username){
-      setPerform(router?.query?.perform)
+    if (router?.query?.username) {
+      setPerform(router?.query?.perform);
     }
   }, [router]);
   useEffect(() => {
@@ -78,22 +78,23 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
     gameService
       .myRank()
       .then((res) => {
-        if (res.success) {
-          if (res.nearRank) {
-            setTop5(res.data);
-            setNearResult(res.nearRank);
-            setYourRank(res.yourRank);
-            setMyGame(res.currentGame);
-          } else {
-            setTop5(res.data);
-            setNearResult([]);
-            setMyGame(res.currentGame);
+        const { success, data, currentGame } = res;
+        if (success) {
+     
+          const { topRanked, nearRank, rank } = data;
 
+          if (!data.rank) {
+            setTop5(topRanked);
+            setNearResult([]);
+            setMyGame(currentGame);
             setYourRank(0);
+          } else {
+            setTop5(topRanked);
+            setNearResult(nearRank);
+            setYourRank(rank);
+            setMyGame(currentGame);
+            
           }
-        } else {
-          setTop5([]);
-          setNearResult([]);
         }
         setLoading(false);
       })
@@ -145,7 +146,9 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
   };
   return (
     <>
-      {userName && perform?<PerformanceHistory userName={userName} />: userName && historyName ? (
+      {userName && perform ? (
+        <PerformanceHistory userName={userName} />
+      ) : userName && historyName ? (
         <HistoryUser userName={userName} />
       ) : userName ? (
         <div className="page--title--block">
@@ -171,13 +174,19 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
                 >
                   <Loader color="#8000ff" />
                 </div>
-              ):top5.length==0?<div style={{
-                width: "100%",
-                display: "flex",
-                margin:'20px',
-                justifyContent: "center",
-                alignItems: "center",
-              }}><h1>You have not been ranked yet</h1></div> : (
+              ) : top5.length == 0 ? (
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    margin: "20px",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <h1>You have not been ranked yet</h1>
+                </div>
+              ) : (
                 <table>
                   <thead>
                     <tr>
@@ -271,7 +280,7 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
                     className="text--purple"
                     onClick={() => {
                       setShowAllUser(false);
-                      setPage(1)
+                      setPage(1);
                     }}
                   >
                     Collapse View
@@ -287,7 +296,7 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
               </div>
             </div>
           )}
-          {!showAllUser && top5.length!=0&& (
+          {!showAllUser && top5.length != 0 && (
             <div className="wrapper--hgroup">
               <div className="wrapper--title"></div>
               <div className="readmore--link">
@@ -362,19 +371,23 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
           )}
         </div>
       )}
-      {top5.length!=0 && myGame?.creatorId==user?.user?._id && userName=='' && <div className="downloadLeaderBoard">
-        <button onClick={() => downloadLeaderBoard(myGame?._id)}>
-          {loadingLeaderboard ? "Loading..." : "DOWNLOAD LEADERBOARD"}
-        </button>
-        <CSVLink
-          style={{ display: "none" }}
-          ref={linktarget}
-          headers={leaderHeaders}
-          data={csvData}
-        >
-          Download me
-        </CSVLink>
-      </div>}
+      {top5.length != 0 &&
+        myGame?.creatorId == user?.user?._id &&
+        userName == "" && (
+          <div className="downloadLeaderBoard">
+            <button onClick={() => downloadLeaderBoard(myGame?._id)}>
+              {loadingLeaderboard ? "Loading..." : "DOWNLOAD LEADERBOARD"}
+            </button>
+            <CSVLink
+              style={{ display: "none" }}
+              ref={linktarget}
+              headers={leaderHeaders}
+              data={csvData}
+            >
+              Download me
+            </CSVLink>
+          </div>
+        )}
     </>
   );
 }

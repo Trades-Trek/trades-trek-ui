@@ -21,14 +21,14 @@ export default function Notifications() {
   const [status, setStaus] = useState(false);
   const [modelOpened, setModelOpened] = useState(false);
   const [modelOpened1, setModelOpened1] = useState(false);
-  const [page,setPage]=useState(1)
-  const [totalPage,setTotalPage]=useState(1)
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
 
   const [selectedId, setSelectedId] = useState("");
   useEffect(() => {
     GetAllNotification(page);
-    setStaus(user?.user?.allowNotification||false);
-  }, [user,page]);
+    setStaus(user?.user?.allowNotification || false);
+  }, [user, page]);
 
   const theme = useMantineTheme();
 
@@ -38,8 +38,30 @@ export default function Notifications() {
       .getUserAllNotification(currentpage)
       .then((res) => {
         setNotifications(res?.data?.docs);
-        setTotalPage(res?.data?.pages)
-        notificationService.noficationUpdateStatus().then((r)=>{}).catch((e)=>console.log(e))
+        setTotalPage(res?.data?.pages);
+        const notificationIds = res?.data?.docs
+          .filter((notification) => notification.status === true)
+          .map((notification) => notification._id);
+
+          if(!notificationIds.length) return
+
+        notificationService
+          .noficationUpdateStatus(notificationIds)
+          .then((response) => {
+
+            if (response.success) {
+              const updatedNotifications = res?.data?.docs.map(
+                (notification) => {
+                  if (notificationIds.includes(notification._id)) {
+                    notification.status = false;
+                  }
+                  return notification;
+                }
+              );
+              setNotifications(updatedNotifications);
+            }
+          })
+          .catch((error) => console.log(error));
         setIsLoading(false);
       })
       .catch((err) => {
@@ -88,8 +110,8 @@ export default function Notifications() {
       .catch((err) => console.log(err));
   };
   const handlePageClick = ({ selected }) => {
-    setPage(selected+1)
-  }
+    setPage(selected + 1);
+  };
 
   return (
     <>
@@ -164,7 +186,7 @@ export default function Notifications() {
               );
             })
           )}
-           {totalPage > 1 && (
+          {totalPage > 1 && (
             <div className="paginationReact tablepaginate">
               <ReactPaginate
                 breakLabel="..."
@@ -178,7 +200,7 @@ export default function Notifications() {
             </div>
           )}
         </div>
-       
+
         <Modal
           withCloseButton={false}
           overlayColor={

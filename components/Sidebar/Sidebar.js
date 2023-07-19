@@ -56,16 +56,16 @@ export default function Sidebar() {
   }, []);
 
  
-  useEffect(() => {
-    document.body.classList.remove("otp--page");
+  // useEffect(() => {
+  //   document.body.classList.remove("otp--page");
 
-    if (router.asPath == "/dashboard/competition-summary/" || router.asPath == "/dashboard/learning/") {
-      if (user && user.user && user.user.subscriptionDuration) {
-        if (user?.user?.subscriptionDuration === "free-lifetime")
-         router.push("/dashboard/subscription");
-      }
-    }
-  }, [router.asPath, user]);
+  //   if (router.asPath == "/dashboard/competition-summary/" || router.asPath == "/dashboard/learning/") {
+  //     if (user && user.user && user.user.subscriptionDuration) {
+  //       if (user?.user?.subscriptionDuration === "free-lifetime")
+  //        router.push("/dashboard/subscription");
+  //     }
+  //   }
+  // }, [router.asPath, user]);
 
   return (
     <>

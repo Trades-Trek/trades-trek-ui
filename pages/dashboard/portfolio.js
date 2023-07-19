@@ -60,7 +60,7 @@ export default function Portfolio() {
                     ACCOUNT VALUE
                     <ToolTipCustome text="Displays the total current value of your portfolio, which is updated nightly after the market’s close." />
                   </span>
-
+                 
                   <p>
                     ₦
                     {(

@@ -467,6 +467,38 @@ function getBankDetail() {
       return error;
     });
 }
+
+function getBanks() {  
+  return fetchWrapper
+    .get(`${baseUrl}/bank`)
+    .then((res) => {
+      if(res.success){
+       res
+      }
+     
+      return res;
+    })
+    .catch(function (error) {
+      return error;
+    });
+}
+
+function verifyAccountNumber({account_number,bank_code }) {  
+  return fetchWrapper
+    .get(`${baseUrl}/bank/verifyAccount?account_number=${account_number}&bank_code=${bank_code}`)
+    .then((res) => {
+      if(res.success){
+       res
+      }
+     
+      return res;
+    })
+    .catch(function (error) {
+      return error;
+    });
+}
+
+
 function allowNotificationStatus(status) {
 
   
@@ -572,6 +604,8 @@ export const userService = {
   },
   login,
   getNews,
+  getBanks,
+  verifyAccountNumber,
   getBankDetail,
   removeProfile,
   updateAccount,

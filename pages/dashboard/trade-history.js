@@ -109,7 +109,10 @@ export default function TradeHistory() {
                         <tbody>
                           {tradeHistoryData.map((item, index) => (
                             <tr key={index}>
-                              <td>{DataConvert(item.updatedAt)}</td>
+                              
+                              {/* item.createdAt updatedAt */}
+
+                              <td>{DataConvert(item.createdAt)}</td>
                               <td>{item.symbol}</td>
                               <td>
                                 {item.action == "Short" ? "Short " : ""}{" "}

@@ -68,9 +68,9 @@ function getUserAllNotification(page) {
         return error;
       });
   }
-  function noficationUpdateStatus(){
+  function noficationUpdateStatus(notificationIds){
     return fetchWrapper
-    .get(`${baseUrl}/notifications/update-status`)
+    .put(`${baseUrl}/notifications/update-status`, notificationIds)
     .then((res) => {
       if(res.success){
        

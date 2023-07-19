@@ -14,12 +14,14 @@ const ProfileAnotherUser = ({ userName }) => {
   const [user1, setUser1] = useState(true);
   const [user2, setUser2] = useState(true);
   let { user } = useSelector((state) => state.userWrapper);
+
+
   useEffect(() => {
     let temp = {
       anotheruser: user1 ? userName : "",
       username: user2 ? user?.user?.username : "",
     };
-    console.log(temp);
+
     userService
       .anotherUserGraph({ temp, userName, typeData, perSelected })
       .then((res) => {

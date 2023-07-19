@@ -142,7 +142,7 @@ const [data,setData]=useState()
                 New Password
               </label>
               <div className="invalid-feedback">
-                {errors.password?.type === "required" && "Password is required"}
+                {errors.password?.type === "required" && "New Password is required"}
                 {errors.password?.type === "minLength" &&
                   "Password should be atleast 8 characters"}
                 {errors.password?.type === "maxLength" &&

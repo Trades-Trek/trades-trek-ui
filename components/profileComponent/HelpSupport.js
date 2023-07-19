@@ -11,9 +11,6 @@ const HelpSupport = () => {
   const [errorMessage, setErrorMessage] = useState();
   const [success, setSuccess] = useState(false);
 
-  const router = useRouter();
-
-  const [data, setData] = useState();
   const {
     register,
     handleSubmit,
@@ -23,6 +20,7 @@ const HelpSupport = () => {
   } = useForm();
 
   const onSubmit = (data) => {
+    data.type = 'Request';
     supportService
       .createSupport(data)
       .then((res) => {

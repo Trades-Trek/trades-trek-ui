@@ -19,9 +19,9 @@ export default function CompetationSummery() {
   const [disabled,setDisabled]=useState(false)
   const router = useRouter();
   useEffect(() => {    
-    if (user.subscription == "Freemium") {
-      router.push("/dashboard");
-    }
+    // if (user?.user?.subscriptionDuration == "free-lifetime") {
+    //   router.push("/dashboard");
+    // }
   }, [user]);
 
   return (
@@ -39,26 +39,6 @@ export default function CompetationSummery() {
               </h3>
             </div>
             <SelectGame value={disabled} />
-            {/* <div className="grid-block-right right-align">
-                            <div className="beginner-option">
-                                Current Competition
-                                <span
-                                    className="btn"
-                                    onClick={() => setBeginnerOption(!beginnerOption)}
-                                >
-                                    Beginners
-                                </span>
-                                {beginnerOption && (
-                                    <div className="option--list">
-                                        <ul>
-                                            <li>Beginners </li>
-                                            <li>Beginners 1</li>
-                                            <li>Beginners 2</li>
-                                        </ul>
-                                    </div>
-                                )}
-                            </div>
-                        </div> */}
           </div>
         </div>
 

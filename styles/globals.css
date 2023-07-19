@@ -114,6 +114,33 @@
 .w-18{
   width: 4.5rem;
 }
+
+
+.beta-testing-modal .mantine-Modal-inner .mantine-Paper-root{
+  width: 35rem
+}
+
+
+.beta-testing-modal .mantine-Modal-body{
+ 
+ /* border-radius: 80px; */
+ /* background: #2E2E2E */
+}
+
+.beta-testing-modal section{
+  border-bottom-left-radius: 70px;
+  border-bottom-right-radius: 70px;
+}
+
+.beta-testing-modal .mantine-Modal-header  {
+ visibility: hidden;
+}
+.beta-testing-modal .mantine-Modal-inner .mantine-Paper-root{
+ padding: 0px !important;
+ border-radius: 80px;
+ /* background: rgb(46, 46, 46); */
+}
+
 .ml-18{
   margin-left: 4.5rem;
 }
@@ -208,7 +235,7 @@ body{
   background-color: var(--lightGreyColor);
   background-image: url(../public/images/bg.png);
   font-family: var(--fontFamily-normal);
-  @apply bg-no-repeat bg-bottom bg-contain min-h-screen break-words pb-6 leading-normal;
+  @apply bg-no-repeat bg-bottom bg-contain min-h-screen break-words  leading-normal;
 }
 
 .site--form--container{

@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import Transaction from "../Table/Transaction";
 import { setUser } from "../../actions/users";
+import banks from "./bankDetails";
+import BankComboBox from "./ComboBox";
 
 export default function RequestAmount() {
   const [error, setError] = useState(false);
@@ -16,6 +18,11 @@ export default function RequestAmount() {
   const [userAmount, setUserAmount] = useState(0);
   const { user } = useSelector((state) => state.userWrapper);
   const [transactionList, setTransactionList] = useState();
+  const [bankList, setBankList] = useState(banks);
+  const [bankCodeAndName, setBankCodeAndName] = useState({
+    bankName: "",
+    bankCode: "",
+  });
   const dispatch = useDispatch();
   const {
     register,
@@ -24,6 +31,9 @@ export default function RequestAmount() {
     formState: { errors },
     reset,
   } = useForm();
+
+  const typedInAccountNumber = watch('accountNumber')
+
 
   const onSubmit = (data) => {
     userService
@@ -44,8 +54,8 @@ export default function RequestAmount() {
             bankName: "",
             amount: "",
           });
-          getTransactionList()
-          userInfo()
+          getTransactionList();
+          userInfo();
         } else {
           setError(true);
           setErrorMessage(res.message);
@@ -53,7 +63,6 @@ export default function RequestAmount() {
       })
       .catch((error) => {
         setError(true);
-
         setErrorMessage(error.message);
       });
   };
@@ -68,43 +77,82 @@ export default function RequestAmount() {
       .catch((err) => console.log("errr", err.message));
   };
   useEffect(() => {
-    setUserAmount(user?.user?.walletAmount );
-    getTransactionList()
-    bankDetail()
+    setUserAmount(user?.user?.walletAmount);
+    getTransactionList();
+    bankDetail();
+    getBanks();
   }, [user]);
 
-  const userInfo=()=>{
+  const getBanks = () => {
     userService
-    .userInfo()
-    .then((res) => {
-    if(res.success ){
-      dispatch(setUser(res.data));
+      .getBanks()
+      .then((res) => {
+        if (res.status) {
+          setBankList(res.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-    }
-    
-    
-    }
-    )
-    .catch((err) => {
-      console.log(err);
-    });
-  }
-  const bankDetail=()=>{
+  const userInfo = () => {
     userService
-    .getBankDetail()
-    .then((res) => {
-      if (res.success) {
-        reset({
-          bankName:res?.data?.bankName,
-          accountName:res?.data?.accountName,
-          accountNumber:res?.data?.accountNumber
+      .userInfo()
+      .then((res) => {
+        if (res.success) {
+          dispatch(setUser(res.data));
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const bankDetail = () => {
+    userService
+      .getBankDetail()
+      .then((res) => {
+        if (res.success) {
+          reset({
+            bankName: res?.data?.bankName,
+            accountName: res?.data?.accountName,
+            accountNumber: res?.data?.accountNumber,
+          });
+          // console.log('bank',res.data)
+          // setTransactionList(res.data);
+        }
+      })
+      .catch((err) => console.log("errr", err.message));
+  };
+
+  const allowOnlyNumbers = (event) => {
+    const keyCode = event.which || event.keyCode;
+    const keyValue = String.fromCharCode(keyCode);
+    const regex = /^\d+$/; // Regex pattern to match only digits
+  
+    if (!regex.test(keyValue)) {
+      event.preventDefault();
+    }
+  };
+  
+  const handleAccountNumberBlur = () => {
+    if (typedInAccountNumber >= 10 && bankCodeAndName.bankCode) {
+      // Make the API request to verify the account number
+      userService
+        .verifyAccountNumber({
+          account_number: accountNumber,
+          bank_code: bankCodeAndName.bankCode,
         })
-        // console.log('bank',res.data)
-        // setTransactionList(res.data);
-      }
-    })
-    .catch((err) => console.log("errr", err.message))
-  }
+        .then((res) => {
+          console.log(res,  '..............')
+          // Handle the response as needed
+        })
+        .catch((error) => {
+          console.log(error)
+          // Handle the error as needed
+        });
+    }
+  };
 
   return (
     <>
@@ -136,15 +184,52 @@ export default function RequestAmount() {
             </div>
           )}
           <form className="site--form" onSubmit={handleSubmit(onSubmit)}>
+            <BankComboBox
+              bankList={bankList}
+              setBankCodeAndName={setBankCodeAndName}
+            />
+
+            {bankCodeAndName.bankCode && (
+              <div className="form--item">
+                <input
+                onKeyPress={allowOnlyNumbers}
+                onBlur={() => {
+                 console.log('hello')
+                }}
+                  style={{ width: "100%" }}
+                  className={`form--control ${
+                    errors.accountNumber ? "is-invalid" : ""
+                  }`}
+                  type="text"
+                  id="accountNumber"
+                  placeholder="Enter Account Number"
+                  {...register("accountNumber", {
+                    required: true,
+                    pattern: /^\d{10}$/, // Regex pattern for exactly 10 digits
+                  })}
+                />
+                <label className="form--label" htmlFor="accountNumber">
+                  Account Number
+                </label>
+                <div className="invalid-feedback">
+                  {errors.accountNumber?.type === "required" &&
+                    "Account Number is required"}
+                  {errors.accountNumber?.type === "pattern" &&
+                    "Account Number should be exactly 10 digits"}
+                </div>
+              </div>
+            )}
+
             <div className="form--item">
               <input
-                style={{ width: "100%" }}
-                className={`form--control ${
+                disabled
+                style={{ width: "100%", borderTop: 'none !important' }}
+                className={`form--control  !important ${
                   errors.accountName ? "is-invalid" : ""
                 }`}
                 type="text"
                 id="accountName"
-                placeholder="Enter Account Name"
+                placeholder="Account Name"
                 {...register("accountName", {
                   required: true,
                   minLength: 3,
@@ -165,68 +250,7 @@ export default function RequestAmount() {
               </div>
             </div>
 
-            <div className="form--item">
-              <input
-                style={{ width: "100%" }}
-                className={`form--control ${
-                  errors.accountNumber ? "is-invalid" : ""
-                }`}
-                type="text"
-                id="accountNumber"
-                placeholder="Enter Account Number"
-                {...register("accountNumber", {
-                  required: true,
-                  maxLength: 10,
-                  minLength: 10,
-
-                  pattern: {
-                    value: /^[0-9]+$/,
-                  },
-                })}
-              />
-
-              <label className="form--label" htmlFor="accountNumber">
-                Account Number
-              </label>
-              <div className="invalid-feedback">
-                {errors.accountNumber?.type === "required" &&
-                  "Account Number is required"}
-                {errors.accountNumber?.type === "minLength" &&
-                  "Account Number should be atleast 10 characters"}
-                {errors.accountNumber?.type === "maxLength" &&
-                  "Account Number should be less than 10 characters"}
-                {errors.accountNumber?.type === "pattern" &&
-                  "Account Number is not valid Please enter number only"}
-              </div>
-            </div>
-            <div className="form--item">
-              <input
-                style={{ width: "100%" }}
-                className={`form--control ${
-                  errors.bankName ? "is-invalid" : ""
-                }`}
-                type="text"
-                id="bankName"
-                placeholder="Enter Bank Name"
-                {...register("bankName", {
-                  required: true,
-                  maxLength: 30,
-                  minLength: 3,
-                })}
-              />
-
-              <label className="form--label" htmlFor="bankName">
-                Bank Name
-              </label>
-              <div className="invalid-feedback">
-                {errors.bankName?.type === "required" &&
-                  "Bank Name is required"}
-                {errors.bankName?.type === "minLength" &&
-                  "Bank Name should be atleast 3 characters"}
-                {errors.bankName?.type === "maxLength" &&
-                  "Account Number should be less than 30 characters"}
-              </div>
-            </div>
+       
             <div className="form--item">
               <input
                 style={{ width: "100%" }}
@@ -239,7 +263,7 @@ export default function RequestAmount() {
                   pattern: {
                     value: /^[0-9]+$/,
                   },
-                  min:1,
+                  min: 1,
                   validate: (value) => {
                     if (userAmount < value) {
                       return "Insufficient balance";
@@ -254,9 +278,8 @@ export default function RequestAmount() {
               <div className="invalid-feedback">
                 {errors.amount?.type === "required" && "Amount is required"}
                 {errors.amount?.type === "validate" && errors.amount?.message}
-          
-                   {errors.amount?.type === "min" &&
-                  "Amount is greater then 0"}
+
+                {errors.amount?.type === "min" && "Amount is greater then 0"}
               </div>
             </div>
 
@@ -268,7 +291,7 @@ export default function RequestAmount() {
           </form>
         </div>
         <div className="transactionTable">
-         {transactionList&& <Transaction transactionList={transactionList} />}
+          {transactionList && <Transaction transactionList={transactionList} />}
         </div>
       </div>
       <Footer />
