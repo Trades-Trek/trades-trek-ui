@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-const url = 'https://tiny-tan-boa-belt.cyclic.app'
+const url = 'https://n-t2re.onrender.com'
 const nextConfig = {
   reactStrictMode: true,
   trailingSlash: true,
