@@ -110,7 +110,8 @@ export default function Otp() {
           </div>
           <div className="block--content">
             <p>
-              We sent an email to <span>{emailAddress}</span>
+              We sent an OTP to <span>{emailAddress}</span>.
+              Please check your inbox and enter the OTP here to confirm your email
             </p>
           </div>
 
@@ -137,7 +138,7 @@ export default function Otp() {
           <div className="invalid-feedback">{error !== null && error}</div>
           <div className="form--bottom--content">
             <p>
-              Don’t get code?{' '}
+              Didn’t get code?{' '}
               <a href="#" onClick={() => resendOtp()}>
                 Resend
               </a>

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { AnnualReturn, TodayPerChange } from "../../helpers/TodayChange";
 import { userService } from "../../services";
+import { orderService } from '../../services/order.service';
 import LineChartCompare from "../Chart/LinChartCompare";
 import ToolTipCustome from "../Competition/ToolTip";
 
@@ -11,10 +12,12 @@ const ProfileAnotherUser = ({ userName }) => {
   const [typeData, setTypeData] = useState("week");
   const [perSelected, setPerSelected] = useState(false);
   const [graphData, setGraphData] = useState();
+  const [holdingCurrent, setHoldingCurrent] = useState(0);
+  const [shortCurrent, setShortCurrent] = useState(0);
+  const [accountValueLoading, setAccountValueLoading] = useState(true);
   const [user1, setUser1] = useState(true);
   const [user2, setUser2] = useState(true);
   let { user } = useSelector((state) => state.userWrapper);
-
 
   useEffect(() => {
     let temp = {
@@ -42,6 +45,41 @@ const ProfileAnotherUser = ({ userName }) => {
       .catch((err) => console.log(err));
   }, [userName, typeData, perSelected, user1, user2]);
 
+  useEffect(() => {
+    Promise.all([
+      orderService.holdingProfitOrLossAnotherUser(1, userName),
+      orderService.shortProfitOrLossAnotherUser(1, userName),
+    ])
+      .then(([holdingRes, shortRes]) => {
+        if (holdingRes.success) {
+          setHoldingCurrent(holdingRes.holdingCurrent);
+        } else {
+          setHoldingCurrent(0);
+        }
+
+        if (shortRes.success) {
+          setShortCurrent(shortRes.shortCurrent);
+        } else {
+          setShortCurrent(0);
+        }
+
+        setAccountValueLoading(false) 
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const calculateAccountalue = () => {
+    if (accountValueLoading || !infoData) {
+      return "0.00";
+    } else {
+     return (holdingCurrent + (infoData?.Competition?.cash +
+      infoData?.Competition?.profitOrLossToday) - shortCurrent)   
+     .toFixed(2)
+     ?.toString()
+     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    }
+  };
+
   return (
     <>
       <div>
@@ -65,16 +103,7 @@ const ProfileAnotherUser = ({ userName }) => {
                   <ToolTipCustome text="Displays the total current value of your portfolio, which is updated nightly after the market’s close." />
                 </span>
                 <p>
-                  ₦{" "}
-                  {infoData
-                    ? (
-                        infoData?.Competition?.accountValue +
-                        infoData?.Competition?.profitOrLossToday
-                      )
-                        ?.toFixed(2)
-                        ?.toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    : "0.00"}
+                  ₦{calculateAccountalue()}
                 </p>
               </div>
               <div className="profileContainerAccountblock">
@@ -140,12 +169,12 @@ const ProfileAnotherUser = ({ userName }) => {
               <div className="profileContainerAccountblock">
                 <div>
                   <div>
-                  <span className="itemAlign">
-                        BUYING POWER
-                        <ToolTipCustome
-                          text={`The total value of your cash and margin accounts that can be used to make trades. Calculated as: cash + (Long Stocks x 50%) - (Shorted Stocks x 150%).`}
-                        />
-                      </span>
+                    <span className="itemAlign">
+                      BUYING POWER
+                      <ToolTipCustome
+                        text={`The total value of your cash and margin accounts that can be used to make trades. Calculated as: cash + (Long Stocks x 50%) - (Shorted Stocks x 150%).`}
+                      />
+                    </span>
 
                     <p>
                       ₦{" "}
@@ -165,12 +194,12 @@ const ProfileAnotherUser = ({ userName }) => {
                   </div>
                   {/* {console.log(infoData)} */}
                   <div>
-                  <span className="itemAlign">
-                        CASH
-                        <ToolTipCustome
-                          text={`Total amount of cash available for making trades.`}
-                        />
-                      </span>
+                    <span className="itemAlign">
+                      CASH
+                      <ToolTipCustome
+                        text={`Total amount of cash available for making trades.`}
+                      />
+                    </span>
 
                     <p>
                       ₦{" "}

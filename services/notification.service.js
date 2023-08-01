@@ -11,7 +11,7 @@ const userSubject = new BehaviorSubject(
 
 function getUserAllNotification(page) {
     return fetchWrapper
-      .get(`${baseUrl}/notifications?page=${page}`)
+      .get(page ? `${baseUrl}/notifications?page=${page}` : `${baseUrl}/notifications`)
   
       .then((res) => {
         if (res.success) {

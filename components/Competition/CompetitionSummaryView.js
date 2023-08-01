@@ -144,6 +144,7 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
     AllRank(selected + 1);
     setPage(selected + 1);
   };
+
   return (
     <>
       {userName && perform ? (

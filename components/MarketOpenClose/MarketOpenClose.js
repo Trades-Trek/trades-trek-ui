@@ -1,139 +1,112 @@
-import React, { useState, useEffect } from "react";
-import moment from "moment-timezone";
-import NigerianTimeZone from "../../helpers/Negerian-TimeZone";
-import { data } from "autoprefixer";
-import { userService } from "../../services";
-const MarketOpenClose = () => {
-  const [marketOpen, setmarketOpen] = useState(false);
-  const [marketMessage, setMarketMessage] = useState("");
-  const [holiday,setHoliday]=useState();
-  const [message,setMessage]=useState('')
+import React, { useState, useEffect } from 'react';
 
-  const marketOpenTime = "09:30:00";
-  const marketCloseTime = "14:30:00";
-  
+const NigerianStockMarketStatus = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState({ hours: 0, minutes: 0 });
 
+  // Function to check if the current time falls within the stock market opening hours
+  const isMarketOpen = () => {
+    const currentDateTime = new Date();
+    const currentDayOfWeek = currentDateTime.getDay();
+    const currentHour = currentDateTime.getUTCHours() + 1; // Convert to Nigerian time (UTC +1)
+    const currentMinute = currentDateTime.getUTCMinutes();
 
-  function timeDiffCalc(dateFuture, dateNow) {
-    let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
+    const isWeekend = currentDayOfWeek === 0 || currentDayOfWeek === 6; // Sunday: 0, Saturday: 6
+    const isBeforeOpeningTime = currentHour < 9 || (currentHour === 9 && currentMinute < 30);
+    const isAfterClosingTime = currentHour > 14 || (currentHour === 14 && currentMinute >= 30);
 
-    // calculate days
-    const days = Math.floor(diffInMilliSeconds / 86400);
-    diffInMilliSeconds -= days * 86400;
-
-    // calculate hours
-    const hours = Math.floor(diffInMilliSeconds / 3600) % 24;
-    diffInMilliSeconds -= hours * 3600;
-
-    // calculate minutes
-    const minutes = Math.floor(diffInMilliSeconds / 60) % 60;
-    diffInMilliSeconds -= minutes * 60;
-
-    let difference = "";
-    if (days > 0) {
-      difference += days === 1 ? `${days} day, ` : `${days} days, `;
-    }
-
-    difference +=
-      hours === 0 || hours === 1 ? `${hours} hour, ` : `${hours} hours, `;
-
-    difference +=
-      minutes === 0 || hours === 1
-        ? `${minutes} minutes`
-        : `${minutes} minutes`;
-
-    return difference;
-  }
-  const timeCount = (holiday) => {
-    var today = new Date();
-   
-    const temp = NigerianTimeZone(today);
-    const formatDate = moment(temp).format("HH:mm:ss");
-
-    today = new Date(moment(temp).format("YYYY-MM-DD"));
-    var newDate = new Date(moment(temp).format("YYYY-MM-DD HH:mm:ss"));
-    if (moment(today).format("dddd")== "Saturday") {    
-      today.setDate(today.getDate() + 2);
-    } else if (moment(today).format("dddd") == "Sunday") {
-      // today.setDate(today.getDate() + 1);
-    }
-    while (holiday.includes(moment(today).format("YYYY-MM-DD"))) {
-     
-      today.setDate(today.getDate() + 1);
-      let day = moment(today).format("dddd");
-      if (day == "Saturday") {
-        
-        today.setDate(today.getDate() + 2);
-      } else if (day == "Sunday") {
-        today.setDate(today.getDate() + 1);
-      }
-    }
-   
-    if (
-      marketOpenTime <= formatDate &&
-      marketCloseTime >= formatDate &&
-      moment(today).format("YYYY-MM-DD") != moment(newDate).format("YYYY-MM-DD")
-    ) {
-
-      today.setHours(9);
-      today.setMinutes(30);
-      setmarketOpen(false);
-      setMarketMessage(`${timeDiffCalc(newDate, today)} ${message?`(${message})`:""}`);
-    } else if (marketOpenTime <= formatDate && marketCloseTime >= formatDate) {
- 
-      today.setHours(14);
-      today.setMinutes(30);
-      setmarketOpen(true);
-      setMarketMessage(`${timeDiffCalc(newDate, today)} ${message?`(${message})`:""}`);
-
-
-    } else if (marketOpenTime > formatDate) {
-
-      today.setHours(9);
-      today.setMinutes(30);
-      setmarketOpen(false);
-      setMarketMessage(`${timeDiffCalc(newDate, today)} ${message?`(${message})`:""}`);
-
-
-    } else {
-     
-      today.setDate(today.getDate() + 1);
-      today.setHours(9);
-      today.setMinutes(30);
-      setmarketOpen(false);
-      setMarketMessage(`${timeDiffCalc(newDate, today)} ${message?`(${message})`:""}`);
-
-
-    }
+    return !(isWeekend || isBeforeOpeningTime || isAfterClosingTime);
   };
 
   useEffect(() => {
-   if(holiday){
-    setInterval(() => {
-      timeCount(holiday)
+    // Update the market status and time remaining on component mount
+    setIsOpen(isMarketOpen());
+    updateRemainingTime();
+
+    // Update the market status and time remaining every minute
+    const timer = setInterval(() => {
+      setIsOpen(isMarketOpen());
+      updateRemainingTime();
+    }, 60000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // Function to calculate the time remaining until the next market opening or closing
+  // Function to calculate the time remaining until the next market opening or closing
+  const updateRemainingTime = () => {
+    const currentDateTime = new Date();
+    const currentHour = currentDateTime.getUTCHours() + 1; // Convert to Nigerian time (UTC +1)
+    const currentMinute = currentDateTime.getUTCMinutes();
   
-      }, 1000);
-   }
-    // timeCount(holiday)
-  }, [holiday]);
-  const allHoliday=async()=>{
-    userService.getHoliday().then((res)=>{
-      setHoliday(res.data)
-      setMessage(res.desc ||'')
-    }).catch((err)=>console.log(err))
+    if (isMarketOpen()) {
+      const closingHour = 14;
+      const closingMinute = 30;
+      let remainingHours = closingHour - currentHour;
+      let remainingMinutes = closingMinute - currentMinute;
+  
+      if (remainingMinutes < 0) {
+        remainingHours--;
+        remainingMinutes += 60;
+      }
+  
+      setTimeRemaining({ hours: remainingHours, minutes: remainingMinutes });
+    } else {
+      // Check if it's Friday after the closing time
+      const isAfterFridayClosingTime =
+        currentDateTime.getDay() === 5 && (currentHour > 14 || (currentHour === 14 && currentMinute >= 30));
+  
+      // Calculate the time until the next market opening on Monday if it's after Friday closing time
+      if (isAfterFridayClosingTime) {
+        const nextOpeningHour = 9;
+        const nextOpeningMinute = 30;
+  
+        // Calculate the time remaining for the weekend plus the time until Monday's opening
+        let remainingHours = (3 * 24) + (nextOpeningHour - currentHour);
+        let remainingMinutes = nextOpeningMinute - currentMinute;
+  
+        if (remainingMinutes < 0) {
+          remainingHours--;
+          remainingMinutes += 60;
+        }
+  
+        // Calculate the number of days from remaining hours
+        const days = Math.floor(remainingHours / 24);
+        remainingHours %= 24;
+  
+        setTimeRemaining({ days, hours: remainingHours, minutes: remainingMinutes });
+      } else {
+        const nextOpeningHour = 9;
+        const nextOpeningMinute = 30;
+        let remainingHours = nextOpeningHour - currentHour;
+        let remainingMinutes = nextOpeningMinute - currentMinute;
+  
+        if (remainingMinutes < 0) {
+          remainingHours--;
+          remainingMinutes += 60;
+        }
+  
+        if (remainingHours < 0) {
+          remainingHours += 24;
+        }
+  
+        setTimeRemaining({ hours: remainingHours, minutes: remainingMinutes });
+      }
+    }
+  };
+  
+  
 
-  }
 
-  useEffect(()=>{
+const convertLongHoursTodays = (val) => {
+  return  val > 24  ? `${val} hours` : `${val} hours`
+};
 
-    allHoliday()
-  },[])
- 
   return (
-    <>
-      {marketOpen ? (
-        <div className="status-summary font-18">
-          <span>
+    <div className="status-summary font-18">
+      {isOpen ? (
+        <>
+           <span>
             <svg
               width="25"
               height="25"
@@ -150,10 +123,10 @@ const MarketOpenClose = () => {
               />
             </svg>
           </span>
-          Market is open. Close in {marketMessage}
-        </div>
-      ) :marketMessage? (
-        <div className="status-summary font-18">
+          Market is open. Close in {timeRemaining.hours} hours, {timeRemaining.minutes} minutes
+        </>
+      ) : (
+        <>
           <span>
             <svg
               width="17"
@@ -168,11 +141,11 @@ const MarketOpenClose = () => {
               />
             </svg>
           </span>
-          Market is closed. Opens in {marketMessage}
-        </div>
-      ):""}
-    </>
+          Market is closed. Opens in {convertLongHoursTodays(timeRemaining.hours)} , {timeRemaining.minutes} minutes
+        </>
+      )}
+    </div>
   );
 };
 
-export default MarketOpenClose;
+export default NigerianStockMarketStatus;

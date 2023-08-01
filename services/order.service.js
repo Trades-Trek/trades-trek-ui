@@ -258,7 +258,7 @@ function shortProfitOrLossAnotherUser(page,userName) {
 
       return errr;
     });
-}
+} 
 export const orderService = {
   user: userSubject.asObservable(),
   get userValue() {

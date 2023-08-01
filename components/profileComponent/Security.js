@@ -144,11 +144,11 @@ const [data,setData]=useState()
               <div className="invalid-feedback">
                 {errors.password?.type === "required" && "New Password is required"}
                 {errors.password?.type === "minLength" &&
-                  "Password should be atleast 8 characters"}
+                  "New Password must be atleast 8 characters"}
                 {errors.password?.type === "maxLength" &&
-                  "Password should be less than 15 characters"}
+                  "New Password must be less than 15 characters"}
                 {errors.password?.type === "pattern" &&
-                  "Password must be alphanumeric with at least one special character"}
+                  "New Password must be alphanumeric with at least one special character"}
               </div>
             </div>
             <div className="form--item">

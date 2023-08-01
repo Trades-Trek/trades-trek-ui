@@ -88,7 +88,7 @@ const ShortTable = () => {
     "QTY",
     "Total Value",
     "Total Gain/Loss",
-    "Trade Actions",
+    "Trade Actions...",
   ];
   const handleBuyCover = (stock) => {
     orderService

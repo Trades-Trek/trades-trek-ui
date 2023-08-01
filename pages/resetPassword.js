@@ -5,6 +5,7 @@ import Footer from "../components/Footer/Footer";
 import { userService } from "../services/user.service";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function ResetPassword() {
 
@@ -31,6 +32,10 @@ export default function ResetPassword() {
   const resetFormValue = () => {
     document.getElementById("create-course-form").reset();
   };
+
+ const resendOtpForResetPassword = () => {
+  toast.success('Your OTP code has been resent successfully');
+ }
   const onSubmit = (data) => {
     userService
         .reset_password({
@@ -59,6 +64,17 @@ export default function ResetPassword() {
   };
   return (
     <>
+     <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className="center--block">
         <div className="small--block">
           <div className="block--title block--back--link text--center">
@@ -87,6 +103,13 @@ export default function ResetPassword() {
                 type="text"
                 id="otp"
                 placeholder="Otp"
+                maxLength="4"
+                onPaste={(event) => {
+                  event.preventDefault();
+                  const pastedData = event.clipboardData.getData("text");
+                  const trimmedData = pastedData.slice(0, 4);
+                  document.execCommand("insertText", false, trimmedData);
+                }}
                 {...register("otp", {
                   required: true,
                   maxLength: 4,
@@ -185,6 +208,14 @@ export default function ResetPassword() {
               </button>
             </div>
             <div className="form--bottom--content">
+           
+            <p>
+              Didn’t get code?{' '}
+              <a href="#" onClick={() => resendOtpForResetPassword()}>
+                Resend
+              </a>
+            </p>
+              <br/>
               <p>
                 Already have an account?{" "}
                 <Link href="/">

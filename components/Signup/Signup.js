@@ -2,11 +2,12 @@ import { React, useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import SignupSlider from "../SignupSlider/SignupSlider";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { userService } from "../../services";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../actions/users";
+import { toast, ToastContainer } from "react-toastify";
 // import 'react-phone-number-input/style.css'
 // import PhoneInput from "react-phone-number-input";
 import PhoneInput from "react-phone-input-2";
@@ -33,6 +34,7 @@ export default function Signup() {
     watch,
     reset,
     formState: { errors },
+    control
   } = useForm();
 
   useEffect(() => {
@@ -90,6 +92,17 @@ export default function Signup() {
 
   return (
     <>
+    <ToastContainer
+       position="top-center"
+       autoClose={3000}
+       hideProgressBar={false}
+       newestOnTop={false}
+       closeOnClick
+       rtl={false}
+       pauseOnFocusLoss
+       draggable
+       pauseOnHover
+     />
       <div className="site--form--container">
         <div className="form--grid--wrapper">
           <div className="left--form--layout">
@@ -131,7 +144,7 @@ export default function Signup() {
                   }`}
                   type="text"
                   id="fName"
-                  placeholder="First Name"
+                  placeholder="First Name*"
                   {...register("firstName", {
                     required: true,
                     maxLength: 20,
@@ -162,7 +175,7 @@ export default function Signup() {
                   }`}
                   type="text"
                   id="lName"
-                  placeholder="Last Name"
+                  placeholder="Last Name*"
                   {...register("lastName", {
                     required: true,
                     maxLength: 20,
@@ -193,7 +206,7 @@ export default function Signup() {
                   }`}
                   type="email"
                   id="email"
-                  placeholder="Email Address"
+                  placeholder="Email Address*"
                   {...register("email", {
                     required: true,
                     maxLength: 50,
@@ -257,7 +270,7 @@ export default function Signup() {
                   }`}
                   type="text"
                   id="username"
-                  placeholder="username"
+                  placeholder="username*"
                   {...register("username", {
                     required: true,
                     maxLength: 20,
@@ -277,7 +290,7 @@ export default function Signup() {
                     "Username should be atleast 3 characters"}
                   {errors.username?.type === "maxLength" &&
                     "Username should be less than 20 characters"}
-                  {errors.username?.type === "pattern" && "Invalide User Name"}
+                  {errors.username?.type === "pattern" && "Invalid User Name"}
                 </div>
               </div>
               <div className="form--item">
@@ -289,7 +302,7 @@ export default function Signup() {
                     }`}
                     type={showPassword ? "text" : "password"}
                     id="pwd"
-                    placeholder="Password"
+                    placeholder="Password*"
                     {...register("password", {
                       required: true,
                       maxLength: 15,

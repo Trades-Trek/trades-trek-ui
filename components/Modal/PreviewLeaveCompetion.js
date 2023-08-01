@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import { gameService } from "../../services/game.service";
 import { userService } from "../../services";
 import { setUser } from "../../actions/users";
+import { toast, ToastContainer } from "react-toastify";
+
 
 function PreviewLeaveCompetition({ modelOpened, setModelOpened, id }) {
   const [error, setError] = useState("");
@@ -20,7 +22,9 @@ function PreviewLeaveCompetition({ modelOpened, setModelOpened, id }) {
           if (localStorage.getItem("GameId") == id) {
             localStorage.removeItem("GameId");
           }
-    
+          toast.success(res.message, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
     userService
       .userInfo()
       .then((res) => {
@@ -53,6 +57,18 @@ function PreviewLeaveCompetition({ modelOpened, setModelOpened, id }) {
   };
 
   return (
+    <>
+     <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     <Modal
       withCloseButton={false}
       overlayColor={
@@ -118,6 +134,7 @@ function PreviewLeaveCompetition({ modelOpened, setModelOpened, id }) {
         </div>
       </div>
     </Modal>
+    </>
   );
 }
 

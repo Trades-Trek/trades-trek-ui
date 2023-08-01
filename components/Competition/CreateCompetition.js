@@ -99,7 +99,7 @@ export default function CreateCompetation() {
                     {errors.competitionName?.type === "required" &&
                       "Competition Name is required"}
                     {errors.competitionName?.type === "minLength" &&
-                      "Competition Name should be atleast 10 characters"}
+                      "Competition Name should be at least 10 characters"}
                     {errors.competitionName?.type === "maxLength" &&
                       "Competition Name should be less than 30 characters"}
                   </div>
@@ -125,7 +125,7 @@ export default function CreateCompetation() {
                     {errors.competitionDescription?.type === "required" &&
                       "Competition Description is required"}
                     {errors.competitionDescription?.type === "minLength" &&
-                      "Competition Description should be atleast 20 characters"}
+                      "Competition Description should be at least 20 characters"}
                     {errors.competitionDescription?.type === "maxLength" &&
                       "Competition Description should be less than 70 characters"}
                   </div>
@@ -173,7 +173,7 @@ export default function CreateCompetation() {
                       {errors.password?.type === "required" &&
                         "Password is required"}
                       {errors.password?.type === "minLength" &&
-                        "Password should be atleast 8 characters"}
+                        "Password must contain at least 8 characters"}
                       {errors.password?.type === "maxLength" &&
                         "Password should be less than 15 characters"}
                       {errors.password?.type === "pattern" &&

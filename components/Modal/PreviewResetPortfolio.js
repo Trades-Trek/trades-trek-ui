@@ -11,7 +11,7 @@ function PreviewResetPortfolio({ modelOpened, setModelOpened, id }) {
 
   const router = useRouter();
   const theme = useMantineTheme();
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const portfolioReset = (id) => {
     gameService
       .portfolioResetting(id)
@@ -20,27 +20,26 @@ function PreviewResetPortfolio({ modelOpened, setModelOpened, id }) {
           if (localStorage.getItem("GameId") == id) {
             localStorage.removeItem("GameId");
           }
-    
-    userService
-      .userInfo()
-      .then((res) => {
-      if(res.success ){
-        dispatch(setUser(res.data));
+          toast.success(res.message, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+          userService
+            .userInfo()
+            .then((res) => {
+              if (res.success) {
+                dispatch(setUser(res.data));
+              }
+              // else
+              //   if(router.asPath=='/dashboard/competition-summary/'){
+              //     dispatch(setUser(res.message));
+              //     router.push('/dashboard/subscription')
+              //   }
 
-      }
-      // else
-      //   if(router.asPath=='/dashboard/competition-summary/'){
-      //     dispatch(setUser(res.message));
-      //     router.push('/dashboard/subscription')
-      //   }
-
-      // // 
-      
-      }
-      )
-      .catch((err) => {
-        console.log(err);
-      });
+              // //
+            })
+            .catch((err) => {
+              console.log(err);
+            });
           setModelOpened(false);
           setError("");
         } else {
@@ -74,7 +73,11 @@ function PreviewResetPortfolio({ modelOpened, setModelOpened, id }) {
         <h2 style={{ textAlign: "center", margin: "20px 10px" }}>
           <b>Are you sure you want to reset portfolio?</b>
         </h2>
-        <p>If you click RESET PORTFOLIO, all current positions that are part of your portfolio will be deleted and it will be reset to its beginning state.</p>
+        <p>
+          If you click RESET PORTFOLIO, all current positions that are part of
+          your portfolio will be deleted and it will be reset to its beginning
+          state.
+        </p>
         {error && (
           <h2
             style={{

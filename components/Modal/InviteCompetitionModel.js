@@ -2,6 +2,7 @@ import { Modal, useMantineTheme } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { gameService } from "../../services/game.service";
+import { toast, ToastContainer } from "react-toastify";
 import ToolTipCustome from "../Competition/ToolTip";
 
 function InviteCompetitionModel({ modelOpened, setModelOpened, id, data }) {
@@ -86,7 +87,9 @@ function InviteCompetitionModel({ modelOpened, setModelOpened, id, data }) {
           setError(res.message);
         } else {
           setError();
-
+          toast.success(res.message, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
           setModelOpened(false);
         }
       })
@@ -94,6 +97,19 @@ function InviteCompetitionModel({ modelOpened, setModelOpened, id, data }) {
     // setModelOpened(false);
   };
   return (
+    <>
+     <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+ 
     <Modal
       withCloseButton={false}
       overlayColor={
@@ -113,14 +129,10 @@ function InviteCompetitionModel({ modelOpened, setModelOpened, id, data }) {
       <div>
         <h2 style={{ textAlign: "center", margin: "20px 10px" }}>
           <span className="itemAlign">
-            <b>
-              Do you want to invite{" "}
-              <span style={{ color: "#8000ff" }}>
-                {data[0]?.competitionName}
-              </span>{" "}
-              with our friends?
-            </b>
-            <ToolTipCustome text={`Enter email and press enter key to send`} />
+            <b>Enter email to invite friends?</b>
+            <ToolTipCustome
+              text={`Enter email and press enter key to activate send button or enter  additional email(s)`}
+            />
           </span>
         </h2>
         {error && (
@@ -236,11 +248,21 @@ function InviteCompetitionModel({ modelOpened, setModelOpened, id, data }) {
         )}
         <div style={{ border: "1px solid #c9cdd1", marginTop: "40px" }}>
           <button
-            style={{
-              width: "50%",
-              borderRight: "0.5px solid #c9cdd1",
-              padding: "10px",
-            }}
+            style={
+              emails.length !== 0
+                ? {
+                    background: "#8000FF",
+                    color: "white",
+                    width: "50%",
+                    borderRight: "0.5px solid #c9cdd1",
+                    padding: "10px",
+                  }
+                : {
+                    width: "50%",
+                    borderRight: "0.5px solid #c9cdd1",
+                    padding: "10px",
+                  }
+            }
             onClick={() => {
               InviteGame();
             }}
@@ -264,6 +286,7 @@ function InviteCompetitionModel({ modelOpened, setModelOpened, id, data }) {
         </div>
       </div>
     </Modal>
+    </>
   );
 }
 

@@ -9,6 +9,7 @@ import { gameService } from "../../services/game.service";
 import NigerianTimeZone from "../../helpers/Negerian-TimeZone";
 import moment from "moment-timezone";
 import { userService } from "../../services";
+import { toast, ToastContainer } from "react-toastify";
 
 function PreviewGameModel({ modelOpened, setModelOpened, data, setShowTrade }) {
   const router = useRouter();
@@ -55,11 +56,17 @@ function PreviewGameModel({ modelOpened, setModelOpened, data, setShowTrade }) {
               if (res.success == false) {
                 setErrorStatus(true);
                 setError(res.message);
+                toast.success(res.message || 'Failed to join game', {
+                  position: toast.POSITION.TOP_RIGHT,
+                });
               } else {
                 setError();
                 setErrorStatus(false);
                 setModelOpened(false);
                 localStorage.setItem('GameId',data[0]._id)
+                toast.success('Private Game Joined Successfully', {
+                  position: toast.POSITION.TOP_RIGHT,
+                });
                 userService
                 .userInfo()
                 .then((res) => {
@@ -83,6 +90,9 @@ function PreviewGameModel({ modelOpened, setModelOpened, data, setShowTrade }) {
             setErrorStatus(false);
             setModelOpened(false);
             localStorage.setItem('GameId',data[0]._id)
+            toast.success('Game Joined Successfully', {
+              position: toast.POSITION.TOP_RIGHT,
+            });
             userService
             .userInfo()
             .then((res) => {
@@ -104,6 +114,19 @@ function PreviewGameModel({ modelOpened, setModelOpened, data, setShowTrade }) {
    
   };
   return (
+    <>
+     <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+  
     <Modal
       overlayColor={
         theme.colorScheme === "dark"
@@ -394,6 +417,7 @@ function PreviewGameModel({ modelOpened, setModelOpened, data, setShowTrade }) {
         </div>
       )}
     </Modal>
+    </>
   );
 }
 

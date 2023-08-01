@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { gameService } from "../../services/game.service";
 import { userService } from "../../services";
 import { setUser } from "../../actions/users";
+import { toast, ToastContainer } from "react-toastify";
 
 function PreviewDeleteGame({ modelOpened, setModelOpened, id }) {
   const [error, setError] = useState("");
@@ -20,7 +21,9 @@ function PreviewDeleteGame({ modelOpened, setModelOpened, id }) {
           if (localStorage.getItem("GameId") == id) {
             localStorage.removeItem("GameId");
           }
-    
+          toast.success(res.message, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
     userService
       .userInfo()
       .then((res) => {
@@ -53,6 +56,19 @@ function PreviewDeleteGame({ modelOpened, setModelOpened, id }) {
   };
 
   return (
+    <>
+    <ToastContainer
+       position="top-center"
+       autoClose={3000}
+       hideProgressBar={false}
+       newestOnTop={false}
+       closeOnClick
+       rtl={false}
+       pauseOnFocusLoss
+       draggable
+       pauseOnHover
+     />
+
     <Modal
       withCloseButton={false}
       overlayColor={
@@ -117,6 +133,7 @@ function PreviewDeleteGame({ modelOpened, setModelOpened, id }) {
         </div>
       </div>
     </Modal>
+    </>
   );
 }
 

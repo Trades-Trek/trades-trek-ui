@@ -1,6 +1,4 @@
 /** @type {import('next').NextConfig} */
-
-const url = 'https://n-t2re.onrender.com'
 const nextConfig = {
   reactStrictMode: true,
   trailingSlash: true,
@@ -12,16 +10,16 @@ const nextConfig = {
   },
   images: {
     loader: 'imgix',
-    path: process.env.NODE_ENV === 'development' ? 'http://localhost:4000/' : 'https://client-staging-green.vercel.app',
+    path: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://client-staging-green.vercel.app',
   },
   env: {
-    baseApiUrl: url,
+    baseApiUrl: 'https://staging-api.tradestrek.com',
   },
   publicRuntimeConfig: {
     apiUrl:
       process.env.NODE_ENV === 'development'
-        ? 'http://localhost:4000' // development api
-        : url, // production api
+        ? 'http://localhost:5000' // development api
+        : 'https://staging-api.tradestrek.com', // production api
   },
 };
 

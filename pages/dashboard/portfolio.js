@@ -13,12 +13,55 @@ import { userService } from "../../services";
 import { AnnualReturn, TodayPerChange } from "../../helpers/TodayChange";
 import SubscriptionExpiredMessage from "../../components/MarketOpenClose/SubscriptionExpiredMessage";
 import ToolTipCustome from "../../components/Competition/ToolTip";
+import { orderService } from "../../services/order.service";
+
 
 export default function Portfolio() {
   let { user } = useSelector((state) => state.userWrapper);
   const [graphData, setGraphData] = useState();
   const [typeData, setTypeData] = useState("week");
   const [perSelected, setPerSelected] = useState(false);
+  const [userHistoryData, setuserHistoryData] = useState(null);
+  const [holdingCurrent, setHoldingCurrent] = useState(0);
+  const [accountValueLoading, setAccountValueLoading] = useState(true);
+  const [shortCurrent, setShortCurrent] = useState(0);
+
+  useEffect(() => {
+    Promise.all([
+      orderService.holdingProfitOrLoss(),
+      orderService.shortProfitOrLoss(),
+    ])
+      .then(([holdingRes, shortRes]) => {
+        if (holdingRes.success) {
+          setHoldingCurrent(holdingRes.holdingCurrent);
+        } else {
+          setHoldingCurrent(0);
+        }
+
+        if (shortRes.success) {
+          setShortCurrent(shortRes.shortCurrent);
+        } else {
+          setShortCurrent(0);
+        }
+
+        setAccountValueLoading(false) 
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    userService
+      .userPerformanceHistory(1)
+      .then((res) => {
+        if (res.success) {
+          setuserHistoryData(res.history.docs);
+        } else {
+          setuserHistoryData([]);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [user]);
+
   useEffect(() => {
     userService
       .userGraph({ typeData, perSelected })
@@ -33,6 +76,21 @@ export default function Portfolio() {
         setGraphData();
       });
   }, [user, typeData, perSelected]);
+
+  const calculateAccountalue = () => {
+    if (accountValueLoading || Array.isArray(user) ) {
+      return "";
+    } else {
+
+      console.log('portfolio.cash', user?.portfolio?.cash, 'portfolio.profitLossToday >>>>',  user?.portfolio?.profitOrLossToday )
+     return  (holdingCurrent  + (user?.portfolio?.cash +
+     user?.portfolio?.profitOrLossToday) - shortCurrent)
+     
+     .toFixed(2)
+     ?.toString()
+     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    }
+  };
 
   return (
     <>
@@ -60,16 +118,10 @@ export default function Portfolio() {
                     ACCOUNT VALUE
                     <ToolTipCustome text="Displays the total current value of your portfolio, which is updated nightly after the market’s close." />
                   </span>
-                 
+
                   <p>
-                    ₦
-                    {(
-                      user?.portfolio?.accountValue +
-                      user?.portfolio?.profitOrLossToday
-                    )
-                      ?.toFixed(2)
-                      ?.toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
+                    ₦{calculateAccountalue()}
+                
                   </p>
                 </div>
                 <div className="profileContainerAccountblock">

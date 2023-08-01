@@ -16,7 +16,7 @@ import ReactPaginate from "react-paginate";
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   let { user } = useSelector((state) => state.userWrapper);
   const [status, setStaus] = useState(false);
   const [modelOpened, setModelOpened] = useState(false);
@@ -33,7 +33,6 @@ export default function Notifications() {
   const theme = useMantineTheme();
 
   const GetAllNotification = (currentpage) => {
-    setIsLoading(true);
     notificationService
       .getUserAllNotification(currentpage)
       .then((res) => {
@@ -43,13 +42,17 @@ export default function Notifications() {
           .filter((notification) => notification.status === true)
           .map((notification) => notification._id);
 
-          if(!notificationIds.length) return
+          if(!notificationIds.length){
+            setIsLoading(false);
+            return
+          } 
 
         notificationService
           .noficationUpdateStatus(notificationIds)
           .then((response) => {
 
             if (response.success) {
+
               const updatedNotifications = res?.data?.docs.map(
                 (notification) => {
                   if (notificationIds.includes(notification._id)) {
@@ -59,10 +62,14 @@ export default function Notifications() {
                 }
               );
               setNotifications(updatedNotifications);
+              setIsLoading(false);
             }
           })
-          .catch((error) => console.log(error));
-        setIsLoading(false);
+          .catch((error) => {
+            console.log(error)
+            setIsLoading(false);
+          });
+       
       })
       .catch((err) => {
         console.log(err);
@@ -112,6 +119,9 @@ export default function Notifications() {
   const handlePageClick = ({ selected }) => {
     setPage(selected + 1);
   };
+
+
+  console.log(isLoading, '>>>>>>>')
 
   return (
     <>
