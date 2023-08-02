@@ -17,9 +17,7 @@ const nextConfig = {
   },
   publicRuntimeConfig: {
     apiUrl:
-      process.env.NODE_ENV === 'development'
-        ? 'http://localhost:5000' // development api
-        : 'https://staging-api.tradestrek.com', // production api
+    'https://staging-api.tradestrek.com', // production api
   },
 };
 
