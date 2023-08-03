@@ -13,11 +13,15 @@ const nextConfig = {
     path: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://client-staging-green.vercel.app',
   },
   env: {
-    baseApiUrl: 'https://staging-api.tradestrek.com',
+    baseApiUrl: process.env.NODE_ENV === 'development'
+    ? 'http://localhost:4000' // development api
+    : 'https://staging-api.tradestrek.com',
   },
   publicRuntimeConfig: {
     apiUrl:
-    'https://staging-api.tradestrek.com', // production api
+    process.env.NODE_ENV === 'development'
+    ? 'http://localhost:4000' // development api
+    : 'https://staging-api.tradestrek.com', // production api
   },
 };
 

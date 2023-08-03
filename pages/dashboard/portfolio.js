@@ -25,6 +25,7 @@ export default function Portfolio() {
   const [holdingCurrent, setHoldingCurrent] = useState(0);
   const [accountValueLoading, setAccountValueLoading] = useState(true);
   const [shortCurrent, setShortCurrent] = useState(0);
+  const [ annualReturnsLoading, setAnnualReturnsLoading] = useState(true)
 
   useEffect(() => {
     Promise.all([
@@ -79,18 +80,41 @@ export default function Portfolio() {
 
   const calculateAccountalue = () => {
     if (accountValueLoading || Array.isArray(user) ) {
-      return "";
+      return "loading...";
     } else {
 
-      console.log('portfolio.cash', user?.portfolio?.cash, 'portfolio.profitLossToday >>>>',  user?.portfolio?.profitOrLossToday )
-     return  (holdingCurrent  + (user?.portfolio?.cash +
+   return  `₦${(holdingCurrent  + (user?.portfolio?.cash +
      user?.portfolio?.profitOrLossToday) - shortCurrent)
      
      .toFixed(2)
      ?.toString()
-     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+
+
     }
   };
+
+  const calculateAnnualReturn = () => {
+    if (accountValueLoading || Array.isArray(user) ) return "loading...";
+   
+     const accountValue = (holdingCurrent  + (user?.portfolio?.cash +
+      user?.portfolio?.profitOrLossToday) - shortCurrent)
+
+     console.log(accountValue, 'accountValue')
+     console.log(competitionStartingCash, 'competitionStartingCash')
+     console.log(createdAt, 'createdAt')
+
+      
+     return `${AnnualReturn(
+      user?.portfolio?.competitionStartingCash,
+      accountValue,
+      user?.portfolio?.createdAt
+    )
+      ?.toFixed(2)
+      ?.toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+    %`
+  }
 
   return (
     <>
@@ -120,7 +144,7 @@ export default function Portfolio() {
                   </span>
 
                   <p>
-                    ₦{calculateAccountalue()}
+                    {calculateAccountalue()}
                 
                   </p>
                 </div>
@@ -166,15 +190,7 @@ export default function Portfolio() {
                       </span>
 
                       <p>
-                        {AnnualReturn(
-                          user?.portfolio?.investment,
-                          user?.portfolio?.currentValue,
-                          user?.portfolio?.createdAt
-                        )
-                          ?.toFixed(2)
-                          ?.toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                        %
+                        {calculateAnnualReturn()}
                       </p>
                     </div>
                   </div>
