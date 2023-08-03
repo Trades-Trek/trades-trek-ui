@@ -101,8 +101,8 @@ export default function Portfolio() {
       user?.portfolio?.profitOrLossToday) - shortCurrent)
 
      console.log(accountValue, 'accountValue')
-     console.log(competitionStartingCash, 'competitionStartingCash')
-     console.log(createdAt, 'createdAt')
+     console.log(user?.portfolio?.competitionStartingCash, 'competitionStartingCash')
+     console.log(user?.portfolio?.createdAt, 'createdAt')
 
       
      return `${AnnualReturn(
