@@ -75,7 +75,7 @@ export default function PerformanceHistory({userName}) {
       <div className="">
 
       <div className="p-20">
-          <Link href={`competition-summary?username=${userName}`}  style={{ fontSize: "12px", fontWeight: "bold" }}>Go Back2</Link>
+          <Link href={`competition-summary?username=${userName}`}  style={{ fontSize: "12px", fontWeight: "bold" }}>Go Back</Link>
                   {/* <h1 style={{fontSize: "15px"}}>{infoData?.user?.username}</h1> */}
 
                   
