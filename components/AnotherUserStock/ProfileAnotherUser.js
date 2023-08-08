@@ -48,7 +48,7 @@ const ProfileAnotherUser = ({ userName }) => {
   useEffect(() => {
     Promise.all([
       orderService.holdingProfitOrLossAnotherUser(1, userName),
-      orderService.shortProfitOrLossAnotherUser(1, userName),
+      orderService.shortProfitOrLossAnotherUser(1, userName)
     ])
       .then(([holdingRes, shortRes]) => {
         if (holdingRes.success) {
@@ -70,13 +70,13 @@ const ProfileAnotherUser = ({ userName }) => {
 
   const calculateAccountalue = () => {
     if (accountValueLoading || !infoData) {
-      return "0.00";
+      return "Loading.....";
     } else {
-     return (holdingCurrent + (infoData?.Competition?.cash +
+     return `₦ ${(holdingCurrent + (infoData?.Competition?.cash +
       infoData?.Competition?.profitOrLossToday) - shortCurrent)   
      .toFixed(2)
      ?.toString()
-     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
     }
   };
 
@@ -103,7 +103,7 @@ const ProfileAnotherUser = ({ userName }) => {
                   <ToolTipCustome text="Displays the total current value of your portfolio, which is updated nightly after the market’s close." />
                 </span>
                 <p>
-                  ₦{calculateAccountalue()}
+                  {calculateAccountalue()}
                 </p>
               </div>
               <div className="profileContainerAccountblock">

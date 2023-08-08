@@ -16,6 +16,8 @@ import { setPopularCompany } from "../../actions/topCompany";
 import SelectGame from "../../components/SelectGame/SelectGame";
 import SubscriptionExpiredMessage from "../../components/MarketOpenClose/SubscriptionExpiredMessage";
 import ToolTipCustome from "../../components/Competition/ToolTip";
+import useAccountValue from '../../helpers/accountValueHooks'
+
 
 export default function TradesTrek() {
   // const [beginnerOption, setBeginnerOption] = useState(false);
@@ -28,6 +30,7 @@ export default function TradesTrek() {
   // const []
   const [userData, setUserData] = useState({});
   const dispatch=useDispatch()
+
 
   const router = useRouter();
   let { user } = useSelector((state) => state.userWrapper);
@@ -58,6 +61,8 @@ useEffect(() => {
  }
 }, [])
 
+const accountValue = useAccountValue(user);
+
 
 const handleTab=(index)=>{
   setTabIndex(index)
@@ -82,9 +87,15 @@ const handleTab=(index)=>{
               Account Value <ToolTipCustome text={`Displays the total current value of your portfolio, which is updated nightly after the market’s close.`}/>
               </span>
                 <span className="font-20 font-bold">
-                {/* ₦{(userData.accountValue?.toFixed(2))?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
-                ₦{user && ((user?.portfolio?.accountValue+user?.portfolio?.profitOrLossToday)?.toFixed(2))?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                </span>
+            
+                {accountValue
+                      ? `₦ ${accountValue
+                          .toFixed(2)
+                          ?.toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+                      : "Loading.."}
+                
+                 </span>
               </p>
             </div>
             <div className="col-block">

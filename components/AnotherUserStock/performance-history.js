@@ -69,7 +69,7 @@ export default function PerformanceHistory({userName}) {
     "Price",
     "Total Cash Value",
   ];
-//   console.log(tradeHistoryData)
+
   return (
     <>
       <div className="">
