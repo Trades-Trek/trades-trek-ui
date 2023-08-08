@@ -14,7 +14,7 @@ import { AnnualReturn, TodayPerChange } from "../../helpers/TodayChange";
 import SubscriptionExpiredMessage from "../../components/MarketOpenClose/SubscriptionExpiredMessage";
 import ToolTipCustome from "../../components/Competition/ToolTip";
 import { orderService } from "../../services/order.service";
-
+import useAccountValue from "../../helpers/accountValueHooks";
 
 export default function Portfolio() {
   let { user } = useSelector((state) => state.userWrapper);
@@ -22,33 +22,8 @@ export default function Portfolio() {
   const [typeData, setTypeData] = useState("week");
   const [perSelected, setPerSelected] = useState(false);
   const [userHistoryData, setuserHistoryData] = useState(null);
-  const [holdingCurrent, setHoldingCurrent] = useState(0);
-  const [accountValueLoading, setAccountValueLoading] = useState(true);
-  const [shortCurrent, setShortCurrent] = useState(0);
-  const [ annualReturnsLoading, setAnnualReturnsLoading] = useState(true)
 
-  useEffect(() => {
-    Promise.all([
-      orderService.holdingProfitOrLoss(),
-      orderService.shortProfitOrLoss(),
-    ])
-      .then(([holdingRes, shortRes]) => {
-        if (holdingRes.success) {
-          setHoldingCurrent(holdingRes.holdingCurrent);
-        } else {
-          setHoldingCurrent(0);
-        }
-
-        if (shortRes.success) {
-          setShortCurrent(shortRes.shortCurrent);
-        } else {
-          setShortCurrent(0);
-        }
-
-        setAccountValueLoading(false) 
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  const accountValue = useAccountValue(user);
 
   useEffect(() => {
     userService
@@ -78,34 +53,10 @@ export default function Portfolio() {
       });
   }, [user, typeData, perSelected]);
 
-  const calculateAccountalue = () => {
-    if (accountValueLoading || Array.isArray(user) ) {
-      return "loading...";
-    } else {
-
-   return  `₦${(holdingCurrent  + (user?.portfolio?.cash +
-     user?.portfolio?.profitOrLossToday) - shortCurrent)
-     
-     .toFixed(2)
-     ?.toString()
-     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
-
-
-    }
-  };
-
   const calculateAnnualReturn = () => {
-    if (accountValueLoading || Array.isArray(user) ) return "loading...";
-   
-     const accountValue = (holdingCurrent  + (user?.portfolio?.cash +
-      user?.portfolio?.profitOrLossToday) - shortCurrent)
+    if (!accountValue) return "loading...";
 
-     console.log(accountValue, 'accountValue')
-     console.log(user?.portfolio?.competitionStartingCash, 'competitionStartingCash')
-     console.log(user?.portfolio?.createdAt, 'createdAt')
-
-      
-     return `${AnnualReturn(
+    return `${AnnualReturn(
       user?.portfolio?.competitionStartingCash,
       accountValue,
       user?.portfolio?.createdAt
@@ -113,8 +64,8 @@ export default function Portfolio() {
       ?.toFixed(2)
       ?.toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-    %`
-  }
+    %`;
+  };
 
   return (
     <>
@@ -144,8 +95,13 @@ export default function Portfolio() {
                   </span>
 
                   <p>
-                    {calculateAccountalue()}
-                
+                     
+                {accountValue
+                      ? `₦ ${accountValue
+                          .toFixed(2)
+                          ?.toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+                      : "Loading.."}
                   </p>
                 </div>
                 <div className="profileContainerAccountblock">
@@ -189,9 +145,7 @@ export default function Portfolio() {
                         />
                       </span>
 
-                      <p>
-                        {calculateAnnualReturn()}
-                      </p>
+                      <p>{calculateAnnualReturn()}</p>
                     </div>
                   </div>
                 </div>
