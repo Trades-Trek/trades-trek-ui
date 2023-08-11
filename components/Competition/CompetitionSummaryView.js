@@ -4,6 +4,7 @@ import { gameService } from "../../services/game.service";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import IncreaseDecrease from "../Table/IncreaseDecrease";
+import  OverallChange from '../Table/OverallChange'
 import ReactPaginate from "react-paginate";
 import { Loader } from "@mantine/core";
 import { useRouter } from "next/router";
@@ -80,7 +81,6 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
       .then((res) => {
         const { success, data, currentGame } = res;
         if (success) {
-     
           const { topRanked, nearRank, rank } = data;
 
           if (!data.rank) {
@@ -93,7 +93,6 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
             setNearResult(nearRank);
             setYourRank(rank);
             setMyGame(currentGame);
-            
           }
         }
         setLoading(false);
@@ -235,10 +234,11 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
                           {/* <td>{`${item?.result?.username || ""} `}</td> */}
                           <td>
                             ₦{" "}
-                            {item?.accountValue
-                              ?.toFixed(2)
-                              ?.toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            {item?.accountValue +
+                              item?.profitOrLossToday
+                                ?.toFixed(2)
+                                ?.toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                           </td>
 
                           {IncreaseDecrease(
@@ -246,9 +246,11 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
                             (item?.profitOrLossToday * 100) / item?.accountValue
                           )}
 
-                          {IncreaseDecrease(
-                            item?.annualReturn,
-                            (item?.annualReturn * 100) / item?.accountValue
+                          {OverallChange(
+                            item?.accountValue +
+                            item?.profitOrLossToday 
+                            ,
+                            item?.competitionStartingCash
                           )}
                         </tr>
                       );

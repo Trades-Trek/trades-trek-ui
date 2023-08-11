@@ -12,9 +12,6 @@ const ProfileAnotherUser = ({ userName }) => {
   const [typeData, setTypeData] = useState("week");
   const [perSelected, setPerSelected] = useState(false);
   const [graphData, setGraphData] = useState();
-  const [holdingCurrent, setHoldingCurrent] = useState(0);
-  const [shortCurrent, setShortCurrent] = useState(0);
-  const [accountValueLoading, setAccountValueLoading] = useState(true);
   const [user1, setUser1] = useState(true);
   const [user2, setUser2] = useState(true);
   let { user } = useSelector((state) => state.userWrapper);
@@ -45,41 +42,6 @@ const ProfileAnotherUser = ({ userName }) => {
       .catch((err) => console.log(err));
   }, [userName, typeData, perSelected, user1, user2]);
 
-  useEffect(() => {
-    Promise.all([
-      orderService.holdingProfitOrLossAnotherUser(1, userName),
-      orderService.shortProfitOrLossAnotherUser(1, userName)
-    ])
-      .then(([holdingRes, shortRes]) => {
-        if (holdingRes.success) {
-          setHoldingCurrent(holdingRes.holdingCurrent);
-        } else {
-          setHoldingCurrent(0);
-        }
-
-        if (shortRes.success) {
-          setShortCurrent(shortRes.shortCurrent);
-        } else {
-          setShortCurrent(0);
-        }
-
-        setAccountValueLoading(false) 
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  const calculateAccountalue = () => {
-    if (accountValueLoading || !infoData) {
-      return "Loading.....";
-    } else {
-     return `₦ ${(holdingCurrent + (infoData?.Competition?.cash +
-      infoData?.Competition?.profitOrLossToday) - shortCurrent)   
-     .toFixed(2)
-     ?.toString()
-     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
-    }
-  };
-
   return (
     <>
       <div>
@@ -103,7 +65,16 @@ const ProfileAnotherUser = ({ userName }) => {
                   <ToolTipCustome text="Displays the total current value of your portfolio, which is updated nightly after the market’s close." />
                 </span>
                 <p>
-                  {calculateAccountalue()}
+                ₦{" "}
+                  {infoData
+                    ? (
+                        infoData?.Competition?.accountValue +
+                        infoData?.Competition?.profitOrLossToday
+                      )
+                        ?.toFixed(2)
+                        ?.toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    : "0.00"}
                 </p>
               </div>
               <div className="profileContainerAccountblock">

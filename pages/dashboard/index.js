@@ -26,7 +26,6 @@ import SubscriptionExpiredMessage from "../../components/MarketOpenClose/Subscri
 import { stockService } from "../../services/stock.service";
 import ToolTipCustome from "../../components/Competition/ToolTip";
 import { userService } from "../../services";
-import useAccountValue from "../../helpers/accountValueHooks";
 
 import { async } from "rxjs";
 
@@ -39,7 +38,6 @@ export default function Home() {
   const [allNews, setAllNews] = useState([]);
 
   let { user } = useSelector((state) => state.userWrapper);
-  const accountValue = useAccountValue(user);
 
   useEffect(() => {
     GetAllNews();
@@ -107,12 +105,15 @@ export default function Home() {
                       <ToolTipCustome text="Displays the total current value of your portfolio, which is updated nightly after the market’s close." />
                     </span>
                     <span>
-                    {accountValue
-                      ? `₦ ${accountValue
-                          .toFixed(2)
+                    ₦
+                      {user &&
+                        (
+                          user?.portfolio?.accountValue +
+                          user?.portfolio?.profitOrLossToday
+                        )
+                          ?.toFixed(2)
                           ?.toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
-                      : "Loading.."}
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     </span>
                   </li>
                   <li>

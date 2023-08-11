@@ -16,7 +16,6 @@ import { setPopularCompany } from "../../actions/topCompany";
 import SelectGame from "../../components/SelectGame/SelectGame";
 import SubscriptionExpiredMessage from "../../components/MarketOpenClose/SubscriptionExpiredMessage";
 import ToolTipCustome from "../../components/Competition/ToolTip";
-import useAccountValue from '../../helpers/accountValueHooks'
 
 
 export default function TradesTrek() {
@@ -61,7 +60,6 @@ useEffect(() => {
  }
 }, [])
 
-const accountValue = useAccountValue(user);
 
 
 const handleTab=(index)=>{
@@ -88,13 +86,15 @@ const handleTab=(index)=>{
               </span>
                 <span className="font-20 font-bold">
             
-                {accountValue
-                      ? `₦ ${accountValue
-                          .toFixed(2)
+                ₦
+                      {user &&
+                        (
+                          user?.portfolio?.accountValue +
+                          user?.portfolio?.profitOrLossToday
+                        )
+                          ?.toFixed(2)
                           ?.toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
-                      : "Loading.."}
-                
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                  </span>
               </p>
             </div>

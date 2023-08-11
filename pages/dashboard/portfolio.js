@@ -14,7 +14,6 @@ import { AnnualReturn, TodayPerChange } from "../../helpers/TodayChange";
 import SubscriptionExpiredMessage from "../../components/MarketOpenClose/SubscriptionExpiredMessage";
 import ToolTipCustome from "../../components/Competition/ToolTip";
 import { orderService } from "../../services/order.service";
-import useAccountValue from "../../helpers/accountValueHooks";
 
 export default function Portfolio() {
   let { user } = useSelector((state) => state.userWrapper);
@@ -23,7 +22,6 @@ export default function Portfolio() {
   const [perSelected, setPerSelected] = useState(false);
   const [userHistoryData, setuserHistoryData] = useState(null);
 
-  const accountValue = useAccountValue(user);
 
   useEffect(() => {
     userService
@@ -54,11 +52,9 @@ export default function Portfolio() {
   }, [user, typeData, perSelected]);
 
   const calculateAnnualReturn = () => {
-    if (!accountValue) return "loading...";
-
     return `${AnnualReturn(
       user?.portfolio?.competitionStartingCash,
-      accountValue,
+      user?.portfolio?.accountValue + user?.portfolio?.profitOrLossToday,  // user?.portfolio?.currentValue,
       user?.portfolio?.createdAt
     )
       ?.toFixed(2)
@@ -95,13 +91,14 @@ export default function Portfolio() {
                   </span>
 
                   <p>
-                     
-                {accountValue
-                      ? `₦ ${accountValue
-                          .toFixed(2)
-                          ?.toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
-                      : "Loading.."}
+                 ₦
+                    {(
+                      user?.portfolio?.accountValue +
+                      user?.portfolio?.profitOrLossToday
+                    )
+                      ?.toFixed(2)
+                      ?.toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
                   </p>
                 </div>
                 <div className="profileContainerAccountblock">
@@ -158,7 +155,8 @@ export default function Portfolio() {
                           text={`The total value of your cash and margin accounts that can be used to make trades. Calculated as: cash + (Long Stocks x 50%) - (Shorted Stocks x 150%).`}
                         />
                       </span>
-
+                        {console.log('user?.portfolio?.buyingPower', user?.portfolio?.buyingPower)}
+                        {console.log('user?.portfolio?.profitOrLossToday', user?.portfolio?.profitOrLossToday)}
                       <p>
                         ₦
                         {(
@@ -183,8 +181,7 @@ export default function Portfolio() {
                       <p>
                         ₦
                         {(
-                          user?.portfolio?.cash +
-                          user?.portfolio?.profitOrLossToday
+                          user?.portfolio?.cash 
                         )
                           ?.toFixed(2)
                           ?.toString()
