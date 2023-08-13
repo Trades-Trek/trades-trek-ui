@@ -7,8 +7,6 @@ export const TodayPerChange = (accountValue, perchange) => {
 
 export const AnnualReturn = (investmentValue, currentValue, createDate) => {
 
-  console.log('..................', (NigerianDifferentDay(createDate) % 365)==0?1:(NigerianDifferentDay(createDate) % 365));
-
  const daydiffresult = (NigerianDifferentDay(createDate) % 365)==0?1:(NigerianDifferentDay(createDate) % 365)
   const temp =
     ((1 +

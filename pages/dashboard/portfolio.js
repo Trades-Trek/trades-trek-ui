@@ -155,9 +155,7 @@ export default function Portfolio() {
                           text={`The total value of your cash and margin accounts that can be used to make trades. Calculated as: cash + (Long Stocks x 50%) - (Shorted Stocks x 150%).`}
                         />
                       </span>
-                        {console.log('user?.portfolio?.buyingPower', user?.portfolio?.buyingPower)}
-                        {console.log('user?.portfolio?.profitOrLossToday', user?.portfolio?.profitOrLossToday)}
-                      <p>
+                 <p>
                         ₦
                         {(
                           user?.portfolio?.buyingPower +
