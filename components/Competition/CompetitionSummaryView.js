@@ -234,8 +234,8 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
                           {/* <td>{`${item?.result?.username || ""} `}</td> */}
                           <td>
                             ₦{" "}
-                            {item?.accountValue +
-                              item?.profitOrLossToday
+                            {(item?.accountValue +
+                              item?.profitOrLossToday)
                                 ?.toFixed(2)
                                 ?.toString()
                                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
