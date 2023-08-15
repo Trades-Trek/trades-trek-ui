@@ -54,7 +54,7 @@ export default function Portfolio() {
   const calculateAnnualReturn = () => {
     return `${AnnualReturn(
       user?.portfolio?.competitionStartingCash,
-      user?.portfolio?.accountValue + user?.portfolio?.profitOrLossToday,  // user?.portfolio?.currentValue,
+      user?.portfolio?.accountValue + user?.portfolio?.profitOrLossToday,  
       user?.portfolio?.createdAt
     )
       ?.toFixed(2)
@@ -111,17 +111,10 @@ export default function Portfolio() {
                         />
                       </span>
 
-
-{/*                       
-                      <p>
-                         ₦{ user?.portfolio.profitOrLossToday?.toFixed(2)*-1}
-                      </p>
-                      <span>
-                       ({ (user?.portfolio.profitOrLossToday * 100) / user?.portfolio.accountValue?.toFixed(2)*-1}%)
-                      </span> */}
+ 
 
                       <p>
-                        + ₦
+                         ₦
                         {(
                           user?.portfolio?.currentValue -
                           user?.portfolio?.previousValue
@@ -131,8 +124,11 @@ export default function Portfolio() {
                           .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
                       </p>
                       <span>
-                        {/*   */}
-                      ({((user?.portfolio?.profitOrLossToday * 100) / user?.portfolio?.accountValue).toFixed(2)*-1}%)
+                    
+                      {/* ({((user?.portfolio?.profitOrLossToday * 100) / user?.portfolio?.accountValue).toFixed(2)*-1}%) */}
+
+                      ({((user?.portfolio?.profitOrLossToday * -100) / user?.portfolio?.accountValue).toFixed(2)}%)
+
                       </span>
                     </div>
                     <div>
