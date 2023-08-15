@@ -111,6 +111,15 @@ export default function Portfolio() {
                         />
                       </span>
 
+
+{/*                       
+                      <p>
+                         ₦{ user?.portfolio.profitOrLossToday?.toFixed(2)*-1}
+                      </p>
+                      <span>
+                       ({ (user?.portfolio.profitOrLossToday * 100) / user?.portfolio.accountValue?.toFixed(2)*-1}%)
+                      </span> */}
+
                       <p>
                         + ₦
                         {(
@@ -122,16 +131,8 @@ export default function Portfolio() {
                           .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
                       </p>
                       <span>
-                        (
-                        {TodayPerChange(
-                          user?.portfolio?.previousValue,
-                          user?.portfolio?.currentValue -
-                            user?.portfolio?.previousValue
-                        )
-                          ?.toFixed(2)
-                          ?.toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                        %)
+                        {/*   */}
+                      ({((user?.portfolio?.profitOrLossToday * 100) / user?.portfolio?.accountValue).toFixed(2)*-1}%)
                       </span>
                     </div>
                     <div>
