@@ -104,13 +104,13 @@ const HoldingTables = ({userName}) => {
                   <tr>
                     <td>TOTAL VALUE</td>
                     <td>TODAY'S CHANGE</td>
-                    <td>TOTAL GAIN/LOSS</td>
+                    <td style={{ textAlign: 'initial'}}>TOTAL GAIN/LOSS</td>
                   </tr>
                 </thead>
                <tbody>
                <tr>
                   <td>
-                    <h1>₦{holdingCurrent.toFixed(2)}</h1>
+                    <h1>₦{holdingCurrent.toFixed(2)} ddd</h1>
                   </td>
                   {IncreaseDecrease(totalTodayChange, todayChangePer)}
                   {IncreaseDecrease(totalGainOrLoss, totalChangePer)}
