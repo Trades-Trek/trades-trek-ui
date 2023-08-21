@@ -124,7 +124,7 @@ export default function Home() {
                       />
                     </span>
                     <span>
-                      +₦
+                      ₦
                       {(
                         user?.portfolio?.currentValue -
                         user?.portfolio?.previousValue

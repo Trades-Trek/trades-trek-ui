@@ -87,7 +87,7 @@ const ProfileAnotherUser = ({ userName }) => {
                       />
                     </span>
                     <p>
-                      +₦{" "}
+                      ₦{" "}
                       {infoData
                         ? (
                             infoData?.Competition?.currentValue -
