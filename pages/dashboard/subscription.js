@@ -50,7 +50,6 @@ export default function Sub() {
   };
 
   const renderView = (item, user) => {
-
     const itemId = item?._id;
     const userSubscriptionId = user?.user?.subscriptionId;
     const userSubscriptionDuration = user?.user.subscriptionDuration;
@@ -149,21 +148,25 @@ export default function Sub() {
       </div>
 
       <div className="site--content">
-        <div className="page--title--block">
-          <div className="card-no-gap">
-            <h1
-              className="mt--20"
-              style={{ textAlign: "center", fontSize: "20px" }}
-            >
-              Subscription History
-            </h1>
-            <div className="trade-data wrapper--text card--grid card-col-gap">
-              {subscriptionHistory.map((item, index) => (
-                <SubscriptionCart user={user} item={item} key={index} />
-              ))}
+        {user?.user?.subscriptionDuration === "trial" ? (
+          <></>
+        ) : (
+          <div className="page--title--block">
+            <div className="card-no-gap">
+              <h1
+                className="mt--20"
+                style={{ textAlign: "center", fontSize: "20px" }}
+              >
+                Subscription History
+              </h1>
+              <div className="trade-data wrapper--text card--grid card-col-gap">
+                {subscriptionHistory.map((item, index) => (
+                  <SubscriptionCart user={user} item={item} key={index} />
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       <UnsubscribeModel
