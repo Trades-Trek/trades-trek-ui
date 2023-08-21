@@ -103,13 +103,11 @@ export default function Sub() {
               </div>
             ) : (
               <div className="trade-data wrapper--text card--grid card-col-gap">
-                {/* When on free trial let's not make any other subscription available  */}
+                {/* When on free trial let's not make any other subscription available including freetrial */}
                 {allSubscription &&
                   [
                     ...(user?.user?.subscriptionDuration === "trial"
-                      ? allSubscription.filter(
-                          (e) => e.packageDuration === "trial"
-                        )
+                      ? [] // allSubscription.filter( (e) => e.packageDuration === "trial")
                       : allSubscription),
                   ].map((item, index) => {
                     return (

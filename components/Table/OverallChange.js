@@ -5,8 +5,6 @@ export const OverallChange = (accountValue, startingCash) => {
   const change = accountValue - startingCash
   const changePer = (change / startingCash ) * 100
 
-  console.log('accountValue',accountValue , 'startingCash',  startingCash)
-  console.log(changePer, change)
   return (
     <>
       {change < 0 ? (
