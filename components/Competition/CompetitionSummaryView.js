@@ -4,7 +4,7 @@ import { gameService } from "../../services/game.service";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import IncreaseDecrease from "../Table/IncreaseDecrease";
-import  OverallChange from '../Table/OverallChange'
+import OverallChange from "../Table/OverallChange";
 import ReactPaginate from "react-paginate";
 import { Loader } from "@mantine/core";
 import { useRouter } from "next/router";
@@ -234,11 +234,10 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
                           {/* <td>{`${item?.result?.username || ""} `}</td> */}
                           <td>
                             ₦{" "}
-                            {(item?.accountValue +
-                              item?.profitOrLossToday)
-                                ?.toFixed(2)
-                                ?.toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            {(item?.accountValue + item?.profitOrLossToday)
+                              ?.toFixed(2)
+                              ?.toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                           </td>
 
                           {IncreaseDecrease(
@@ -247,9 +246,7 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
                           )}
 
                           {OverallChange(
-                            item?.accountValue +
-                            item?.profitOrLossToday 
-                            ,
+                            item?.accountValue + item?.profitOrLossToday,
                             item?.competitionStartingCash
                           )}
                         </tr>
@@ -348,7 +345,7 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
                             )}
                             <td>
                               ₦{" "}
-                              {item?.accountValue
+                              {(item?.accountValue + item?.profitOrLossToday)
                                 ?.toFixed(2)
                                 ?.toString()
                                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
@@ -359,9 +356,9 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
                                 item?.accountValue
                             )}
 
-                            {IncreaseDecrease(
-                              item?.annualReturn,
-                              (item?.annualReturn * 100) / item?.accountValue
+                            {OverallChange(
+                              item?.accountValue + item?.profitOrLossToday,
+                              item?.competitionStartingCash
                             )}
                           </tr>
                         );
