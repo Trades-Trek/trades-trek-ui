@@ -40,7 +40,7 @@ function UnsubscribeModel({ modelOpened, setModelOpened,id }) {
       
       >
         <h2 style={{ textAlign: "center", margin: "20px 10px" }}>
-          <b>Do you want to Unsubscribe this package?</b>
+          <b>Do you want to Unsubscribe from this package?</b>
         </h2>
        
         <div style={{border: "1px solid #c9cdd1",marginTop:"40px"}}>
