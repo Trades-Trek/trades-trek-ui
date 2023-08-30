@@ -57,7 +57,7 @@ export default function Signup() {
  
   const onSubmit = async (data) => {
     setIsLoading(true);
-    data.phone = phone;
+    // data.phone = phone;
     data.device=device
     userService
       .signup(data)
@@ -223,7 +223,7 @@ export default function Signup() {
                   {errors.email?.type === "pattern" && "Invalid Email"}
                 </div>
               </div>
-              <div className="form--item ">
+              {/* <div className="form--item ">
                 <PhoneInput
                   className="form--control"
                   placeholder="Enter phone number"
@@ -233,36 +233,8 @@ export default function Signup() {
                   // defaultCountry="NG"
                   onChange={(phone) => setPhone(phone)}
                 />
-                {/* <div className="inputGroup">
-                  <span>+234</span>
-                  <input
-                    className={`form--control ${
-                      errors.phone ? "is-invalid" : ""
-                    }`}
-                    type="tel"
-                    id="phnum"
-                    placeholder="Phone Number"
-                    {...register("phone", {
-                      required: true,
-                      maxLength: 11,
-                      minLength: 11,
-                      pattern: /^[0-9]+/,
-                    })}
-                  />
-                </div> */}
-                {/* <label className="form--label" htmlFor="phnum">
-                  Phone Number
-                </label>
-                <div className="invalid-feedback">
-                  {errors.phone?.type === "required" &&
-                    "Phone number is required"}
-                  {errors.phone?.type === "minLength" &&
-                    "Phone number should be at least 11 digit. "}
-                  {errors.phone?.type === "maxLength" &&
-                    "Phone number should contain  11 digit only "}
-                  {errors.phone?.type === "pattern" && "Only digits allow"}
-                </div> */}
-              </div>
+               
+              </div> */}
               <div className="form--item">
                 <input
                   className={`form--control ${
