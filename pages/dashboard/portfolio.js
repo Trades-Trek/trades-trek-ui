@@ -127,7 +127,7 @@ export default function Portfolio() {
                     
                       {/* ({((user?.portfolio?.profitOrLossToday * 100) / user?.portfolio?.accountValue).toFixed(2)*-1}%) */}
 
-                      ({((user?.portfolio?.profitOrLossToday * -100) / user?.portfolio?.accountValue).toFixed(2)}%)
+                      ({((user?.portfolio?.profitOrLossToday * 100) / user?.portfolio?.accountValue).toFixed(2)}%)
 
                       </span>
                     </div>
