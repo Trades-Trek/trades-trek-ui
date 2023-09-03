@@ -5,7 +5,7 @@ import { jsPDF } from "jspdf";
 // Default export is a4 paper, portrait, using millimeters for units
 
 const SubscriptionCart = ({ item, user }) => {
-  
+
   const handlePrint = (data) => {
     // window.print();
     const doc = new jsPDF({
@@ -90,7 +90,15 @@ const SubscriptionCart = ({ item, user }) => {
     doc.save("a4.pdf");
   };
 
-  console.log(item?.result, '...item?.result?.packageAmount....')
+  const ExpiredDate = ({ item }) => {
+    if (item?.result && item.result.packageDuration !== "free-lifetime") {
+      return <p>Subscription Expired Date {moment(item.expireDate).format("lll")}</p>;
+    }
+  
+    return null;
+  };
+
+  
   return (
     <div
       className={`block--info subscription ${item?.result?._id ==
@@ -116,9 +124,8 @@ const SubscriptionCart = ({ item, user }) => {
           Subscription Purchase Date {moment(item?.createdAt).format("lll")}
         </p>
       </div>
-      <div className="info--text">
-         { user && user.user && user?.user.subscriptionDuration !== 'free-lifetime' && (<p>Subscription Expired Date {moment(item?.expireDate).format("lll")}</p>)}
-      </div>
+
+      <ExpiredDate item={item} />
 
       <button onClick={() => handlePrint(item)}>Print</button>
     </div>
