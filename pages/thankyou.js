@@ -82,8 +82,8 @@ const thankyou = () => {
             </p>
           </div>
           <div className="info--button" style={{ margin: "30px" }}>
-            <Link href="/dashboard/trade-stocks">
-              <a className="btn">Go App</a>
+            <Link href="/dashboard/subscription">
+              <a className="btn">Back to App</a>
             </Link>
           </div>
         </div>
@@ -106,8 +106,8 @@ const thankyou = () => {
             </p>
           </div>
           <div className="info--button" style={{ margin: "30px" }}>
-            <Link href="/dashboard/trade-stocks">
-              <a className="btn">Go App</a>
+          <Link href="/dashboard/subscription">
+              <a className="btn">Back to App</a>
             </Link>
           </div>
         </div>

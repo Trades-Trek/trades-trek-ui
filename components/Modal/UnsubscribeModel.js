@@ -2,22 +2,17 @@ import { Modal, useMantineTheme } from "@mantine/core";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { userService } from "../../services";
+import Router, { withRouter } from "next/router";
 
-function UnsubscribeModel({ modelOpened, setModelOpened,id }) {
+function UnsubscribeModel({
+  modelOpened,
+  setModelOpened,
+  setSubcriptionLink,
+  subcriptionLink,
+}) {
   const router = useRouter();
 
   const theme = useMantineTheme();
-  const unsubscribePackage = (id) => {
-          userService.cancelTransaction(id).then((res)=>{
-                    if(res.success){
-                         router.push('/dashboard')     
-                    }
-
-          }).catch((err)=>{
-                    console.log(err)
-          })
-
-  };
 
   return (
     <Modal
@@ -36,29 +31,42 @@ function UnsubscribeModel({ modelOpened, setModelOpened,id }) {
         setModelOpened(false);
       }}
     >
-      <div
-      
-      >
+      <div>
         <h2 style={{ textAlign: "center", margin: "20px 10px" }}>
-          <b>Do you want to Unsubscribe from this package?</b>
+          <b>
+            Do you want to Resubscribe to this package once your current plan
+            expires?
+          </b>
         </h2>
-       
-        <div style={{border: "1px solid #c9cdd1",marginTop:"40px"}}>
-          <button style={{width:"50%",borderRight: "0.5px solid #c9cdd1",padding:'10px'}}
+
+        <div style={{ border: "1px solid #c9cdd1", marginTop: "40px" }}>
+          <button
+            style={{
+              width: "50%",
+              borderRight: "0.5px solid #c9cdd1",
+              padding: "10px",
+            }}
             onClick={() => {
               setModelOpened(false);
-              unsubscribePackage(id);
+              if (subcriptionLink) {
+                Router.push(subcriptionLink);
+              }
             }}
-            className='done'
-            // style={{ margin: "20px" }}
+            className="done"
           >
             Yes
           </button>
           <button
-            onClick={() => setModelOpened(false)}
-            style={{width:"50%",borderRight: "0.5px solid #c9cdd1",padding:'10px'}}
-            className='cancel'
-
+            onClick={() => {
+              setSubcriptionLink("");
+              setModelOpened(false);
+            }}
+            style={{
+              width: "50%",
+              borderRight: "0.5px solid #c9cdd1",
+              padding: "10px",
+            }}
+            className="cancel"
           >
             Cancel
           </button>

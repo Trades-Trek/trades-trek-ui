@@ -62,17 +62,15 @@ export default function Sidebar() {
 
   useEffect(() => {
     document.body.classList.remove("otp--page");
-
-    if (
-      router.asPath == "/dashboard/competition-summary/" ||
-      router.asPath == "/dashboard/learning/"
-    ) {
-      if (user && user.user && user.user.subscriptionDuration) {
-        if (user?.user?.subscriptionDuration === "free-lifetime")
-          router.push("/dashboard/subscription");
+  
+    if (router.asPath === "/dashboard/competition-summary/" || router.asPath === "/dashboard/learning/") {
+      if (user?.user?.subscriptionDuration === "free-lifetime") {
+        router.push("/dashboard/subscription");
+        open()
       }
     }
   }, [router.asPath, user]);
+  
 
   return (
     <>
@@ -239,7 +237,11 @@ export default function Sidebar() {
               </Link>
             </li>
             <li
-              onClick={open}
+              onClick={() => {
+                if (user?.user?.subscriptionDuration === "free-lifetime") {
+                  open();
+                }
+              }}
               className={
                 router.pathname == "/dashboard/competition-summary"
                   ? `menu__list--item active--menu `

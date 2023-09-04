@@ -13,6 +13,7 @@ import UnsubscribeModel from "../../components/Modal/UnsubscribeModel";
 import { Loader } from "@mantine/core";
 import SubscriptionExpiredMessage from "../../components/MarketOpenClose/SubscriptionExpiredMessage";
 import SubscriptionCart from "../../components/Subscription/SubscriptionCart";
+import PendingSubscriptionCart from "../../components/Subscription/PendingSubscriptionCart";
 
 export default function Sub() {
   let { user } = useSelector((state) => state.userWrapper);
@@ -20,21 +21,23 @@ export default function Sub() {
 
   const [allSubscription, setAllSubscription] = useState([]);
   const [modelOpened, setModelOpened] = useState(false);
-  const [subscriptionId, setSubscriptionId] = useState("");
+  const [subcriptionLink, setSubcriptionLink] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [subscriptionHistory, setSubscriptionHistory] = useState([]);
+  const [pendingSubscription, setPendingSubscription] = useState([]);
+
   useEffect(() => {
     setIsLoading(true);
     userService
       .getAllSubscription()
       .then((res) => {
         if (res.success) {
+          console.log(res);
           setAllSubscription(res.data);
           setIsLoading(false);
         }
       })
       .catch((err) => {
-        console.log(err);
         setIsLoading(false);
       });
     userService
@@ -42,15 +45,16 @@ export default function Sub() {
       .then((res) => {
         if (res.success) {
           setSubscriptionHistory(res.data);
+          setPendingSubscription(res.pendingSubscription);
         } else {
           setSubscriptionHistory([]);
         }
       })
       .catch((err) => console.log(err));
   }, []);
-  const Unsubscribe = (id) => {
+  const Resubscribe = (subLink) => {
     setModelOpened(true);
-    setSubscriptionId(id);
+    setSubcriptionLink(subLink);
   };
 
   const renderView = (item, user) => {
@@ -63,52 +67,56 @@ export default function Sub() {
       if (nonPaidSubscriptions.includes(userSubscriptionDuration)) {
         return ""; // if user is currently on a free-lifetime / trial it ensures there is no link on the card
       } else {
-        return (// if user is currently on a paid plan , when that plan is being rendered it should only show an unsubscribe button
+        return (
+          // if user is currently on a paid plan , when that plan is being rendered it should only show a resubscribe button
           <Link href="#">
-            <a onClick={() => Unsubscribe(item?._id)} className="btn">
-              {`${item?.packageDuration.toUpperCase()} UNSUBSCRIBE`}{" "}
+            <a
+              onClick={() => {
+                pendingSubscription.length > 2
+                  ? open()
+                  : Resubscribe(
+                      `https://paystack.com/pay/${item.slug}?email=${user.user.email}&first_name=${user.user.firstName}&last_name=${user.user.lastName}&readonly=email,first_name,last_name`
+                    );
+              }}
+              className="btn"
+            >
+              {`${item?.packageDuration.toUpperCase()} RESUBSCRIBE`}{" "}
             </a>
           </Link>
         );
       }
     } else {
-
       if (!nonPaidSubscriptions.includes(item?.packageDuration)) {
         // for rendering card that one can subscribe to
-
 
         // if user is currently on trial  paid plans are prevent from showing on the UI with the subscriptionUsersCanSee()
 
         // if user is currently on free life time the paid cards should link to paystack
-        if(user?.user.subscriptionDuration === 'free-lifetime'){
-          return <Link
-          href={`https://paystack.com/pay/${item.slug}?email=${user.user.email}&first_name=${user.user.firstName}&last_name=${user.user.lastName}&readonly=email,first_name,last_name`}
-          passHref
-        >
-          <a
-            className="btn"
-            target="_blank"
-            rel="noopener noreferrer"
-          >{`${item?.packageDuration.toUpperCase()} SUBSCRIPTION`}</a>
-        </Link>
+        if (user?.user.subscriptionDuration === "free-lifetime") {
+          return (
+            <Link
+              href={`https://paystack.com/pay/${item.slug}?email=${user.user.email}&first_name=${user.user.firstName}&last_name=${user.user.lastName}&readonly=email,first_name,last_name`}
+              passHref
+            >
+              <a className="btn">{`${item?.packageDuration.toUpperCase()} SUBSCRIPTION`}</a>
+            </Link>
+          );
         }
-  
-        return item.packageDuration !== user?.user.subscriptionDuration ? (
+
+        return (
           <Link href="#">
-            <a onClick={open} className="btn">
+            <a
+              onClick={() => {
+                pendingSubscription.length > 2
+                  ? open()
+                  : Resubscribe(
+                      `https://paystack.com/pay/${item.slug}?email=${user.user.email}&first_name=${user.user.firstName}&last_name=${user.user.lastName}&readonly=email,first_name,last_name`
+                    );
+              }}
+              className="btn"
+            >
               {`${item?.packageDuration.toUpperCase()} SUBSCRIPTION`}{" "}
             </a>
-          </Link>
-        ) : (
-          <Link
-            href={`https://paystack.com/pay/${item.slug}?email=${user.user.email}&first_name=${user.user.firstName}&last_name=${user.user.lastName}&readonly=email,first_name,last_name`}
-            passHref
-          >
-            <a
-              className="btn"
-              target="_blank"
-              rel="noopener noreferrer"
-            >{`${item?.packageDuration.toUpperCase()} SUBSCRIPTION`}</a>
           </Link>
         );
       }
@@ -193,6 +201,30 @@ export default function Sub() {
         </div>
       </div>
 
+      {pendingSubscription.length > 0 && (
+        <div className="site--content">
+          <div className="page--title--block">
+            <div className="card-no-gap">
+              <h1
+                className="mt--20"
+                style={{ textAlign: "center", fontSize: "20px" }}
+              >
+                Pending Subscription
+              </h1>
+              <div className="trade-data wrapper--text card--grid card-col-gap">
+                {pendingSubscription?.map((item, index) => (
+                  <PendingSubscriptionCart
+                    user={user}
+                    item={item}
+                    key={index}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="site--content">
         <div className="page--title--block">
           <div className="card-no-gap">
@@ -217,14 +249,16 @@ export default function Sub() {
         size="auto"
         title={
           <Text fw={700}>
-           Unsubscribe from current subscription before subscribing to a new subscription
+            Users are not allowed to subscribe to more than 3 extra
+            subscriptions
           </Text>
         }
       ></Modal>
       <UnsubscribeModel
         modelOpened={modelOpened}
         setModelOpened={setModelOpened}
-        id={subscriptionId}
+        subcriptionLink={subcriptionLink}
+        setSubcriptionLink={setSubcriptionLink}
       />
     </>
   );
