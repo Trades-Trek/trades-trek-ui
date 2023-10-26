@@ -6,20 +6,25 @@ import { useSelector } from "react-redux";
 import SelectGame from "../SelectGame/SelectGame";
 
 import Sidebar from "../Sidebar/Sidebar";
+import FormSpinner from "../../components/Spinners/FormSpinner";
+import tradeHistoryHeaders from "../../helpers/tradehistorydownloadHeaders";
+import ExportExcel from "../../helpers/ExportExcel";
 import { DataConvert } from "../../helpers/DateTimeConverter";
 import { orderService } from "../../services/order.service";
 
-export default function HistoryUser({userName}) {
+
+export default function HistoryUser({ userName }) {
   const [tradeHistoryData, setTradeHistoryData] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [allPage, setAllPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [xlsxDownloading, setXlsxDownloading] = useState(false);
   let { user } = useSelector((state) => state.userWrapper);
 
   useEffect(() => {
     setIsLoading(true);
     orderService
-      .tradeHistoryAnotheUser(currentPage,userName)
+      .tradeHistoryAnotheUser(currentPage, userName)
       .then((res) => {
         if (res.success) {
           setTradeHistoryData(res.orders.docs);
@@ -33,12 +38,12 @@ export default function HistoryUser({userName}) {
         setIsLoading(false);
       })
       .catch((err) => console.log(err));
-  }, [user,userName]);
+  }, [user, userName]);
 
   const handlePageClick = ({ selected }) => {
     setIsLoading(true);
     orderService
-      .tradeHistoryAnotheUser(selected + 1,userName)
+      .tradeHistoryAnotheUser(selected + 1, userName)
       .then((res) => {
         if (res.success) {
           setCurrentPage(res.orders.page);
@@ -54,6 +59,31 @@ export default function HistoryUser({userName}) {
       })
       .catch((err) => console.log(err));
   };
+
+  const downloadTradeHistoryAnotherUserAll = async (str) => {
+    try {
+      const { success, orders } = await orderService.tradeHistoryAnotherUserAll(userName);
+      if (success) {
+
+        if(!orders.length){
+          alert("No record available for download");
+          return
+        }
+
+        const transformedOrders = orders.map(item => ({
+          ...item,
+          total_cash_value: item.rate * item.quantity
+        }));
+
+        ExportExcel(tradeHistoryHeaders, transformedOrders, `Trade_History_${userName}_`);
+      }
+      setXlsxDownloading(false);
+    } catch (err) {
+      setXlsxDownloading(false);
+      alert("Download failed try again");
+    }
+  };
+
   const columns = [
     "Date",
     "Symbol",
@@ -65,14 +95,15 @@ export default function HistoryUser({userName}) {
   return (
     <>
       <div className="">
-
-      <div className="p-20">
-          <Link href={`competition-summary?username=${userName}`}  style={{ fontSize: "12px", fontWeight: "bold" }}>Go Back</Link>
-                  {/* <h1 style={{fontSize: "15px"}}>{infoData?.user?.username}</h1> */}
-
-                  
+        <div className="p-20">
+          <Link
+            href={`competition-summary?username=${userName}`}
+            style={{ fontSize: "12px", fontWeight: "bold" }}
+          >
+            Go Back
+          </Link>
+          {/* <h1 style={{fontSize: "15px"}}>{infoData?.user?.username}</h1> */}
         </div>
-
 
         <div className="page--title--block">
           <div className="card-no-gap">
@@ -161,6 +192,27 @@ export default function HistoryUser({userName}) {
                     renderOnZeroPageCount={null}
                   />
                 </div>
+              )}
+
+              {xlsxDownloading ? (
+                <Link href="javascript:void(0)">
+                  <a className="btn spinnerBtn downloadButtonStyle">
+                    <FormSpinner />
+                  </a>
+                </Link>
+              ) : (
+                <Link href="javascript:void(0)">
+                  <a
+                    className="btn downloadButtonStyle"
+                    style={{width: '100px', margin: '10px'}}
+                    onClick={() => {
+                      setXlsxDownloading(true);
+                      downloadTradeHistoryAnotherUserAll("xlsx");
+                    }}
+                  >
+                    Download
+                  </a>
+                </Link>
               )}
             </div>
           </div>

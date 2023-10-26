@@ -49,7 +49,7 @@ function CancelProduct({ modelOpened, setModelOpened, id }) {
     >
       <div>
         <h2 style={{ textAlign: "center", margin: "20px 10px" }}>
-          <b>Do you want to Cancel Product</b>
+          <b>Do you want to Cancel Trade</b>
         </h2>
 
         <div style={{ border: "1px solid #c9cdd1", marginTop: "40px" }}>

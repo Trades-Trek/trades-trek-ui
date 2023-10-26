@@ -6,18 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { slide as Menu } from "react-burger-menu";
 import { setUser } from "../../actions/users";
 import { userService } from "../../services/user.service";
-import { Modal } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 
 import LogOutModal from "../Modal/LogoutModal";
 import moment from "moment-timezone";
 import NigerianTimeZone from "../../helpers/Negerian-TimeZone";
 import { notificationService } from "../../services/notification.service";
 
-// const ENDPOINT = "http://localhost:3232";
+
 
 export default function Sidebar() {
-  const [opened, { open, close }] = useDisclosure(false);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -62,23 +59,12 @@ export default function Sidebar() {
 
   useEffect(() => {
     document.body.classList.remove("otp--page");
-  
-    if (router.asPath === "/dashboard/competition-summary/" || router.asPath === "/dashboard/learning/") {
-      if (user?.user?.subscriptionDuration === "free-lifetime") {
-        router.push("/dashboard/subscription");
-        open()
-      }
-    }
+
   }, [router.asPath, user]);
   
 
   return (
     <>
-      <Modal
-        opened={opened}
-        onClose={close}
-        title="Subscribe to a paid plan to view competitions"
-      ></Modal>
       <div
         className={
           menuCollapse
@@ -237,11 +223,6 @@ export default function Sidebar() {
               </Link>
             </li>
             <li
-              onClick={() => {
-                if (user?.user?.subscriptionDuration === "free-lifetime") {
-                  open();
-                }
-              }}
               className={
                 router.pathname == "/dashboard/competition-summary"
                   ? `menu__list--item active--menu `
@@ -250,9 +231,7 @@ export default function Sidebar() {
             >
               <Link
                 href={
-                  user?.user?.subscriptionDuration === "free-lifetime"
-                    ? "/dashboard/subscription"
-                    : "/dashboard/competition-summary"
+                  "/dashboard/competition-summary"
                 }
               >
                 <a>

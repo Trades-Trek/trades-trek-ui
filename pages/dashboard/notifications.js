@@ -120,9 +120,6 @@ export default function Notifications() {
     setPage(selected + 1);
   };
 
-
-  console.log(isLoading, '>>>>>>>')
-
   return (
     <>
       <Sidebar />

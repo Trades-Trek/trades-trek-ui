@@ -169,10 +169,34 @@ function tradeHistory(page) {
     });
 }
 
+function tradeHistoryAll() {
+  return fetchWrapper
+    .get(`${baseUrl}/user/order/history-all?gameId=${localStorage.getItem("GameId") || ''}`)
+    .then((res) => {
+      return res;
+    })
+    .catch((errr) => {
+
+      return errr;
+    });
+}
+
 // trade history for another user ......... 
 function tradeHistoryAnotheUser(page,username) {
   return fetchWrapper
     .get(`${baseUrl}/user/order/history-other-user?page=${page}&gameId=${localStorage.getItem("GameId") || ''}&userName=${username}`)
+    .then((res) => {
+      return res;
+    })
+    .catch((errr) => {
+
+      return errr;
+    });
+} 
+
+function tradeHistoryAnotherUserAll(username) {
+  return fetchWrapper
+    .get(`${baseUrl}/user/order/history-other-user-all?gameId=${localStorage.getItem("GameId") || ''}&userName=${username}`)
     .then((res) => {
       return res;
     })
@@ -273,6 +297,8 @@ export const orderService = {
   profitOrLoss,
   popularCompanies,
   tradeHistory,
+  tradeHistoryAll,
+  tradeHistoryAnotherUserAll,
   holdingProfitOrLoss,
   shortProfitOrLoss,
   getFailedOrders,

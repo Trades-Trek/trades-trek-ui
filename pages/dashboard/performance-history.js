@@ -8,12 +8,18 @@ import SelectGame from "../../components/SelectGame/SelectGame";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { DataConvert } from "../../helpers/DateTimeConverter";
 import { userService } from "../../services";
+import ExportExcel from "../../helpers/ExportExcel";
+import performanceHistoryHeaders from '../../helpers/performanceHistoryHeaders'
+import FormSpinner from "../../components/Spinners/FormSpinner";
+
 
 export default function PerformanceHistory() {
   const [userHistoryData, setuserHistoryData] = useState([]);
   const [currentPage,setCurrentPage]=useState(1);
   const [allPage,setAllPage]=useState(1)
   const [isLoading,setIsLoading]=useState(false)
+  const [xlsxDownloading, setXlsxDownloading] = useState(false);
+
   let { user } = useSelector((state) => state.userWrapper);
 
   useEffect(() => {
@@ -56,6 +62,25 @@ export default function PerformanceHistory() {
     })
     .catch((err) => console.log(err));
   }
+
+  const downloadPerformanceHistory = async (str) => {
+    try {
+      const { success, history } = await userService.userPerformanceHistoryAll();
+      if (success) {
+        
+        if(!history.length){
+          alert("No record available for download");
+          return
+        }
+        
+        ExportExcel(performanceHistoryHeaders, history, "Performance_History_");
+      }
+      setXlsxDownloading(false);
+    } catch (err) {
+      setXlsxDownloading(false);
+      alert('Download failed try again')
+    }
+  };
  
   const columns = [
     "Date",
@@ -161,6 +186,27 @@ export default function PerformanceHistory() {
                       renderOnZeroPageCount={null}
                     />
                     </div>}
+
+                    {xlsxDownloading ? (
+                <Link href="javascript:void(0)">
+                  <a className="btn spinnerBtn downloadButtonStyle">
+                    <FormSpinner />
+                  </a>
+                </Link>
+              ) : (
+                <Link href="javascript:void(0)">
+                  <a
+                    className="btn downloadButtonStyle"
+                   
+                    onClick={() => {
+                      setXlsxDownloading(true);
+                      downloadPerformanceHistory("xlsx");
+                    }}
+                  >
+                   Download
+                  </a>
+                </Link>
+              )}  
             </div>
           </div>
         </div>

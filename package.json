@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "rd /s /q .next && next dev",
     "build": "next build",
     "start": "next start",
     "export": "next export",
@@ -60,6 +60,7 @@
     "slick-carousel": "^1.8.1",
     "socket.io-client": "^4.5.1",
     "timeago-react": "^3.0.5",
+    "xlsx": "^0.18.5",
     "yup": "^1.2.0"
   },
   "devDependencies": {

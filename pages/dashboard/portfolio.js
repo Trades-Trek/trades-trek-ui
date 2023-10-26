@@ -237,7 +237,7 @@ export default function Portfolio() {
                             </Link>
                           </span>{" "}
                           ₦
-                          {user?.top?.accountValue
+                          {(user?.top?.accountValue + user?.top?.profitOrLossToday)
                             ?.toFixed(2)
                             ?.toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}

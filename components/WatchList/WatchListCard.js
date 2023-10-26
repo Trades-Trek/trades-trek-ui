@@ -5,8 +5,7 @@ import React from "react";
 export default function WatchListCard({ listData, removeItem }) {
   const router = useRouter();
   const handleClick = (data) => {
-    router.push("/dashboard/trade-stocks");
-    localStorage.setItem("stock", JSON.stringify(data));
+    router.push(`/dashboard/learning/?tab=stockdetails&symbol=${data.Symbol}`)
   };
   return (
     <>

@@ -42,7 +42,7 @@ const SubscriptionExpire = () => {
     var today = new Date();
     today.setMinutes(today.getMinutes()-10)
     var temp = NigerianTimeZone(today);
-    var expired = user?.user?.expiredDate;
+    var expired = user?.user?.currentSubscriptionExpiryDate;
     var temp1 = NigerianTimeZone(expired);
     today = new Date(moment(temp).format("YYYY-MM-DD HH:mm:ss"));
     expired = new Date(moment(temp1).format("YYYY-MM-DD HH:mm:ss"));
@@ -57,7 +57,7 @@ const SubscriptionExpire = () => {
   };
 
   useEffect(() => {
-    if (user?.user?.expiredDate) {
+    if (user?.user?.currentSubscriptionExpiryDate) {
       setInterval(() => {
         timeCount();
       }, 1000);

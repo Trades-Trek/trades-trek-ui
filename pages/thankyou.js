@@ -41,7 +41,6 @@ const thankyou = () => {
           }else{
             setError(true)
             setLoading(false);
-
           }
           
         })
@@ -82,7 +81,7 @@ const thankyou = () => {
             </p>
           </div>
           <div className="info--button" style={{ margin: "30px" }}>
-            <Link href="/dashboard/subscription">
+          <Link href="/dashboard/subscription">
               <a className="btn">Back to App</a>
             </Link>
           </div>

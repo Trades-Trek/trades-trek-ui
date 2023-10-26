@@ -403,7 +403,7 @@ export default function Account() {
                 {user && user.user
                   ? user.user.subscriptionDuration === "free-lifetime"
                     ? "free-lifetime"
-                    : moment(user.user.expiredDate).format("lll")
+                    : moment(user.user.currentSubscriptionExpiryDate).format("lll")
                   : "Loading..."}
               </h4>
             </div>

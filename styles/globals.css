@@ -23,6 +23,15 @@
   src: url(../public/fonts/Poppins-ExtraBold.ttf);
 }
 
+.downloadButtonStyle{
+  width: 150px !important;
+  margin: 2px auto
+}
+
+.stock-name-td:hover{
+  color: red
+}
+
 :root{
   --lightGreyColor: #f7f7f7;
   --lightGreyColor-1: #F9F9F9;

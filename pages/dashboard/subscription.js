@@ -32,7 +32,6 @@ export default function Sub() {
       .getAllSubscription()
       .then((res) => {
         if (res.success) {
-          console.log(res);
           setAllSubscription(res.data);
           setIsLoading(false);
         }
@@ -72,9 +71,10 @@ export default function Sub() {
           <Link href="#">
             <a
               onClick={() => {
-                pendingSubscription.length > 2
-                  ? open()
-                  : Resubscribe(
+                // pendingSubscription.length > 2
+                  // ? open()
+                  // : 
+                  Resubscribe(
                       `https://paystack.com/pay/${item.slug}?email=${user.user.email}&first_name=${user.user.firstName}&last_name=${user.user.lastName}&readonly=email,first_name,last_name`
                     );
               }}
@@ -107,9 +107,11 @@ export default function Sub() {
           <Link href="#">
             <a
               onClick={() => {
-                pendingSubscription.length > 2
-                  ? open()
-                  : Resubscribe(
+                // pendingSubscription.length > 2
+                //   ? open()
+                //   :
+                  
+                  Resubscribe(
                       `https://paystack.com/pay/${item.slug}?email=${user.user.email}&first_name=${user.user.firstName}&last_name=${user.user.lastName}&readonly=email,first_name,last_name`
                     );
               }}
@@ -242,7 +244,7 @@ export default function Sub() {
           </div>
         </div>
       </div>
-
+{/* 
       <Modal
         opened={opened}
         onClose={close}
@@ -253,7 +255,7 @@ export default function Sub() {
             subscriptions
           </Text>
         }
-      ></Modal>
+      ></Modal> */}
       <UnsubscribeModel
         modelOpened={modelOpened}
         setModelOpened={setModelOpened}

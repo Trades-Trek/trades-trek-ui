@@ -15,24 +15,24 @@ const SubscriptionExpiredMessage = () => {
       if (user.user.subscriptionDuration === "free-lifetime") return; 
       if (user.user.subscriptionDuration === "trial") {
         return `You are currently on free-trial plan which ends on  ${moment(
-          user?.user?.expiredDate
+          user?.user?.currentSubscriptionExpiryDate
         ).format("ll")}`;
       }
 
       return `You are currently on ${user?.user?.subscriptionDuration?.toUpperCase()} Subscription which ends on  ${moment(
-        user?.user?.expiredDate
+        user?.user?.currentSubscriptionExpiryDate
       ).format("ll")}`;
     }
   };
 
   return (
     <>
-      {user?.user?.expiredDate ? (
+      {user?.user?.currentSubscriptionExpiryDate ? (
         <>
-          {user?.user?.expiredDate &&
+          {user?.user?.currentSubscriptionExpiryDate &&
           NigerianTimeZone(new Date()) >=
             NigerianTimeZone(
-              moment(user?.user?.expiredDate).add(2, "hours")
+              moment(user?.user?.currentSubscriptionExpiryDate).add(2, "hours")
             ) ? (
             <div className="status-summary font-18">
               <span>
@@ -50,7 +50,7 @@ const SubscriptionExpiredMessage = () => {
                 </svg>
               </span>
               Your subscription is expired (
-              {moment(user?.user?.expiredDate).format("ll")}).
+              {moment(user?.user?.currentSubscriptionExpiryDate).format("ll")}).
             </div>
           ) : (
             <div className="status-summary font-18">
@@ -72,8 +72,8 @@ const SubscriptionExpiredMessage = () => {
                 </svg>
               </span>
               {renderSubscriptionMessage()}
-              {/* {user?.user?.subscriptionId?`Your Next Billing Date ${moment(user?.user?.expiredDate).format("ll")} (${user?.user?.subscriptionDuration?.toUpperCase()} Subscription)`:`Subscription Expired Date ${moment(user?.user?.expiredDate).format("ll")} (Cancelled ${user?.user?.subscriptionDuration?.toUpperCase()} Subscription)`} */}
-              {/* Your Next Billing Date {moment(user?.user?.expiredDate).format("ll")} {user?.user?.subscriptionId?` (${user?.user?.subscriptionDuration?.toUpperCase()} Subscription)`:` (Cancelled ${user?.user?.subscriptionDuration?.toUpperCase()} Subscription)`} */}
+              {/* {user?.user?.subscriptionId?`Your Next Billing Date ${moment(user?.user?.currentSubscriptionExpiryDate).format("ll")} (${user?.user?.subscriptionDuration?.toUpperCase()} Subscription)`:`Subscription Expired Date ${moment(user?.user?.currentSubscriptionExpiryDate).format("ll")} (Cancelled ${user?.user?.subscriptionDuration?.toUpperCase()} Subscription)`} */}
+              {/* Your Next Billing Date {moment(user?.user?.currentSubscriptionExpiryDate).format("ll")} {user?.user?.subscriptionId?` (${user?.user?.subscriptionDuration?.toUpperCase()} Subscription)`:` (Cancelled ${user?.user?.subscriptionDuration?.toUpperCase()} Subscription)`} */}
             </div>
           )}
         </>

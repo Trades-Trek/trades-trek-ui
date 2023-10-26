@@ -72,23 +72,6 @@ function verifyLoginOtp(email, otp) {
 }
 
 
-function subscriptionUpdate(email, subscription) {
-  return fetchWrapper
-    .post(`${baseUrl}/user/subscription`, {
-      email,
-      subscription
-    })
-    .then((res) => {
-      if (res.success) {
-        userSubject.next(res.token);
-        localStorage.setItem('token', res.token);
-      }
-      return res;
-    })
-    .catch(function (error) {
-      return error;
-    });
-}
 // forgot password ...................     
 function forgot_password(email) {
   return fetchWrapper
@@ -235,7 +218,6 @@ function changePassword(data){
   });
 }
 
-
 // user performance history ..................... 
 function userPerformanceHistory(page){
   return fetchWrapper
@@ -255,10 +237,46 @@ function userPerformanceHistory(page){
 
 }
 
+function userPerformanceHistoryAll(){
+  return fetchWrapper
+      .get(`${baseUrl}/user/performanceHistory-all?gameId=${localStorage.getItem("GameId") || ''}`)
+  
+      .then((res) => {
+        // if (res.success) {
+        // }
+        return res;
+      })
+      .catch((error) => {
+        if (error?.length > 0) {
+          return error[0];
+        }
+        return error;
+      });
+
+}
+
 // anotheruser performance history 
 function anotherUserPerformanceHistory(page,username){
   return fetchWrapper
       .get(`${baseUrl}/user/another-user-performanceHistory?page=${page}&userName=${username}&gameId=${localStorage.getItem("GameId") || ''}`)
+  
+      .then((res) => {
+        // if (res.success) {
+        // }
+        return res;
+      })
+      .catch((error) => {
+        if (error?.length > 0) {
+          return error[0];
+        }
+        return error;
+      });
+
+}
+
+function anotherUserPerformanceHistoryAll(username){
+  return fetchWrapper
+      .get(`${baseUrl}/user/another-user-all-performanceHistory?userName=${username}&gameId=${localStorage.getItem("GameId") || ''}`)
   
       .then((res) => {
         // if (res.success) {
@@ -619,8 +637,9 @@ export const userService = {
   userInfo,
   changePassword,
   userPerformanceHistory,
+  userPerformanceHistoryAll,
+  anotherUserPerformanceHistoryAll,
   getHoliday,
-  subscriptionUpdate,
   getAllSubscription,
   verifyTransaction,
   GetSingleUser,

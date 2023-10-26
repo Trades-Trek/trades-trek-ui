@@ -15,6 +15,40 @@ import ProfileAnotherUser from "../AnotherUserStock/ProfileAnotherUser";
 import HistoryUser from "../AnotherUserStock/history-user";
 import { CSVLink } from "react-csv";
 import PerformanceHistory from "../AnotherUserStock/performance-history";
+import moment from "moment";
+
+function getCurrentNigerianTime() {
+  return moment().tz("Africa/Lagos"); // Set the timezone to Nigerian time
+}
+
+function isWeekday(day) {
+  return day >= 1 && day <= 5; // Monday to Friday (1 to 5)
+}
+
+function isWithinTimeRange(time) {
+  const start = moment("09:30", "HH:mm");
+  const end = moment("14:30", "HH:mm");
+
+  return time.isBetween(start, end);
+}
+
+function getMessage(showBuyStocksMesssage) {
+  const currentNigerianTime = getCurrentNigerianTime();
+  const currentDay = currentNigerianTime.day();
+  const isWorkingDay = isWeekday(currentDay);
+  const isWithinWorkingHours = isWithinTimeRange(currentNigerianTime);
+
+  if (isWorkingDay && isWithinWorkingHours) {
+
+    if(showBuyStocksMesssage){
+      return "Buy a stock to get ranked"
+    }
+
+    return "You have not been ranked yet, Check back in fifteen minutes";
+  } else {
+    return "You have not been ranked yet, Check back later";
+  }
+}
 
 export default function CompetationSummeryView({ setDisabled, disabled }) {
   let { user } = useSelector((state) => state.userWrapper);
@@ -25,13 +59,15 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
   const [showAllUser, setShowAllUser] = useState(false);
   const [page, setPage] = useState(1);
   const [allPage, setAllPage] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [myGame, setMyGame] = useState();
   const [userName, setUserName] = useState("");
   const [historyName, setHistoryName] = useState("");
   const [perform, setPerform] = useState("");
   const [loadingLeaderboard, setLoadingLeaderboard] = useState(false);
+  const [mySubscriptionCategory, setMysubscriptionCategory] = useState("Basic");
   const [csvData, setCsvData] = useState([]);
+  const [showBuyStocksMesssage, setShowByStocksMessage] = useState(false);
   const linktarget = useRef();
 
   const [leaderHeaders, setLeaderHeaders] = useState([
@@ -75,18 +111,23 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
     }
   }, [user, showAllUser, userName]);
   const MyRank = () => {
-    setLoading(true);
     gameService
       .myRank()
       .then((res) => {
         const { success, data, currentGame } = res;
-        if (success) {
-          const { topRanked, nearRank, rank } = data;
 
-          if (!data.rank) {
-            setTop5(topRanked);
+        console.log(data);
+        if (success) {
+          const { topRanked, nearRank, rank, subscriptionCategory } = data;
+
+          if (!rank) {
+            const { shouldDisplayBuyStock } = data;
+            if (shouldDisplayBuyStock) {
+              setShowByStocksMessage(true);
+            }
+            setTop5([]);
             setNearResult([]);
-            setMyGame(currentGame);
+            setMyGame();
             setYourRank(0);
           } else {
             setTop5(topRanked);
@@ -174,7 +215,7 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
                 >
                   <Loader color="#8000ff" />
                 </div>
-              ) : top5.length == 0 ? (
+              ) : yourRank === 0 ? (
                 <div
                   style={{
                     width: "100%",
@@ -184,7 +225,7 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
                     alignItems: "center",
                   }}
                 >
-                  <h1>You have not been ranked yet</h1>
+                  {getMessage(showBuyStocksMesssage)}
                 </div>
               ) : (
                 <table>
@@ -358,7 +399,7 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
 
                             {OverallChange(
                               item?.accountValue + item?.profitOrLossToday,
-                              item?.competitionStartingCash
+                              item?.competitionStartingCash || 100000
                             )}
                           </tr>
                         );

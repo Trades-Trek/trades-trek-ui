@@ -10,8 +10,7 @@ export default function GainersData(Props) {
         setGainerList(listGainerData)
     })
     const handleClick=(data)=>{
-      localStorage.setItem('stock',JSON.stringify(data))
-      router.push('/dashboard/trade-stocks')
+      router.push(`/dashboard/learning/?tab=stockdetails&symbol=${data.Symbol}`)
     }
     return (
       <>

@@ -10,7 +10,7 @@ const baseUrl = `${publicRuntimeConfig.apiUrl}`;
       <div className="learningCard">
         <div className="cardTitle">
           <div className="cardIcon">
-            <img src={`${baseUrl}/${item.filePath}`} />
+            <img src={`${item.imageUrl}`} />
           </div>
           <h4>{item?.categoryName}</h4>
 

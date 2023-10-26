@@ -3,8 +3,7 @@ import React from "react";
 export const OverallChange = (accountValue, startingCash) => {
 
   const change = accountValue - startingCash
-  const changePer = (change / startingCash ) * 100
-
+  const changePer = (change / startingCash ) * 100;
   return (
     <>
       {change < 0 ? (

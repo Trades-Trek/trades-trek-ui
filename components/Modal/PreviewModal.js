@@ -186,7 +186,6 @@ function PreviewModal({ modelOpened, setModelOpened, data, setShowTrade }) {
                 ₦
                 {(
                   (data?.quantity || 0) * (data?.rate || 0) +
-                  29.95 +
                   commission
                 )
                   ?.toFixed(2)

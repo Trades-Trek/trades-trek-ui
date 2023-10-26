@@ -4,10 +4,12 @@ import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { useSelector } from "react-redux";
 import SelectGame from "../../components/SelectGame/SelectGame";
-
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { DataConvert } from "../../helpers/DateTimeConverter";
 import { orderService } from "../../services/order.service";
+import ExportExcel from "../../helpers/ExportExcel";
+import tradeHistoryHeaders from '../../helpers/tradehistorydownloadHeaders'
+import FormSpinner from "../../components/Spinners/FormSpinner";
 
 export default function TradeHistory() {
   const [tradeHistoryData, setTradeHistoryData] = useState();
@@ -15,6 +17,7 @@ export default function TradeHistory() {
   const [allPage, setAllPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   let { user } = useSelector((state) => state.userWrapper);
+  const [xlsxDownloading, setXlsxDownloading] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -54,6 +57,28 @@ export default function TradeHistory() {
       })
       .catch((err) => console.log(err));
   };
+
+  const downloadTradeHistory = async (str) => {
+    try {
+      const { success, orders } = await orderService.tradeHistoryAll();
+      if (success) {
+        
+        if(!orders.length){
+          alert("No record available for download");
+          return
+        }
+        const transformedOrders = orders.map(item => ({
+          ...item,
+          total_cash_value: item.rate * item.quantity
+        }));
+        ExportExcel(tradeHistoryHeaders,transformedOrders, "Trade_History");
+      }
+      setXlsxDownloading(false);
+    } catch (err) {
+      setXlsxDownloading(false);
+      alert('Download failed try again')
+    }
+  };
   const columns = [
     "Date",
     "Symbol",
@@ -69,13 +94,9 @@ export default function TradeHistory() {
       <div className="site--content">
         <SelectGame />
 
-        <div
-          className="trade-data pageBack"
-        >
+        <div className="trade-data pageBack">
           <Link href="/dashboard/portfolio">
-            <a>
-              Back to Portfolio
-            </a>
+            <a>Back to Portfolio</a>
           </Link>
         </div>
 
@@ -109,7 +130,6 @@ export default function TradeHistory() {
                         <tbody>
                           {tradeHistoryData.map((item, index) => (
                             <tr key={index}>
-                              
                               {/* item.createdAt updatedAt */}
 
                               <td>{DataConvert(item.createdAt)}</td>
@@ -158,6 +178,7 @@ export default function TradeHistory() {
                   )}
                 </div>
               )}
+
               {tradeHistoryData?.length > 0 && (
                 <div className="paginationReact">
                   <ReactPaginate
@@ -170,6 +191,27 @@ export default function TradeHistory() {
                     renderOnZeroPageCount={null}
                   />
                 </div>
+              )}
+
+              {xlsxDownloading ? (
+                <Link href="javascript:void(0)">
+                  <a className="btn spinnerBtn downloadButtonStyle">
+                    <FormSpinner />
+                  </a>
+                </Link>
+              ) : (
+                <Link href="javascript:void(0)">
+                  <a
+                    className="btn downloadButtonStyle"
+                
+                    onClick={() => {
+                      setXlsxDownloading(true);
+                      downloadTradeHistory("xlsx");
+                    }}
+                  >
+                    Download
+                  </a>
+                </Link>
               )}
             </div>
           </div>
