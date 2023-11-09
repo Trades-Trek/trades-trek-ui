@@ -15,6 +15,8 @@ import "react-phone-input-2/lib/style.css";
 import axios from "axios";
 import { Loader } from "@mantine/core";
 import { isBrowser, isMobileOnly, isTablet } from "react-device-detect";
+import { GoogleLoginButton } from "react-social-login-buttons";
+import { TwitterLoginButton } from "react-social-login-buttons";
 
 // https://phonevalidation.abstractapi.com/v1/?api_key=4364d337d243447c97e34576cb324660&phone=+9190607574241
 export default function Signup() {
@@ -67,7 +69,7 @@ export default function Signup() {
           localStorage.setItem("email", data.email);
           setError(res.message);
           localStorage.setItem("otp", data.email);
-          dispatch(setUser(res.user));
+          // dispatch(setUser(res.user));
           setIsLoading(false);
           router.replace("/otp");
         } else if (res?.success === false) {
@@ -412,6 +414,12 @@ export default function Signup() {
                 <button disabled={isLoading} className="btn" type="submit">
                   {isLoading ? <Loader color="#8000ff" /> : "Sign Up"}
                 </button>
+{/* 
+                <GoogleLoginButton onClick={() => alert("Hello")} />
+
+                <TwitterLoginButton onClick={() => alert("Hello")} />
+                 */}
+
               </div>
               <div className="form--bottom--content">
                 <p>

@@ -23,6 +23,74 @@
   src: url(../public/fonts/Poppins-ExtraBold.ttf);
 }
 
+.landing-page-layout{
+
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: 'Poppins';  
+}
+
+.landing-page-layout button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+.landing-page-layout button:hover {
+  border-color: #646cff;
+}
+
+.landing-page-layout button:focus,
+.landing-page-layout button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.landing-page-layout h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+.landing-page-layout .faq ul {
+  list-style: disc !important;
+  list-style-position: inside !important;
+  padding-left: 12px !important;
+}
+
+/* .landing-page-layout a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit; 
+}
+
+.landing-page-layout a:hover {
+  color: #535bf2;
+} */
+
+.landing-page-layout .faq ol {
+  list-style: decimal !important;
+  list-style-position: inside !important;
+  padding-left: 12px !important;
+}
+
+.purpleBg {
+  background-image: url("../public/images/landing/About/Purple.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.faqPage {
+  background-image: url("../public/images/landing/Home/faq.png");
+  background-size: contain;
+  background-position: bottom right;
+  background-repeat: no-repeat;
+}
+
 .downloadButtonStyle{
   width: 150px !important;
   margin: 2px auto

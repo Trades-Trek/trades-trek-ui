@@ -8,51 +8,26 @@ import { userService } from "../services";
 const thankyou = () => {
   const [refrence, setrefrence] = useState();
   const [loading, setLoading] = useState(true);
-  const [error,setError]=useState(false)
+  const [error, setError] = useState(false);
   const router = useRouter();
   useEffect(() => {
     setLoading(true);
     if (router.query.reference) {
-      if(localStorage.getItem('token')){
- userService
+      userService
         .verifyTransaction(router.query)
         .then((res) => {
-          if(res.success){
+          if (res.success) {
             setLoading(false);
             console.log(res);
-          }else{
-            setError(true)
+          } else {
+            setError(true);
             setLoading(false);
-
           }
-          
         })
         .catch((err) => {
           // console.log(error)
           setLoading(false);
         });
-      }else{
-        userService
-        .withoutVerifyTransaction(router.query)
-        .then((res) => {
-          if(res.success){
-            setLoading(false);
-            console.log(res);
-          }else{
-            setError(true)
-            setLoading(false);
-          }
-          
-        })
-        .catch((err) => {
-          // console.log(error)
-          setLoading(false);
-        });
-        
-      }
-   
-
-     
     }
   }, [router.query]);
   return (
@@ -62,7 +37,7 @@ const thankyou = () => {
         <div className="loading">
           <Loader color="#8000ff" />
         </div>
-      ) : error?(
+      ) : error ? (
         <div className="errorthan">
           <div className="inside">
             <img src="/images/wrong.webp" />
@@ -81,12 +56,12 @@ const thankyou = () => {
             </p>
           </div>
           <div className="info--button" style={{ margin: "30px" }}>
-          <Link href="/dashboard/subscription">
+            <Link href="/dashboard/subscription">
               <a className="btn">Back to App</a>
             </Link>
           </div>
         </div>
-      ):(
+      ) : (
         <div className="success">
           <div className="inside">
             <img src="/images/right.jpg" />
@@ -105,7 +80,7 @@ const thankyou = () => {
             </p>
           </div>
           <div className="info--button" style={{ margin: "30px" }}>
-          <Link href="/dashboard/subscription">
+            <Link href="/dashboard/subscription">
               <a className="btn">Back to App</a>
             </Link>
           </div>

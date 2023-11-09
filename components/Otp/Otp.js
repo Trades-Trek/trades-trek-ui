@@ -22,6 +22,12 @@ export default function Otp() {
     let email = localStorage.getItem('email');
     if (email) {
       setEmailAddress(email);
+    }else{
+
+    if(!email && !emailAddress)
+    window.location.href = '/login/';
+
+
     }
   }, []);
 
@@ -57,6 +63,7 @@ export default function Otp() {
         }
         setBtnStatus(false);
         setLoaderStatus(false);
+        localStorage.removeItem('email');
       }
     }
     setBtnStatus(false);

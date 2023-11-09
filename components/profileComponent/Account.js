@@ -362,7 +362,7 @@ export default function Account() {
           </div>
           <div className="profileRightDetail">
             <div className="flexBox justifyBetween referralNo">
-              <h4 className="">Your Total Wallet Amount</h4>
+              <h4 className="">Total Rewards</h4>
               <h4 className="">
                 ₦{" "}
                 {user?.user?.walletAmount

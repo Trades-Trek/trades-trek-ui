@@ -1,23 +1,35 @@
-import React, { useEffect } from "react";
-import Login from "../components/Login/Login";
-import Footer from "../components/Footer/Footer";
-import { userService } from "../services";
-import { useRouter } from "next/router";
-import Home from "./home";
+// import SectionFive from "../components/landing/SectionFive"
+// import SectionFour from "../components/landing/SectionFour"
+// import SectionOne from "../components/landing/SectionOne"
+// import SectionSix from "../components/landing/SectionSix"
+// import SectionThree from "../components/landing/SectionThree"
+// import SectionTwo from "../components/landing/SectionTwo"
+// import LandingPageLayout from '../components/landing/layout';
 
-export default function LoginForm() {
-  const router = useRouter();
-  useEffect(() => {
-    document.body.classList.remove("signUp--page");
-    document.body.classList.remove("otp--page");
-    if (userService.userValue) {
-      router.push("/dashboard");
-    }
-  }, []);
+// const Homepage = () => {
+//   return (
+//     <div>
+//       <SectionOne />
+//       <SectionTwo />
+//       <SectionThree />
+//       <SectionFour />
+//       <SectionFive />
+//       <SectionSix />
+//     </div>
+//   )
+// }
 
+
+// const LandingPage = () => <LandingPageLayout><Homepage/></LandingPageLayout>
+// export default LandingPage
+
+
+import Login from "./login";
+
+export default function Index() {
   return (
     <>
-      <Home />
+      <Login />
     </>
   );
 }
