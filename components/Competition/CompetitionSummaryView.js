@@ -33,21 +33,11 @@ function isWithinTimeRange(time) {
 }
 
 function getMessage(showBuyStocksMesssage) {
-  const currentNigerianTime = getCurrentNigerianTime();
-  const currentDay = currentNigerianTime.day();
-  const isWorkingDay = isWeekday(currentDay);
-  const isWithinWorkingHours = isWithinTimeRange(currentNigerianTime);
-
-  if (isWorkingDay && isWithinWorkingHours) {
-
-    if(showBuyStocksMesssage){
-      return "Buy a stock to get ranked"
-    }
-
-    return "You have not been ranked yet, Check back in fifteen minutes";
-  } else {
-    return "You have not been ranked yet, Check back later";
+  if (showBuyStocksMesssage) {
+    return "Buy a stock to get ranked";
   }
+
+  return "You have not been ranked yet, Check back in fifteen minutes";
 }
 
 export default function CompetationSummeryView({ setDisabled, disabled }) {
