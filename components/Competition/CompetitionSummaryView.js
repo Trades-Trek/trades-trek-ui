@@ -57,7 +57,7 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
   const [loadingLeaderboard, setLoadingLeaderboard] = useState(false);
   const [mySubscriptionCategory, setMysubscriptionCategory] = useState("Basic");
   const [csvData, setCsvData] = useState([]);
-  const [showBuyStocksMesssage, setShowByStocksMessage] = useState(false);
+  const [showRankedNullMessage, setShowRankedNullMessage] = useState('');
   const linktarget = useRef();
 
   const [leaderHeaders, setLeaderHeaders] = useState([
@@ -104,17 +104,13 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
     gameService
       .myRank()
       .then((res) => {
-        const { success, data, currentGame } = res;
+        const { success, data, currentGame, message } = res;
 
-        console.log(data);
         if (success) {
           const { topRanked, nearRank, rank, subscriptionCategory } = data;
 
           if (!rank) {
-            const { shouldDisplayBuyStock } = data;
-            if (shouldDisplayBuyStock) {
-              setShowByStocksMessage(true);
-            }
+            setShowRankedNullMessage(message)
             setTop5([]);
             setNearResult([]);
             setMyGame();
@@ -215,7 +211,7 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
                     alignItems: "center",
                   }}
                 >
-                  {getMessage(showBuyStocksMesssage)}
+                  {showRankedNullMessage}
                 </div>
               ) : (
                 <table>
