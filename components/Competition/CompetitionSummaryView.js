@@ -32,14 +32,6 @@ function isWithinTimeRange(time) {
   return time.isBetween(start, end);
 }
 
-function getMessage(showBuyStocksMesssage) {
-  if (showBuyStocksMesssage) {
-    return "Buy a stock to get ranked";
-  }
-
-  return "You have not been ranked yet, Check back in fifteen minutes";
-}
-
 export default function CompetationSummeryView({ setDisabled, disabled }) {
   let { user } = useSelector((state) => state.userWrapper);
   const router = useRouter();
