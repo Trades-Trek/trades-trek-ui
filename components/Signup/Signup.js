@@ -15,8 +15,6 @@ import "react-phone-input-2/lib/style.css";
 import axios from "axios";
 import { Loader } from "@mantine/core";
 import { isBrowser, isMobileOnly, isTablet } from "react-device-detect";
-import { GoogleLoginButton } from "react-social-login-buttons";
-import { TwitterLoginButton } from "react-social-login-buttons";
 
 // https://phonevalidation.abstractapi.com/v1/?api_key=4364d337d243447c97e34576cb324660&phone=+9190607574241
 export default function Signup() {
