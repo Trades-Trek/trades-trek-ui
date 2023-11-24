@@ -244,7 +244,6 @@ export default function Signup() {
                   id="username"
                   placeholder="username*"
                   {...register("username", {
-                    required: true,
                     maxLength: 20,
                     minLength: 3,
                     pattern: {
