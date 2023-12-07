@@ -57,7 +57,7 @@ export default function Signup() {
  
   const onSubmit = async (data) => {
     setIsLoading(true);
-    // data.phone = phone;
+    data.mobileDeviceToken = ""
     data.device=device
     userService
       .signup(data)
