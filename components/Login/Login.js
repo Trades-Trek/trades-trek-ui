@@ -26,6 +26,7 @@ export default function Login() {
   } = useForm();
 
   const onSubmit = (data) => {
+    data.mobileDeviceToken = ""
     // if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data.email)){
       setIsLoading(true)
       userService
