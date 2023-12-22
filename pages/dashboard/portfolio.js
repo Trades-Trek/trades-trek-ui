@@ -155,7 +155,7 @@ export default function Portfolio() {
                       </span>
                  <p>
                         ₦
-                        {user?.calculatedPortfolioValues?.calculatedBuyingPower} biola
+                        {user?.calculatedPortfolioValues?.calculatedBuyingPower}
                         {/* {(
                           user?.portfolio?.buyingPower +
                           (user?.portfolio?.gameId?.allowTradingWithMargin
@@ -177,7 +177,7 @@ export default function Portfolio() {
 
                       <p>
                         ₦
-                        {user?.calculatedPortfolioValues?.calculatedCash} balo
+                        {user?.calculatedPortfolioValues?.calculatedCash}
                         {/* {(
                           user?.portfolio?.cash 
                         )
