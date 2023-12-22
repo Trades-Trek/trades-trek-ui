@@ -99,7 +99,7 @@ export default function Portfolio() {
                       ?.toFixed(2)
                       ?.toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0} */}
-                       {user.calculatedPortfolioValues.calculatedAccountValue}
+                       {user?.calculatedPortfolioValues?.calculatedAccountValue}
                   </p>
                 </div>
                 <div className="profileContainerAccountblock">
@@ -123,13 +123,13 @@ export default function Portfolio() {
                           ?.toFixed(2)
                           ?.toString()
                           .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0} */}
-                          {user.calculatedPortfolioValues.calculatedTodaysChangeNaira}
+                          {user?.calculatedPortfolioValues?.calculatedTodaysChangeNaira}
                       </p>
                       <span>
                     
                      
                       {/* ({((user?.portfolio?.profitOrLossToday * 100) / user?.portfolio?.accountValue).toFixed(2)}%) */}
-                      ({user.calculatedPortfolioValues.calculatedTodaysChangePercentage}%)
+                      ({user?.calculatedPortfolioValues?.calculatedTodaysChangePercentage}%)
                       </span>
                     </div>
                     <div>
@@ -155,7 +155,7 @@ export default function Portfolio() {
                       </span>
                  <p>
                         ₦
-                        {user.calculatedPortfolioValues.calculatedBuyingPower} biola
+                        {user?.calculatedPortfolioValues?.calculatedBuyingPower} biola
                         {/* {(
                           user?.portfolio?.buyingPower +
                           (user?.portfolio?.gameId?.allowTradingWithMargin
@@ -177,7 +177,7 @@ export default function Portfolio() {
 
                       <p>
                         ₦
-                        {user.calculatedPortfolioValues.calculatedCash} balo
+                        {user?.calculatedPortfolioValues?.calculatedCash} balo
                         {/* {(
                           user?.portfolio?.cash 
                         )
