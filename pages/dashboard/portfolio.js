@@ -92,13 +92,14 @@ export default function Portfolio() {
 
                   <p>
                  ₦
-                    {(
+                    {/* {(
                       user?.portfolio?.accountValue +
                       user?.portfolio?.profitOrLossToday
                     )
                       ?.toFixed(2)
                       ?.toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0} */}
+                       {user.calculatedPortfolioValues.calculatedAccountValue}
                   </p>
                 </div>
                 <div className="profileContainerAccountblock">
@@ -115,20 +116,20 @@ export default function Portfolio() {
 
                       <p>
                          ₦
-                        {(
+                        {/* {(
                           user?.portfolio?.currentValue -
                           user?.portfolio?.previousValue
                         )
                           ?.toFixed(2)
                           ?.toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0} */}
+                          {user.calculatedPortfolioValues.calculatedTodaysChangeNaira}
                       </p>
                       <span>
                     
-                      {/* ({((user?.portfolio?.profitOrLossToday * 100) / user?.portfolio?.accountValue).toFixed(2)*-1}%) */}
-
-                      ({((user?.portfolio?.profitOrLossToday * 100) / user?.portfolio?.accountValue).toFixed(2)}%)
-
+                     
+                      {/* ({((user?.portfolio?.profitOrLossToday * 100) / user?.portfolio?.accountValue).toFixed(2)}%) */}
+                      ({user.calculatedPortfolioValues.calculatedTodaysChangePercentage}%)
                       </span>
                     </div>
                     <div>
@@ -154,7 +155,8 @@ export default function Portfolio() {
                       </span>
                  <p>
                         ₦
-                        {(
+                        {user.calculatedPortfolioValues.calculatedBuyingPower}
+                        {/* {(
                           user?.portfolio?.buyingPower +
                           (user?.portfolio?.gameId?.allowTradingWithMargin
                             ? user?.portfolio?.profitOrLossToday / 2
@@ -162,7 +164,7 @@ export default function Portfolio() {
                         )
                           ?.toFixed(2)
                           ?.toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0} */}
                       </p>
                     </div>
                     <div>
@@ -175,12 +177,13 @@ export default function Portfolio() {
 
                       <p>
                         ₦
-                        {(
+                        {user.calculatedPortfolioValues.calculatedCash}
+                        {/* {(
                           user?.portfolio?.cash 
                         )
                           ?.toFixed(2)
                           ?.toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0} */}
                       </p>
                     </div>
                   </div>

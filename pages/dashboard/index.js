@@ -47,7 +47,7 @@ export default function Home() {
     setTodayTime(today);
   }, []);
 
-  console.log(user, '>>>>>>')
+  console.log(user.calculatedPortfolioValues, '>>>>>>')
 
   useEffect(() => {
     return () => {
@@ -108,14 +108,16 @@ export default function Home() {
                     </span>
                     <span>
                     ₦
-                      {user &&
+                      {/* {user &&
                         (
                           user?.portfolio?.accountValue +
                           user?.portfolio?.profitOrLossToday
                         )
                           ?.toFixed(2)
                           ?.toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
+
+                          {user.calculatedPortfolioValues.calculatedAccountValue}
                     </span>
                   </li>
                   <li>
@@ -127,23 +129,17 @@ export default function Home() {
                     </span>
                     <span>
                       ₦
-                      {(
+                      {/* {(
                         user?.portfolio?.currentValue -
                         user?.portfolio?.previousValue
                       )
                         ?.toFixed(2)
                         ?.toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}{" "}
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0} */}
+                        {user.calculatedPortfolioValues.calculatedTodaysChangeNaira}
                       <span>
                         (
-                        {TodayPerChange(
-                          user?.portfolio?.previousValue,
-                          user?.portfolio?.currentValue -
-                            user?.portfolio?.previousValue
-                        )
-                          ?.toFixed(2)
-                          ?.toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        {user.calculatedPortfolioValues.calculatedTodaysChangePercentage}
                         %)
                       </span>
                     </span>
