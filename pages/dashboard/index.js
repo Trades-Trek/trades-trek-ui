@@ -47,6 +47,8 @@ export default function Home() {
     setTodayTime(today);
   }, []);
 
+  console.log(user, '>>>>>>')
+
   useEffect(() => {
     return () => {
       userService
