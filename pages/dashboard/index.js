@@ -47,8 +47,6 @@ export default function Home() {
     setTodayTime(today);
   }, []);
 
-  console.log(user.calculatedPortfolioValues, '>>>>>>')
-
   useEffect(() => {
     return () => {
       userService
@@ -117,7 +115,7 @@ export default function Home() {
                           ?.toString()
                           .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
 
-                          {user.calculatedPortfolioValues.calculatedAccountValue}
+                          {user?.calculatedPortfolioValues?.calculatedAccountValue}
                     </span>
                   </li>
                   <li>
@@ -136,10 +134,10 @@ export default function Home() {
                         ?.toFixed(2)
                         ?.toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0} */}
-                        {user.calculatedPortfolioValues.calculatedTodaysChangeNaira}
+                        {user?.calculatedPortfolioValues?.calculatedTodaysChangeNaira}
                       <span>
                         (
-                        {user.calculatedPortfolioValues.calculatedTodaysChangePercentage}
+                        {user?.calculatedPortfolioValues?.calculatedTodaysChangePercentage}
                         %)
                       </span>
                     </span>
