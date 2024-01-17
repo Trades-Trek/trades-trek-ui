@@ -105,7 +105,7 @@ export default function Home() {
                       <ToolTipCustome text="Displays the total current value of your portfolio, which is updated nightly after the market’s close." />
                     </span>
                     <span>
-                    ₦
+                    ₦&nbsp;
                       {/* {user &&
                         (
                           user?.portfolio?.accountValue +
