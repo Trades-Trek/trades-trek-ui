@@ -91,7 +91,7 @@ export default function Portfolio() {
                   </span>
 
                   <p>
-                 ₦
+                 ₦&nbsp;
                     {/* {(
                       user?.portfolio?.accountValue +
                       user?.portfolio?.profitOrLossToday
@@ -115,7 +115,7 @@ export default function Portfolio() {
  
 
                       <p>
-                         ₦
+                         ₦&nbsp;
                         {/* {(
                           user?.portfolio?.currentValue -
                           user?.portfolio?.previousValue
@@ -154,7 +154,7 @@ export default function Portfolio() {
                         />
                       </span>
                  <p>
-                        ₦
+                        ₦&nbsp;
                         {user?.calculatedPortfolioValues?.calculatedBuyingPower}
                         {/* {(
                           user?.portfolio?.buyingPower +
@@ -176,7 +176,7 @@ export default function Portfolio() {
                       </span>
 
                       <p>
-                        ₦
+                        ₦&nbsp;
                         {user?.calculatedPortfolioValues?.calculatedCash}
                         {/* {(
                           user?.portfolio?.cash 
