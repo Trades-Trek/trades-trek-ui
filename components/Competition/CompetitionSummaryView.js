@@ -214,6 +214,7 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
                       <th>Account Value</th>
                       <th>Today’s Change</th>
                       <th>Overall Change</th>
+                      <th>Points</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -268,6 +269,10 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
                             item?.accountValue + item?.profitOrLossToday,
                             item?.competitionStartingCash
                           )}
+
+<td>
+                           {item.points}
+                          </td>
                         </tr>
                       );
                     })}
@@ -377,8 +382,13 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
 
                             {OverallChange(
                               item?.accountValue + item?.profitOrLossToday,
-                              item?.competitionStartingCash || 100000
+                              item?.competitionStartingCash 
                             )}
+
+
+<td>
+                           {item.points}
+                          </td>
                           </tr>
                         );
                       })}
