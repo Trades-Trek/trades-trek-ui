@@ -223,7 +223,7 @@ export default function Portfolio() {
                     </p>
                   </div>
                 ) : (
-                  <div>Your rank will update daily starting tomorrow</div>
+                  <div>You get ranked 15 minutes after your pending stock(s) get executed</div>
                 )}
 
                 {user?.top &&
