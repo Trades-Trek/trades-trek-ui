@@ -490,6 +490,26 @@ export default function CreateCompetation() {
                     })}
                   </select>
                 </div>
+
+
+                <div className="form--item">
+                  <label className="form--label withIcon">
+                    Volume Restriction
+                   <ToolTipCustome text={`volume percentage set to prevent purchase of each individual stock from being greater than the percentage of the volume sold the previous day.`} />
+                  </label>
+                  <select
+                    {...register("volumeRestriction")}
+                    className="form--control"
+                  >
+                    <option value="Disabled">Disabled</option>
+                    {Array.from({ length: 10 }, (_, i) => {
+                      return (
+                        <option key={i} value={(i + 1) * 10}>{(i + 1) * 10} %</option>
+                      );
+                    })}
+                  </select>
+                </div>
+
               </div>
             </div>
           </div>

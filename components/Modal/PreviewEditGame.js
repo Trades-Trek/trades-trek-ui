@@ -31,9 +31,11 @@ function PreviewEditGame({ modelOpened, setModelOpened, data, setShowTrade }) {
   const [minimumStockForMargin, setMinimumStockForMargin] = useState();
   const [marginInterest, setMarginInterest] = useState();
   const [cashInterest, setCashInterest] = useState();
+  const [volumeRestriction, setVolumeRestriction] = useState();
   let { user } = useSelector((state) => state.userWrapper);
   const theme = useMantineTheme();
   useEffect(() => {
+    setVolumeRestriction(data[0]?.volumeRestriction)
     setCashInterest(data[0]?.cashInterest);
     setMarginInterest(data[0]?.marginInterest);
     setMinimumStockForMargin(data[0]?.minimumStockForMargin);
@@ -66,6 +68,7 @@ function PreviewEditGame({ modelOpened, setModelOpened, data, setShowTrade }) {
           allowPortfolioResetting,
           cashInterest,
           marginInterest,
+          volumeRestriction
         },
         data[0]?._id
       )
@@ -81,8 +84,6 @@ function PreviewEditGame({ modelOpened, setModelOpened, data, setShowTrade }) {
       })
       .catch((err) => console.log(err));
   };
-  console.log("quick sell",quickSell)
-  console.log("market delay",marketDelay)
 
   return (
     <Modal
@@ -418,6 +419,28 @@ function PreviewEditGame({ modelOpened, setModelOpened, data, setShowTrade }) {
                   })}
                 </select>
             </div>
+      
+            <div className="row-block">
+              <p className="font-18 ">Volume Restriction</p>
+                <select
+                  onChange={(e) => setVolumeRestriction(e.target.value)}
+                  value={volumeRestriction}
+                >
+                  <option value="Disabled">Disabled</option>
+                  {Array.from({ length: 10 }, (_, i) => {
+                    return (
+                      <option
+                        key={i}
+                       
+                        value={(i + 1) * 10}
+                      >
+                        {(i + 1) * 10} %
+                      </option>
+                    );
+                  })}
+                </select>
+            </div>
+
             <button onClick={handleUpdate} className="btn">
               Update Competition Rule
             </button>
