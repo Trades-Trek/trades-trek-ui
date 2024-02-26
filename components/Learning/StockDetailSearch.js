@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
+
 const StockInfo = ({ stockAllData, setSelectedStock_StockDetailsTab }) => {
   const router = useRouter();
   const [value, setValue] = useState("");
