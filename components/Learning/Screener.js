@@ -8,6 +8,14 @@ import { Tabs, MultiSelect } from "@mantine/core";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
+import {
+  IconArrowsSort,
+} from "@tabler/icons-react";
+
+const Arrow = () => (
+  <IconArrowsSort style={{ display: "inline-flex", width: 12, height: 12 }} />
+);
+
 const headers = [
   "Name",
   "Symbol",
@@ -109,8 +117,8 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
 
   return (
     <div>
-      <div className="" style={{ marginTop: 20, marginBottom: 20 }}>
-        {/* <MultiSelect
+      {/* <div className="" style={{ marginTop: 20, marginBottom: 20 }}> */}
+      {/* <MultiSelect
             label="Add/remove table column"
             placeholder="Add/remove table column"
             data={selectOptions}
@@ -133,30 +141,9 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
               setValue(v);
             }}
           /> */}
-      </div>
-      <Box sx={{ minWidth: 120 }}>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Parameter</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={parameter}
-            label="Select Parameter"
-            onChange={handleChange}
-          >
-            <MenuItem value="Last">Price/Last</MenuItem>,
-            <MenuItem value="PerChange">Per Change</MenuItem>,
-            <MenuItem value="EPS">EPS</MenuItem>,
-            <MenuItem value="PE">PE</MenuItem>,
-            <MenuItem value="Volume">Volume</MenuItem>,
-            <MenuItem value="High52Week">High 52 Week</MenuItem>,
-            <MenuItem value="Low52Week">Low 52 Week</MenuItem>,
-            <MenuItem value="MktCap">Mkt Cap</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
+      {/* </div> */}
 
-      {parameter && (
+      <Box sx={{ display: "flex" }}>
         <Box
           component="form"
           sx={{
@@ -164,159 +151,183 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
           }}
           autoComplete="off"
         >
-          <TextField
-            id="outlined-controlled"
-            label={`Minimum ${parameter}`}
-            value={minValue}
-            onChange={(event) => {
-              setMinValue(event.target.value);
-            }}
-          />
-          <TextField
-            id="outlined-uncontrolled"
-            label={`Maximum ${parameter}`}
-            value={maxValue}
-            onChange={(event) => {
-              setMaxValue(event.target.value);
-            }}
-          />
+          <FormControl>
+            <InputLabel id="demo-simple-select-label">Parameter</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={parameter}
+              label="Select Parameter"
+              onChange={handleChange}
+            >
+              <MenuItem value="Last">Price/Last</MenuItem>,
+              <MenuItem value="PerChange">Per Change</MenuItem>,
+              <MenuItem value="EPS">EPS</MenuItem>,
+              <MenuItem value="PE">PE</MenuItem>,
+              <MenuItem value="Volume">Volume</MenuItem>,
+              <MenuItem value="High52Week">High 52 Week</MenuItem>,
+              <MenuItem value="Low52Week">Low 52 Week</MenuItem>,
+              <MenuItem value="MktCap">Mkt Cap</MenuItem>
+            </Select>
+          </FormControl>
 
-          <Button
-             style={{ background: 'blue', height : '50px'}}
-            variant="contained"
-          >
-            Search
-          </Button>
+          {parameter && (
+            <>
+              <TextField
+                id="outlined-controlled"
+                label={`Minimum ${parameter}`}
+                value={minValue}
+                onChange={(event) => {
+                  setMinValue(event.target.value);
+                }}
+              />
+              <TextField
+                id="outlined-uncontrolled"
+                label={`Maximum ${parameter}`}
+                value={maxValue}
+                onChange={(event) => {
+                  setMaxValue(event.target.value);
+                }}
+              />
+
+              <Button
+                style={{ background: "blue", height: "50px" }}
+                variant="contained"
+              >
+                Search
+              </Button>
+            </>
+          )}
         </Box>
-      )}
+      </Box>
 
-      {/* <table class="table-auto">
-          <thead>
-            <tr>
-              {value.map((header) => {
-                if (header === "Price") {
-                  return (
-                    <HeaderWrapper
-                      title="Price ₦"
-                      sortable={true}
-                      column={header}
-                    />
-                  );
-                }
-  
-                if (header === "PerChange") {
-                  return (
-                    <HeaderWrapper
-                      title="PerChange %"
-                      sortable={true}
-                      column={header}
-                    />
-                  );
-                }
-  
-                if (header === "Change") {
-                  return (
-                    <HeaderWrapper
-                      title="Change ₦"
-                      sortable={true}
-                      column={header}
-                    />
-                  );
-                }
-  
+      <table class="table-auto">
+        <thead>
+          <tr>
+            {value.map((header) => {
+              if (header === "Price") {
                 return (
-                  <HeaderWrapper title={header} sortable={true} column={header} />
+                  <HeaderWrapper
+                    title="Price ₦"
+                    sortable={true}
+                    column={header}
+                  />
                 );
+              }
+
+              if (header === "PerChange") {
+                return (
+                  <HeaderWrapper
+                    title="PerChange %"
+                    sortable={true}
+                    column={header}
+                  />
+                );
+              }
+
+              if (header === "Change") {
+                return (
+                  <HeaderWrapper
+                    title="Change ₦"
+                    sortable={true}
+                    column={header}
+                  />
+                );
+              }
+
+              return (
+                <HeaderWrapper title={header} sortable={true} column={header} />
+              );
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {stocks.map((eachStock) => (
+            <tr key={eachStock.Symbol}>
+              {value.map((column) => {
+                if (column === "Name") {
+                  return (
+                    <td
+                      key={column}
+                      className="stock-name-td"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        switchToStockDetails(eachStock);
+                      }}
+                    >
+                      {eachStock[column]}
+                    </td>
+                  );
+                }
+
+                if (column === "Price") {
+                  return <td key={column}>{eachStock[column]?.toFixed(2)}</td>;
+                }
+
+                if (column === "MktCap") {
+                  return (
+                    <td key={column}>{formatMarketCap(eachStock[column])}</td>
+                  );
+                }
+
+                if (column === "EPS") {
+                  return <td key={column}>{eachStock[column]?.toFixed(2)}</td>;
+                }
+
+                if (column === "PE") {
+                  return <td key={column}>{formatPE(eachStock[column])}</td>;
+                }
+
+                if (column === "LastTradeTime") {
+                  return (
+                    <td key={column}>
+                      {eachStock[column]
+                        ? moment(eachStock[column]).format(
+                            "YYYY-MM-DD HH:mm:ss"
+                          )
+                        : ""}
+                    </td>
+                  );
+                }
+
+                if (column === "PrevCloseDate") {
+                  return (
+                    <td key={column}>
+                      {eachStock[column]
+                        ? moment(eachStock[column]).format(
+                            "YYYY-MM-DD HH:mm:ss"
+                          )
+                        : ""}
+                    </td>
+                  );
+                }
+
+                if (column === "Change") {
+                  return <td key={column}>{eachStock[column]?.toFixed(2)}</td>;
+                }
+
+                if (column === "PerChange") {
+                  return <td key={column}>{eachStock[column]?.toFixed(2)}</td>;
+                }
+
+                if (column === "TradeDate") {
+                  return (
+                    <td key={column}>
+                      {eachStock[column]
+                        ? moment(eachStock[column]).format(
+                            "YYYY-MM-DD HH:mm:ss"
+                          )
+                        : ""}
+                    </td>
+                  );
+                }
+
+                return <td key={column}>{eachStock[column]}</td>;
               })}
             </tr>
-          </thead>
-          <tbody>
-            {stocks.map((eachStock) => (
-              <tr key={eachStock.Symbol}>
-                {value.map((column) => {
-                  if (column === "Name") {
-                    return (
-                      <td
-                        key={column}
-                        className="stock-name-td"
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                          switchToStockDetails(eachStock);
-                        }}
-                      >
-                        {eachStock[column]}
-                      </td>
-                    );
-                  }
-  
-                  if (column === "Price") {
-                    return <td key={column}>{eachStock[column]?.toFixed(2)}</td>;
-                  }
-  
-                  if (column === "MktCap") {
-                    return (
-                      <td key={column}>{formatMarketCap(eachStock[column])}</td>
-                    );
-                  }
-  
-                  if (column === "EPS") {
-                    return <td key={column}>{eachStock[column]?.toFixed(2)}</td>;
-                  }
-  
-                  if (column === "PE") {
-                    return <td key={column}>{formatPE(eachStock[column])}</td>;
-                  }
-  
-                  if (column === "LastTradeTime") {
-                    return (
-                      <td key={column}>
-                        {eachStock[column]
-                          ? moment(eachStock[column]).format(
-                              "YYYY-MM-DD HH:mm:ss"
-                            )
-                          : ""}
-                      </td>
-                    );
-                  }
-  
-                  if (column === "PrevCloseDate") {
-                    return (
-                      <td key={column}>
-                        {eachStock[column]
-                          ? moment(eachStock[column]).format(
-                              "YYYY-MM-DD HH:mm:ss"
-                            )
-                          : ""}
-                      </td>
-                    );
-                  }
-  
-                  if (column === "Change") {
-                    return <td key={column}>{eachStock[column]?.toFixed(2)}</td>;
-                  }
-  
-                  if (column === "PerChange") {
-                    return <td key={column}>{eachStock[column]?.toFixed(2)}</td>;
-                  }
-  
-                  if (column === "TradeDate") {
-                    return (
-                      <td key={column}>
-                        {eachStock[column]
-                          ? moment(eachStock[column]).format(
-                              "YYYY-MM-DD HH:mm:ss"
-                            )
-                          : ""}
-                      </td>
-                    );
-                  }
-  
-                  return <td key={column}>{eachStock[column]}</td>;
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table> */}
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
