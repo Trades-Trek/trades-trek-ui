@@ -1,5 +1,4 @@
 import { Tabs, MultiSelect } from "@mantine/core";
-import moment from "moment";
 import React, { useState, useEffect } from "react";
 import {
   IconPhoto,
