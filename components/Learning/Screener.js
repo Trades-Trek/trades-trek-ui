@@ -170,7 +170,6 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
     setIsFilterSearchLoading(true);
     try {
       const response = await stockService.filterStocks(selectedChildOptions);
-      console.log(selectedChildOptions, response);
       setIsFilterSearchLoading(false);
 
       if(response?.data){
@@ -311,7 +310,7 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
 
                     if (column === "Price") {
                       return (
-                        <td key={column}>{eachStock[column]?.toFixed(2)}</td>
+                        <td key={column}>{eachStock[column] ?  eachStock[column].toFixed(2) : eachStock['Last'].toFixed(2)}</td>
                       );
                     }
 
@@ -476,7 +475,6 @@ const Filter = ({
     });
   };
 
-  console.log();
   return showChild[level] ? (
     <Box
       component="form"
