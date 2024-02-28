@@ -9,7 +9,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import moment from "moment";
 import { stockService } from "../../services/stock.service";
-import { Loader } from '@mantine/core';
+import { Loader } from "@mantine/core";
 
 import {
   IconArrowsSort,
@@ -64,10 +64,27 @@ const menuItems = [
 ];
 
 const defaultShowChild = { 1: true, 2: false, 3: false };
+const defaultChildOptions = {
+  1: {
+    property: "",
+    minValue: "",
+    maxValue: "",
+  },
+  2: {
+    property: "",
+    minValue: "",
+    maxValue: "",
+  },
+  3: {
+    property: "",
+    minValue: "",
+    maxValue: "",
+  },
+}
 
 const Screener = ({ stockAllData, switchToStockDetails }) => {
   const [stockSectors, setStocksectors] = useState([]);
-  
+
   useEffect(() => {
     stockService
       .getAllStockSectors()
@@ -81,24 +98,8 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
 
   const [value, setValue] = useState(["Name", "Symbol", "Sector", "Price"]);
   const [stockMenuItems, setStockMenuItems] = useState(menuItems);
-  const [showChild, setShowChild] = useState({ 1: true, 2: false, 3: false });
-  const [selectedChildOptions, setSelectedChildOptions] = useState({
-    1: {
-      property: "",
-      minValue: "",
-      maxValue: "",
-    },
-    2: {
-      property: "",
-      minValue: "",
-      maxValue: "",
-    },
-    3: {
-      property: "",
-      minValue: "",
-      maxValue: "",
-    },
-  });
+  const [showChild, setShowChild] = useState(defaultShowChild);
+  const [selectedChildOptions, setSelectedChildOptions] = useState(defaultChildOptions);
 
   const [selectOptions, setSelectOptions] = useState([
     "Select All",
@@ -165,21 +166,26 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
       option.property !== "" || option.minValue !== "" || option.maxValue !== ""
   );
 
-  const searchStockByFilter = async() => {
+  const searchStockByFilter = async () => {
     if (!hasAnyValue) return;
     setIsFilterSearchLoading(true);
     try {
       const response = await stockService.filterStocks(selectedChildOptions);
       setIsFilterSearchLoading(false);
 
-      if(response?.data){
-        setStocks(response?.data)
+      if (response?.data) {
+        setStocks(response?.data);
       }
     } catch (error) {
       setIsFilterSearchLoading(false);
     }
   };
 
+  const clearFilter = () => {
+    setStocks(stockAllData);
+    setSelectedChildOptions(defaultChildOptions)
+    setShowChild(defaultShowChild)
+  }
   return (
     <div>
       <Box
@@ -206,15 +212,30 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
         ))}
 
         <Button
+          onClick={clearFilter}
+          style={{
+            background: "blue",
+            height: "50px",
+            width: "80px",
+            marginRight: '5px'
+          }}
+          variant="contained"
+        >
+          Clear
+        </Button>
+        <Button
           onClick={searchStockByFilter}
           style={{
-            background: hasAnyValue && !isFilterSearchLoading ? "forestgreen" : "darkseagreen",
+            background:
+              hasAnyValue && !isFilterSearchLoading
+                ? "forestgreen"
+                : "darkseagreen",
             height: "50px",
             width: "80px",
           }}
           variant="contained"
         >
-          {isFilterSearchLoading ? 'Loading': 'Search'}
+          {isFilterSearchLoading ? "Loading" : "Search"}
         </Button>
       </Box>
 
@@ -243,7 +264,7 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
           }}
         />
         {isFilterSearchLoading ? (
-          <Loader size={30} style={{ margin: '10px auto'}} />
+          <Loader size={30} style={{ margin: "10px auto" }} />
         ) : (
           <table class="table-auto">
             <thead>
@@ -310,7 +331,11 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
 
                     if (column === "Price") {
                       return (
-                        <td key={column}>{eachStock[column] ?  eachStock[column].toFixed(2) : eachStock['Last'].toFixed(2)}</td>
+                        <td key={column}>
+                          {eachStock[column]
+                            ? eachStock[column].toFixed(2)
+                            : eachStock["Last"].toFixed(2)}
+                        </td>
                       );
                     }
 
