@@ -92,6 +92,24 @@ function getAllStockSectors() {
     });
 }
 
+function filterStocks(stock) {
+  return fetchWrapper
+    .post(`${baseUrl}/stock/filter`, stock)
+
+    .then((res) => {
+      if (res.success) {
+      }
+      return res;
+    })
+    .catch((error) => {
+      if (error?.length > 0) {
+        return error[0];
+      }
+      return error;
+    });
+}
+
+
 function addToWatchListStock(stock) {
   return fetchWrapper
     .post(`${baseUrl}/watchlist`, stock)
@@ -151,6 +169,7 @@ export const stockService = {
   getTopLooser,
   getAllStock,
   getAllStockSectors,
+  filterStocks,
   addToWatchListStock,
   AllWathchList,
   removeItem,

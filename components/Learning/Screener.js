@@ -67,7 +67,7 @@ const defaultShowChild = { 1: true, 2: false, 3: false };
 
 const Screener = ({ stockAllData, switchToStockDetails }) => {
   const [stockSectors, setStocksectors] = useState([]);
-
+  
   useEffect(() => {
     stockService
       .getAllStockSectors()
@@ -165,11 +165,17 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
       option.property !== "" || option.minValue !== "" || option.maxValue !== ""
   );
 
-  const searchStockByFilter = () => {
+  const searchStockByFilter = async() => {
     if (!hasAnyValue) return;
     setIsFilterSearchLoading(true);
     try {
-      // setIsFilterSearchLoading(false);
+      const response = await stockService.filterStocks(selectedChildOptions);
+      console.log(selectedChildOptions, response);
+      setIsFilterSearchLoading(false);
+
+      if(response?.data){
+        setStocks(response?.data)
+      }
     } catch (error) {
       setIsFilterSearchLoading(false);
     }
@@ -203,13 +209,13 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
         <Button
           onClick={searchStockByFilter}
           style={{
-            background: hasAnyValue ? "forestgreen" : "darkseagreen",
+            background: hasAnyValue && !isFilterSearchLoading ? "forestgreen" : "darkseagreen",
             height: "50px",
             width: "80px",
           }}
           variant="contained"
         >
-          Search
+          {isFilterSearchLoading ? 'Loading': 'Search'}
         </Button>
       </Box>
 
