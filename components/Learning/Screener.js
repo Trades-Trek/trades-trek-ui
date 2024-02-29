@@ -21,6 +21,13 @@ const Arrow = () => (
   <IconArrowsSort style={{ display: "inline-flex", width: 12, height: 12 }} />
 );
 
+const optionsNum = {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+};
+
+
+
 const headers = [
   "Name",
   "Symbol",
