@@ -51,6 +51,22 @@ const headers = [
   "Asset",
 ];
 
+const formatMarketCap = (value) => {
+  return Number(value).toLocaleString("en", optionsNum);
+};
+
+const formatPE = (value) => {
+  if (value) {
+    try {
+      const numberValue = Number(value);
+      return numberValue.toFixed(2);
+    } catch (error) {
+      return value;
+    }
+  }
+  return "";
+};
+
 const menuItems = [
   { value: "Last", label: "Price/Last" },
   { value: "PerChange", label: "Per Change" },
@@ -64,6 +80,7 @@ const menuItems = [
 ];
 
 const defaultShowChild = { 1: true, 2: false, 3: false };
+const defaultMenuItems = { 1: menuItems,  2: menuItems , 3: menuItems  }
 const defaultChildOptions = {
   1: {
     property: "",
@@ -97,7 +114,7 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
   }, []);
 
   const [value, setValue] = useState(["Name", "Symbol", "Sector", "Price"]);
-  const [stockMenuItems, setStockMenuItems] = useState(menuItems);
+  const [stockMenuItems, setStockMenuItems] = useState(defaultMenuItems);
   const [showChild, setShowChild] = useState(defaultShowChild);
   const [selectedChildOptions, setSelectedChildOptions] = useState(defaultChildOptions);
 
@@ -186,6 +203,8 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
     setSelectedChildOptions(defaultChildOptions)
     setShowChild(defaultShowChild)
   }
+
+  
   return (
     <div>
       <Box
@@ -197,7 +216,6 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
           pb: 1,
         }}
       >
-        {/* <span>Filter</span> */}
         {[1, 2, 3].map((level) => (
           <Filter
             level={level}
@@ -430,12 +448,50 @@ const Filter = ({
   setSelectedChildOptions,
   stockSectors,
   setStockMenuItems,
+  
 }) => {
   const parameter = selectedChildOptions[level]?.property || "";
   const minValue = selectedChildOptions[level]?.minValue || "";
   const maxValue = selectedChildOptions[level]?.maxValue || "";
 
   const handleChange = (event) => {
+    if (level === 1) {
+     const newMenuItems = menuItems.filter((item) => item.value !== event.target.value)
+     const newObj = { 1: menuItems,  2: newMenuItems , 3: newMenuItems  }
+     setStockMenuItems(newObj)
+     
+     setSelectedChildOptions({
+      ...selectedChildOptions,
+      2: {
+        property: "",
+        minValue: "",
+        maxValue: "",
+      },
+      3: {
+        property: "",
+        minValue: "",
+        maxValue: "",
+      },
+    });
+
+
+    }
+
+    if (level === 2) {
+      const newMenuItems = stockMenuItems[2].filter((item) => item.value !== event.target.value)
+      const newObj = { 1: menuItems,  2: stockMenuItems[2] , 3: newMenuItems  }
+      setStockMenuItems(newObj)
+      
+      setSelectedChildOptions({
+        ...selectedChildOptions,
+        3: {
+          property: "",
+          minValue: "",
+          maxValue: "",
+        },
+      });
+     }
+
     setSelectedChildOptions({
       ...selectedChildOptions,
       [level]: { property: event.target.value, minValue: "", maxValue: "" },
@@ -517,7 +573,7 @@ const Filter = ({
           label="Select Parameter"
           onChange={handleChange}
         >
-          {stockMenuItems.map(({ label, value }) => (
+          {stockMenuItems[level].map(({ label, value }) => (
             <MenuItem key={value} value={value}>
               {label}
             </MenuItem>

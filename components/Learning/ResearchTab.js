@@ -22,21 +22,7 @@ const optionsNum = {
   maximumFractionDigits: 2,
 };
 
-const formatMarketCap = (value) => {
-  return Number(value).toLocaleString("en", optionsNum);
-};
 
-const formatPE = (value) => {
-  if (value) {
-    try {
-      const numberValue = Number(value);
-      return numberValue.toFixed(2);
-    } catch (error) {
-      return value;
-    }
-  }
-  return "";
-};
 
 const headers = [
   "Name",
