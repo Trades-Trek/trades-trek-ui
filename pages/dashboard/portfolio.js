@@ -21,7 +21,21 @@ export default function Portfolio() {
   const [typeData, setTypeData] = useState("week");
   const [perSelected, setPerSelected] = useState(false);
   const [userHistoryData, setuserHistoryData] = useState(null);
+  const [userRankDetail, setUserRankDetail] = useState({
+    "count": null,
+    "rank": null
+});
 
+useEffect(() => {
+  userService
+    .userRankDetails()
+    .then((res) => {
+      if (res.success) {
+        setUserRankDetail(res.data);
+      } 
+    })
+    .catch((err) => console.log(err));
+}, [user]);
 
   useEffect(() => {
     userService
@@ -196,7 +210,7 @@ export default function Portfolio() {
                 {user?.portfolio?.rank ? (
                   <div className="rank">
                     <p className="yourrank">
-                      {user?.portfolio?.rank
+                      {userRankDetail?.rank
 
                         ?.toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
@@ -215,7 +229,7 @@ export default function Portfolio() {
                     </svg>{" "}
                     <p className="players">
                       of{" "}
-                      {user?.portfolio?.gameId?.users?.length
+                      {userRankDetail?.count
 
                         ?.toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}

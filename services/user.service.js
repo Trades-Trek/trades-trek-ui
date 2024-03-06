@@ -486,6 +486,24 @@ function getBankDetail() {
     });
 }
 
+function userRankDetails() {
+
+  
+  return fetchWrapper
+    .get(`${baseUrl}/user/get/rank-info?gameId=${localStorage.getItem("GameId")}`)
+    .then((res) => {
+      if(res.success){
+       res
+      }
+     
+      return res;
+    })
+    .catch(function (error) {
+      return error;
+    });
+}
+
+
 function getBanks() {  
   return fetchWrapper
     .get(`${baseUrl}/bank`)
@@ -637,6 +655,7 @@ export const userService = {
   userInfo,
   changePassword,
   userPerformanceHistory,
+  userRankDetails,
   userPerformanceHistoryAll,
   anotherUserPerformanceHistoryAll,
   getHoliday,
