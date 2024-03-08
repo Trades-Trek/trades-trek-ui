@@ -1,7 +1,8 @@
 import Link from "next/link";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { CSVLink } from "react-csv";
 import { gameService } from "../../services/game.service";
+import { userService } from "../../services";
 
 const CurrentComponent = ({
   item,
@@ -15,6 +16,22 @@ const CurrentComponent = ({
   handleDeleteGame,
   length
 }) => {
+
+  const [userRankDetail, setUserRankDetail] = useState({
+    "count": null,
+    "rank": null
+});
+
+useEffect(() => {
+  userService
+    .userRankDetails(item?._id)
+    .then((res) => {
+      if (res.success) {
+        setUserRankDetail(res.data);
+      } 
+    })
+    .catch((err) => console.log(err));
+}, [user, item]);
 
 
     const [loadingTrade,setLoadingTrade]=useState(false)
@@ -95,7 +112,7 @@ const CurrentComponent = ({
               <div className="colBlock">
                 <p className="font-17 font--normal">CURRENT RANK</p>
                 <h2 className="font-17 font--bold flexBox">
-                  {item.result.rank || "--"}
+                  {userRankDetail?.rank || "--"}
                   <span className="font-17 font--normal flexBox">
                     <svg
                       className="ml-12 mr-12"
@@ -109,7 +126,7 @@ const CurrentComponent = ({
                         fill="#00FFA0"
                       ></path>
                     </svg>
-                    of {item.users.length} Players
+                    of {userRankDetail?.count} Players
                   </span>
                 </h2>
               </div>

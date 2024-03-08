@@ -486,11 +486,11 @@ function getBankDetail() {
     });
 }
 
-function userRankDetails() {
+function userRankDetails(gameID) {
 
   
   return fetchWrapper
-    .get(`${baseUrl}/user/get/rank-info?gameId=${localStorage.getItem("GameId")}`)
+    .get(`${baseUrl}/user/get/rank-info?gameId=${gameID ? gameID : localStorage.getItem("GameId")}`)
     .then((res) => {
       if(res.success){
        res
