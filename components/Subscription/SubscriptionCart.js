@@ -125,6 +125,12 @@ const SubscriptionCart = ({ item, user }) => {
         </p>
       </div>
 
+      <div className="info--text">
+        <p>
+          Activation Date {moment(item?.activationDate).format("lll")}
+        </p>
+      </div>
+
       <ExpiredDate item={item} />
 
       <button onClick={() => handlePrint(item)}>Print</button>
