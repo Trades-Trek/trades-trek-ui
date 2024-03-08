@@ -95,7 +95,7 @@ export default function JoinCompetation() {
                 <th>competition Name</th>
                 <th>Start Date</th>
                 <th>End Date</th>
-                <th>No of Players</th>
+                <th>No of Players(All subscription)</th>
                 <th>Starting Cash</th>
                 <th>Actions</th>
                 <th></th>
