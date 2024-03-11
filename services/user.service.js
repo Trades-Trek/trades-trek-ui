@@ -327,6 +327,25 @@ function getAllSubscription() {
       return error;
     });
 }
+
+function getAllPaidSubscription() {
+ 
+  return fetchWrapper
+    .get(`${baseUrl}/subscription/paid`)
+
+    .then((res) => {
+      if (res.success) {
+      }
+      return res;
+    })
+    .catch((error) => {
+      if (error?.length > 0) {
+        return error[0];
+      }
+      return error;
+    });
+}
+
 function subscriptions() {
  
   return fetchWrapper
@@ -486,11 +505,11 @@ function getBankDetail() {
     });
 }
 
-function userRankDetails(gameID) {
+function userRankDetails() {
 
   
   return fetchWrapper
-    .get(`${baseUrl}/user/get/rank-info?gameId=${gameID ? gameID : localStorage.getItem("GameId")}`)
+    .get(`${baseUrl}/user/get/rank-info?gameId=${localStorage.getItem("GameId")}`)
     .then((res) => {
       if(res.success){
        res
@@ -660,6 +679,7 @@ export const userService = {
   anotherUserPerformanceHistoryAll,
   getHoliday,
   getAllSubscription,
+  getAllPaidSubscription,
   verifyTransaction,
   GetSingleUser,
   cancelTransaction,

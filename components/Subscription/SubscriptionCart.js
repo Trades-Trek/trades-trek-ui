@@ -5,6 +5,7 @@ import { jsPDF } from "jspdf";
 // Default export is a4 paper, portrait, using millimeters for units
 
 const SubscriptionCart = ({ item, user }) => {
+  console.log(item )
 
   const handlePrint = (data) => {
     // window.print();
@@ -103,7 +104,7 @@ const SubscriptionCart = ({ item, user }) => {
     <div
       className={`block--info subscription ${item?.result?._id ==
         user?.user?.subscriptionId &&
-        item?.status &&
+        item?.status === 'active' &&
         "activeSubscription"}`}
     >
       <div className="info--title">

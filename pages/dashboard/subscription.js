@@ -29,7 +29,7 @@ export default function Sub() {
   useEffect(() => {
     setIsLoading(true);
     userService
-      .getAllSubscription()
+      .getAllPaidSubscription()
       .then((res) => {
         if (res.success) {
           setAllSubscription(res.data);
