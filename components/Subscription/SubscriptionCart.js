@@ -5,8 +5,7 @@ import { jsPDF } from "jspdf";
 // Default export is a4 paper, portrait, using millimeters for units
 
 const SubscriptionCart = ({ item, user }) => {
-  console.log(item )
-
+  
   const handlePrint = (data) => {
     // window.print();
     const doc = new jsPDF({
