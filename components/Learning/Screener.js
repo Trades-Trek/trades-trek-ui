@@ -10,6 +10,8 @@ import Button from "@mui/material/Button";
 import moment from "moment";
 import { stockService } from "../../services/stock.service";
 import { Loader } from "@mantine/core";
+import orderBy from 'lodash/orderBy';
+
 
 import {
   IconArrowsSort,
@@ -25,8 +27,6 @@ const optionsNum = {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 };
-
-
 
 const headers = [
   "Name",
@@ -59,10 +59,14 @@ const headers = [
 ];
 
 const formatMarketCap = (value) => {
-  return Number(value).toLocaleString("en", optionsNum);
+  if (value) {
+    return Number(value).toLocaleString("en", optionsNum);
+  } else {
+    return value;
+  }
 };
 
-const formatPE = (value) => {
+const format_Num = (value) => {
   if (value) {
     try {
       const numberValue = Number(value);
@@ -71,7 +75,19 @@ const formatPE = (value) => {
       return value;
     }
   }
-  return "";
+  return value;
+};
+
+const formatEPS = (value) => {
+  if (value) {
+    try {
+      const numberValue = Number(value);
+      return numberValue.toFixed(2);
+    } catch (error) {
+      return value;
+    }
+  }
+  return value;
 };
 
 const menuItems = [
@@ -87,7 +103,7 @@ const menuItems = [
 ];
 
 const defaultShowChild = { 1: true, 2: false, 3: false };
-const defaultMenuItems = { 1: menuItems,  2: menuItems , 3: menuItems  }
+const defaultMenuItems = { 1: menuItems, 2: menuItems, 3: menuItems };
 const defaultChildOptions = {
   1: {
     property: "",
@@ -104,7 +120,7 @@ const defaultChildOptions = {
     minValue: "",
     maxValue: "",
   },
-}
+};
 
 const Screener = ({ stockAllData, switchToStockDetails }) => {
   const [stockSectors, setStocksectors] = useState([]);
@@ -123,7 +139,9 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
   const [value, setValue] = useState(["Name", "Symbol", "Sector", "Price"]);
   const [stockMenuItems, setStockMenuItems] = useState(defaultMenuItems);
   const [showChild, setShowChild] = useState(defaultShowChild);
-  const [selectedChildOptions, setSelectedChildOptions] = useState(defaultChildOptions);
+  const [selectedChildOptions, setSelectedChildOptions] = useState(
+    defaultChildOptions
+  );
 
   const [selectOptions, setSelectOptions] = useState([
     "Select All",
@@ -141,31 +159,21 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
 
   const handleSort = (columnName) => {
     let newSortOrder = sortOrder;
+  
     if (sortColumn === columnName) {
       // If clicking on the same column, toggle the sort order
-      newSortOrder = sortOrder === "asc" ? "desc" : "asc";
+      newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
     } else {
       // If clicking on a different column, default to ascending order
-      newSortOrder = "asc";
+      newSortOrder = 'asc';
     }
+  
     setSortOrder(newSortOrder);
     setSortColumn(columnName);
-
-    // Sort the stockAllData array based on the selected column and order
-    const sortedData = [...stocks].sort((a, b) => {
-      const aValue = a[columnName];
-      const bValue = b[columnName];
-
-      if (typeof aValue === "number" && typeof bValue === "number") {
-        return newSortOrder === "asc" ? aValue - bValue : bValue - aValue;
-      } else {
-        const lowerAValue = String(aValue).toLowerCase();
-        const lowerBValue = String(bValue).toLowerCase();
-        return newSortOrder === "asc"
-          ? lowerAValue.localeCompare(lowerBValue)
-          : lowerBValue.localeCompare(lowerAValue);
-      }
-    });
+  
+    // Sort the stockAllData array based on the selected column and order using lodash
+    const sortedData = orderBy(stocks, [columnName], [newSortOrder]);
+  
     setStocks(sortedData);
   };
 
@@ -207,11 +215,10 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
 
   const clearFilter = () => {
     setStocks(stockAllData);
-    setSelectedChildOptions(defaultChildOptions)
-    setShowChild(defaultShowChild)
-  }
+    setSelectedChildOptions(defaultChildOptions);
+    setShowChild(defaultShowChild);
+  };
 
-  
   return (
     <div>
       <Box
@@ -242,7 +249,7 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
             background: "blue",
             height: "50px",
             width: "80px",
-            marginRight: '5px'
+            marginRight: "5px",
           }}
           variant="contained"
         >
@@ -364,23 +371,31 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
                       );
                     }
 
-                    if (column === "MktCap") {
-                      return (
-                        <td key={column}>
-                          {formatMarketCap(eachStock[column])}
-                        </td>
-                      );
-                    }
+                    // if (column === "MktCap") {
+                    //   return (
+                    //     <td key={column}>
+                    //       {formatMarketCap(eachStock[column])}
+                    //     </td>
+                    //   );
+                    // }
 
-                    if (column === "EPS") {
+                    if (
+                      [
+                        "PE",
+                        "EPS",
+                        "Change",
+                        "PerChange",
+                        "Ask",
+                        "Bid",
+                        "AskSize",
+                        "BidSize",
+                        "High52Week",
+                        "Low52Week",
+                
+                      ].includes(column)
+                    ) {
                       return (
-                        <td key={column}>{eachStock[column]?.toFixed(2)}</td>
-                      );
-                    }
-
-                    if (column === "PE") {
-                      return (
-                        <td key={column}>{formatPE(eachStock[column])}</td>
+                        <td key={column}>{format_Num(eachStock[column])}</td>
                       );
                     }
 
@@ -405,18 +420,6 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
                               )
                             : ""}
                         </td>
-                      );
-                    }
-
-                    if (column === "Change") {
-                      return (
-                        <td key={column}>{eachStock[column]?.toFixed(2)}</td>
-                      );
-                    }
-
-                    if (column === "PerChange") {
-                      return (
-                        <td key={column}>{eachStock[column]?.toFixed(2)}</td>
                       );
                     }
 
@@ -455,7 +458,6 @@ const Filter = ({
   setSelectedChildOptions,
   stockSectors,
   setStockMenuItems,
-  
 }) => {
   const parameter = selectedChildOptions[level]?.property || "";
   const minValue = selectedChildOptions[level]?.minValue || "";
@@ -463,32 +465,34 @@ const Filter = ({
 
   const handleChange = (event) => {
     if (level === 1) {
-     const newMenuItems = menuItems.filter((item) => item.value !== event.target.value)
-     const newObj = { 1: menuItems,  2: newMenuItems , 3: newMenuItems  }
-     setStockMenuItems(newObj)
-     
-     setSelectedChildOptions({
-      ...selectedChildOptions,
-      2: {
-        property: "",
-        minValue: "",
-        maxValue: "",
-      },
-      3: {
-        property: "",
-        minValue: "",
-        maxValue: "",
-      },
-    });
+      const newMenuItems = menuItems.filter(
+        (item) => item.value !== event.target.value
+      );
+      const newObj = { 1: menuItems, 2: newMenuItems, 3: newMenuItems };
+      setStockMenuItems(newObj);
 
-
+      setSelectedChildOptions({
+        ...selectedChildOptions,
+        2: {
+          property: "",
+          minValue: "",
+          maxValue: "",
+        },
+        3: {
+          property: "",
+          minValue: "",
+          maxValue: "",
+        },
+      });
     }
 
     if (level === 2) {
-      const newMenuItems = stockMenuItems[2].filter((item) => item.value !== event.target.value)
-      const newObj = { 1: menuItems,  2: stockMenuItems[2] , 3: newMenuItems  }
-      setStockMenuItems(newObj)
-      
+      const newMenuItems = stockMenuItems[2].filter(
+        (item) => item.value !== event.target.value
+      );
+      const newObj = { 1: menuItems, 2: stockMenuItems[2], 3: newMenuItems };
+      setStockMenuItems(newObj);
+
       setSelectedChildOptions({
         ...selectedChildOptions,
         3: {
@@ -497,7 +501,7 @@ const Filter = ({
           maxValue: "",
         },
       });
-     }
+    }
 
     setSelectedChildOptions({
       ...selectedChildOptions,
