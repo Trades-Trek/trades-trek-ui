@@ -11,6 +11,7 @@ import moment from "moment";
 import { stockService } from "../../services/stock.service";
 import { Loader } from "@mantine/core";
 import orderBy from 'lodash/orderBy';
+import { sort } from 'fast-sort';
 
 
 import {
@@ -171,12 +172,20 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
     setSortOrder(newSortOrder);
     setSortColumn(columnName);
   
-    // Sort the stockAllData array based on the selected column and order using lodash
-    const sortedData = orderBy(stocks, [columnName], [newSortOrder]);
-  
-    setStocks(sortedData);
+    console.log(newSortOrder, [columnName])
+
+    if(newSortOrder === 'desc'){
+      const sorted = sort(stocks).desc(val => val[columnName]);
+      setStocks(sortedData);
+    }else{
+      const sorted = sort(stocks).asc(val => val[columnName]);
+      setStocks(sortedData);
+    }
+
+ 
   };
 
+  
   const HeaderWrapper = ({ title, sortable, column }) => (
     <th
       onClick={() => {

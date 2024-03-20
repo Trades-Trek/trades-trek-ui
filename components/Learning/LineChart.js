@@ -78,7 +78,7 @@ export default function LineChart({graphData, stockProperty}){
                     data={data}
                     height={100}
                     options={options}
-                />:<div style={{height:'150px',display:'flex',alignItems:"center"}}><h1>Your performance chart will update daily starting tomorrow</h1></div>}
+                />:<div style={{height:'150px',display:'flex',alignItems:"center"}}><h1>No data avaialble for this stock</h1></div>}
                 
             </div>
         </>

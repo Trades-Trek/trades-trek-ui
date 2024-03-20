@@ -28,6 +28,7 @@
     "axios": "^0.27.2",
     "chart.js": "^3.8.2",
     "connected-react-router": "^6.9.3",
+    "fast-sort": "^3.4.0",
     "i": "^0.3.7",
     "jspdf": "^2.5.1",
     "mdb-react-ui-kit": "^4.1.0",
