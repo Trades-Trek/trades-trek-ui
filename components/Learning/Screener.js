@@ -176,10 +176,10 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
 
     if(newSortOrder === 'desc'){
       const sorted = sort(stocks).desc(val => val[columnName]);
-      setStocks(sortedData);
+      setStocks(sorted);
     }else{
       const sorted = sort(stocks).asc(val => val[columnName]);
-      setStocks(sortedData);
+      setStocks(sorted);
     }
 
  
