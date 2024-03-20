@@ -174,21 +174,28 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
     console.log(newSortOrder, [columnName]);
 
     if (newSortOrder === "desc") {
-      if (["Bid", "PE"].includes(columnName)) {
+      if (["Bid", "PE", "MktCap"].includes(columnName)) {
+      
         setStocks(
           stocks.sort((a, b) => {
-            return b[columnName] - a[columnName];
+            const aValue = isNaN(a[columnName]) ? a[columnName] : Number(a[columnName]);
+            const bValue = isNaN(b[columnName]) ? b[columnName] : Number(b[columnName]);
+            return bValue - aValue;
           })
         );
+
+
       } else {
         const sorted = sort(stocks).desc((val) => val[columnName]);
         setStocks(sorted);
       }
     } else {
-      if (["Bid", "PE"].includes(columnName)) {
+      if (["Bid", "PE", "MktCap"].includes(columnName)) {
         setStocks(
           stocks.sort((a, b) => {
-            return a[columnName] - b[columnName];
+            const aValue = isNaN(a[columnName]) ? a[columnName] : Number(a[columnName]);
+            const bValue = isNaN(b[columnName]) ? b[columnName] : Number(b[columnName]);
+            return aValue - bValue;
           })
         );
       } else {
