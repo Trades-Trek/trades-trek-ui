@@ -10,9 +10,8 @@ import Button from "@mui/material/Button";
 import moment from "moment";
 import { stockService } from "../../services/stock.service";
 import { Loader } from "@mantine/core";
-import orderBy from 'lodash/orderBy';
-import { sort } from 'fast-sort';
-
+import orderBy from "lodash/orderBy";
+import { sort } from "fast-sort";
 
 import {
   IconArrowsSort,
@@ -160,32 +159,45 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
 
   const handleSort = (columnName) => {
     let newSortOrder = sortOrder;
-  
+
     if (sortColumn === columnName) {
       // If clicking on the same column, toggle the sort order
-      newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+      newSortOrder = sortOrder === "asc" ? "desc" : "asc";
     } else {
       // If clicking on a different column, default to ascending order
-      newSortOrder = 'asc';
+      newSortOrder = "asc";
     }
-  
+
     setSortOrder(newSortOrder);
     setSortColumn(columnName);
-  
-    console.log(newSortOrder, [columnName])
 
-    if(newSortOrder === 'desc'){
-      const sorted = sort(stocks).desc(val => val[columnName]);
-      setStocks(sorted);
-    }else{
-      const sorted = sort(stocks).asc(val => val[columnName]);
-      setStocks(sorted);
+    console.log(newSortOrder, [columnName]);
+
+    if (newSortOrder === "desc") {
+      if (["Bid", "PE"].includes(columnName)) {
+        setStocks(
+          stocks.sort((a, b) => {
+            return b[columnName] - a[columnName];
+          })
+        );
+      } else {
+        const sorted = sort(stocks).desc((val) => val[columnName]);
+        setStocks(sorted);
+      }
+    } else {
+      if (["Bid", "PE"].includes(columnName)) {
+        setStocks(
+          stocks.sort((a, b) => {
+            return a[columnName] - b[columnName];
+          })
+        );
+      } else {
+        const sorted = sort(stocks).asc((val) => val[columnName]);
+        setStocks(sorted);
+      }
     }
-
- 
   };
 
-  
   const HeaderWrapper = ({ title, sortable, column }) => (
     <th
       onClick={() => {
@@ -400,7 +412,6 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
                         "BidSize",
                         "High52Week",
                         "Low52Week",
-                
                       ].includes(column)
                     ) {
                       return (
