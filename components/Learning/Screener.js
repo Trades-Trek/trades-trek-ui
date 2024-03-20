@@ -171,8 +171,6 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
     setSortOrder(newSortOrder);
     setSortColumn(columnName);
 
-    console.log(newSortOrder, [columnName]);
-
     if (newSortOrder === "desc") {
       if (["Bid", "PE", "MktCap"].includes(columnName)) {
       
@@ -399,13 +397,13 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
                       );
                     }
 
-                    // if (column === "MktCap") {
-                    //   return (
-                    //     <td key={column}>
-                    //       {formatMarketCap(eachStock[column])}
-                    //     </td>
-                    //   );
-                    // }
+                    if (column === "MktCap") {
+                      return (
+                        <td key={column}>
+                          {formatMarketCap(eachStock[column])}
+                        </td>
+                      );
+                    }
 
                     if (
                       [
