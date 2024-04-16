@@ -1,9 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
+import { Modal, Button, Radio, NumberInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Button, Group } from "@mantine/core";
-
 import { stockService } from "../../services/stock.service";
 import { orderService } from "../../services/order.service";
 import Select, { AriaOnFocus } from "react-select";
@@ -31,6 +30,12 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [stockData, setStockData] = useState();
   const [modelOpened, setModelOpened] = useState(false);
+
+  const [isPriceAlertModalOpen, setPriceAlertModalOpen] = useState(false);
+  const [isPriceAlertLoading, setIsPriceAlertLoading] = useState(false);
+  const [targetPrice, setTargetPrice] = useState();
+  const [range, setRange] = useState("above");
+
   const [action, setAction] = useState("Buy");
   const [quantity, setQuantity] = useState("");
   const [duration, setDuration] = useState("Day Only");
@@ -46,6 +51,33 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
   const [token, setToken] = useState("");
   const router = useRouter();
   let { user } = useSelector((state) => state.userWrapper);
+
+  const openPriceAlertModal = () => setPriceAlertModalOpen(true);
+  const closePriceAlertModal = () => setPriceAlertModalOpen(false);
+
+  const handlePriceAlertSubmit = async () => {
+    setIsPriceAlertLoading(true);
+
+    try {
+      const res = await stockService.addPriceAlert({
+        Symbol: stockData.Symbol,
+        targetPrice,
+        range,
+      });
+      setIsPriceAlertLoading(false);
+
+      toast.success(res.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+
+      if (res.success) closePriceAlertModal();
+    } catch (error) {
+      setIsPriceAlertLoading(false);
+      toast.error(res.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
 
   const data = router.state;
   useEffect(() => {
@@ -266,10 +298,12 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
     }
   };
 
-
   const handleQuantityChange = (event) => {
-    const quantityWithoutLeadingZeros = event.target.value.replace(/^0+/g, '');
-    const quantityWithoutDecimals = quantityWithoutLeadingZeros.replace(/\.|\,/, '');
+    const quantityWithoutLeadingZeros = event.target.value.replace(/^0+/g, "");
+    const quantityWithoutDecimals = quantityWithoutLeadingZeros.replace(
+      /\.|\,/,
+      ""
+    );
     setQuantity(quantityWithoutDecimals);
   };
 
@@ -680,11 +714,64 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
                   : "Add to WatchList"}
               </a>
             )}
+
+            {stockData && (
+              <a
+                className="btn form--submit"
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  if (isWatchListLoading) return;
+
+                  if (user?.user?.subscriptionDuration === "free-lifetime") {
+                    open();
+                    return;
+                  }
+                  openPriceAlertModal();
+                }}
+              >
+                {isWatchListLoading ? "Loading.." : "Add Price Alert"}
+              </a>
+            )}
+
             <Modal
               opened={opened}
               onClose={close}
               title="Subscribe to a Plan to Add to Watchlist"
             ></Modal>
+
+            <Modal
+              opened={isPriceAlertModalOpen}
+              onClose={closePriceAlertModal}
+              title="Set Price Alert"
+            >
+              <NumberInput
+                label="Target Price"
+                placeholder="Enter a number"
+                value={targetPrice}
+                onChange={setTargetPrice}
+              />
+              <Radio.Group
+                label="Price Range"
+                value={range}
+                onChange={setRange}
+                className="mt-4"
+              >
+                <Radio value="above" label="Above" />
+                <Radio value="below" label="Below" />
+                <Radio value="exact" label="Exact" />
+              </Radio.Group>
+              <Button
+                className="mt-4"
+                style={{ background: "blue" }}
+                disabled={!targetPrice || isPriceAlertLoading}
+                variant="filled"
+                type="submit"
+                onClick={handlePriceAlertSubmit}
+              >
+                {isPriceAlertLoading ? "Loading.." : "Submit"}
+              </Button>
+            </Modal>
+
             <PreviewModal
               modelOpened={modelOpened}
               setModelOpened={setModelOpened}

@@ -109,6 +109,22 @@ function filterStocks(stock) {
     });
 }
 
+function addPriceAlert(body) {
+  return fetchWrapper
+    .post(`${baseUrl}/watchlist/priceAlert`, body)
+
+    .then((res) => {
+      if (res.success) {
+      }
+      return res;
+    })
+    .catch((error) => {
+      if (error?.length > 0) {
+        return error[0];
+      }
+      return error;
+    });
+}
 
 function addToWatchListStock(stock) {
   return fetchWrapper
@@ -171,6 +187,7 @@ export const stockService = {
   getAllStockSectors,
   filterStocks,
   addToWatchListStock,
+  addPriceAlert,
   AllWathchList,
   removeItem,
   stockDetailGraph,
