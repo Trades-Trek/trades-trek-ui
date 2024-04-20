@@ -58,6 +58,23 @@ function getTopLooser() {
       return error;
     });
 }
+
+function getPriceAlertStocks() {
+  return fetchWrapper
+    .get(`${baseUrl}/watchlist/price-alert-stocks`)
+    .then((res) => {
+      if (res.success) {
+      }
+      return res;
+    })
+    .catch((error) => {
+      if (error?.length > 0) {
+        return error[0];
+      }
+      return error;
+    });
+}
+
 function getAllStock() {
   return fetchWrapper
     .get(`${baseUrl}/stock/all`)
@@ -95,6 +112,25 @@ function getAllStockSectors() {
 function filterStocks(stock) {
   return fetchWrapper
     .post(`${baseUrl}/stock/filter`, stock)
+
+    .then((res) => {
+      if (res.success) {
+      }
+      return res;
+    })
+    .catch((error) => {
+      if (error?.length > 0) {
+        return error[0];
+      }
+      return error;
+    });
+}
+
+
+
+function editPriceAlert(body, id) {
+  return fetchWrapper
+    .put(`${baseUrl}/watchlist/priceAlert/${id}`, body)
 
     .then((res) => {
       if (res.success) {
@@ -188,7 +224,9 @@ export const stockService = {
   filterStocks,
   addToWatchListStock,
   addPriceAlert,
+  editPriceAlert,
   AllWathchList,
   removeItem,
   stockDetailGraph,
+  getPriceAlertStocks,
 };

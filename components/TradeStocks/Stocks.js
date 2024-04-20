@@ -31,10 +31,14 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
   const [stockData, setStockData] = useState();
   const [modelOpened, setModelOpened] = useState(false);
 
+  const [showAlertForm, setShowAlertForm] = useState(false);
   const [isPriceAlertModalOpen, setPriceAlertModalOpen] = useState(false);
   const [isPriceAlertLoading, setIsPriceAlertLoading] = useState(false);
   const [targetPrice, setTargetPrice] = useState();
+  const [priceAlertId, setPriceAlertId ] =  useState('')
   const [range, setRange] = useState("above");
+  const [priceAlertStocks, setPriceAlertStocks] = useState([]);
+  const [priceAlertCounter, setPriceAlertCounter] = useState(0);
 
   const [action, setAction] = useState("Buy");
   const [quantity, setQuantity] = useState("");
@@ -55,6 +59,14 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
   const openPriceAlertModal = () => setPriceAlertModalOpen(true);
   const closePriceAlertModal = () => setPriceAlertModalOpen(false);
 
+  const resetPriceAlertModal = () => {
+    setTargetPrice();
+    setShowAlertForm(false);
+    setRange("above");
+    setPriceAlertId('')
+    closePriceAlertModal();
+  };
+
   const handlePriceAlertSubmit = async () => {
     setIsPriceAlertLoading(true);
 
@@ -70,7 +82,38 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
         position: toast.POSITION.TOP_RIGHT,
       });
 
-      if (res.success) closePriceAlertModal();
+      if (res.success) {
+        resetPriceAlertModal();
+        setPriceAlertCounter(priceAlertCounter + 1);
+      }
+    } catch (error) {
+      setIsPriceAlertLoading(false);
+      toast.error(res.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
+
+  //editPriceAlert(body, id)
+  const handleEditPriceAlertSubmit = async () => {
+    setIsPriceAlertLoading(true);
+
+    try {
+      const res = await stockService.editPriceAlert({
+        Symbol: stockData.Symbol,
+        targetPrice,
+        range,
+      }, priceAlertId);
+      setIsPriceAlertLoading(false);
+
+      toast.success(res.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+
+      if (res.success) {
+        resetPriceAlertModal();
+        setPriceAlertCounter(priceAlertCounter + 1);
+      }
     } catch (error) {
       setIsPriceAlertLoading(false);
       toast.error(res.message, {
@@ -137,6 +180,21 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
       setQuantity(data.quantity);
     }
   }, []);
+
+  useEffect(() => {
+    stockService
+      .getPriceAlertStocks()
+      .then((res) => {
+        if (res.success) {
+          setPriceAlertStocks(res?.data);
+        } else {
+          setPriceAlertStocks([]);
+        }
+      })
+      .catch((err) => {
+        setPriceAlertStocks([]);
+      });
+  }, [priceAlertCounter]);
 
   const inputChange = (inputValue) => {
     setSearch(inputValue);
@@ -225,26 +283,7 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
         });
     }
   };
-  const theme = (theme) => ({
-    ...theme,
-    colors: {
-      ...theme.colors,
-      primary25: "blue",
-      primary: "pink",
-    },
-  });
-  const colourStyles = {
-    control: (styles) => ({ ...styles, backgroundColor: "white" }),
-    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-      const color = "white";
-      return {
-        ...styles,
-        backgroundColor: isDisabled ? "red" : blue,
-        color: "#FFF",
-        cursor: isDisabled ? "not-allowed" : "default",
-      };
-    },
-  };
+
   const handleAddRemoveFromWatchList = () => {
     setIsWatchListLoading(true);
     if (watchListData.includes(stockData.Symbol)) {
@@ -693,27 +732,6 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
                 Preview Order
               </a>
             )}
-            {stockData && (
-              <a
-                className="btn form--submit"
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  if (isWatchListLoading) return;
-
-                  if (user?.user?.subscriptionDuration === "free-lifetime") {
-                    open();
-                    return;
-                  }
-                  handleAddRemoveFromWatchList();
-                }}
-              >
-                {isWatchListLoading
-                  ? "Loading.."
-                  : watchListData.includes(stockData.Symbol)
-                  ? "Remove from WatchList"
-                  : "Add to WatchList"}
-              </a>
-            )}
 
             {stockData && (
               <a
@@ -729,7 +747,8 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
                   openPriceAlertModal();
                 }}
               >
-                {isWatchListLoading ? "Loading.." : "Add Price Alert"}
+                watch List
+                {/* {isWatchListLoading ? "Loading.." : "Add Price Alert"} */}
               </a>
             )}
 
@@ -741,35 +760,117 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
 
             <Modal
               opened={isPriceAlertModalOpen}
-              onClose={closePriceAlertModal}
-              title="Set Price Alert"
+              onClose={resetPriceAlertModal}
+              title="WatchList"
             >
-              <NumberInput
-                label="Target Price"
-                placeholder="Enter a number"
-                value={targetPrice}
-                onChange={setTargetPrice}
-              />
-              <Radio.Group
-                label="Price Range"
-                value={range}
-                onChange={setRange}
-                className="mt-4"
+              <a
+                className="btn form--submit"
+                style={
+                  showAlertForm
+                    ? !targetPrice
+                      ? { cursor: "not-allowed" }
+                      : { cursor: "pointer" }
+                    : { cursor: "pointer" }
+                }
+                onClick={() => {
+                  if (isWatchListLoading) return;
+
+                  if (user?.user?.subscriptionDuration === "free-lifetime") {
+                    open();
+                    return;
+                  }
+
+                  if (showAlertForm && !targetPrice) {
+                    return;
+                  }
+
+                  handleAddRemoveFromWatchList();
+                }}
               >
-                <Radio value="above" label="Above" />
-                <Radio value="below" label="Below" />
-                <Radio value="exact" label="Exact" />
-              </Radio.Group>
-              <Button
-                className="mt-4"
-                style={{ background: "blue" }}
-                disabled={!targetPrice || isPriceAlertLoading}
-                variant="filled"
-                type="submit"
-                onClick={handlePriceAlertSubmit}
-              >
-                {isPriceAlertLoading ? "Loading.." : "Submit"}
-              </Button>
+                {isWatchListLoading
+                  ? "Loading.."
+                  : watchListData.includes(stockData?.Symbol)
+                  ? "Remove from WatchList"
+                  : "Add to WatchList"}
+              </a>
+
+              {priceAlertStocks
+                .map((e) => e.stockSymbol)
+                .includes(stockData?.Symbol) ? (
+                <Radio
+                  className="mt-4"
+                  label="Edit Price Alert"
+                  checked={showAlertForm}
+                  onChange={(event) => {
+                    const alertStock = priceAlertStocks.filter(
+                      (e) => e.stockSymbol === stockData?.Symbol
+                    );
+
+                    const alertStockObject = alertStock[0];
+                    console.log(alertStockObject._id, '....')
+                    setPriceAlertId(alertStockObject._id)
+                    setTargetPrice(alertStockObject.targetPrice);
+                    setRange(alertStockObject.range);
+
+                    setShowAlertForm(true);
+                  }}
+                />
+              ) : (
+                <Radio
+                  className="mt-4"
+                  label="Set price alert"
+                  checked={showAlertForm}
+                  onChange={(event) => setShowAlertForm(true)}
+                />
+              )}
+
+              {showAlertForm && (
+                <>
+                  <NumberInput
+                    className="mt-4"
+                    label="Target Price"
+                    placeholder="Enter a number"
+                    value={targetPrice}
+                    onChange={setTargetPrice}
+                  />
+                  <Radio.Group
+                    label="Price Range"
+                    value={range}
+                    onChange={setRange}
+                    className="mt-4"
+                  >
+                    <Radio value="above" label="Above" />
+                    <Radio value="below" label="Below" />
+                    <Radio value="exact" label="Exact" />
+                  </Radio.Group>
+                  <Button
+                    className="mt-4"
+                    style={{ background: "blue" }}
+                    disabled={!targetPrice || isPriceAlertLoading}
+                    variant="filled"
+                    type="submit"
+                    onClick={() => {
+                      if (
+                        priceAlertStocks
+                          .map((e) => e.stockSymbol)
+                          .includes(stockData?.Symbol)
+                      ) {
+                        handleEditPriceAlertSubmit();
+                      } else {
+                        handlePriceAlertSubmit();
+                      }
+                    }}
+                  >
+                    {isPriceAlertLoading
+                      ? "Loading.."
+                      : priceAlertStocks
+                          .map((e) => e.stockSymbol)
+                          .includes(stockData?.Symbol)
+                      ? "Update Price alert"
+                      : "Create price alert"}
+                  </Button>
+                </>
+              )}
             </Modal>
 
             <PreviewModal
