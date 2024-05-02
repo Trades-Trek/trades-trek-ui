@@ -16,6 +16,8 @@ import { DataConvert, TimeConverter } from "../../helpers/DateTimeConverter";
 import LineChartStock from "../Chart/LineChartStock";
 import { toast, ToastContainer } from "react-toastify";
 import ToolTipCustome from "../Competition/ToolTip";
+import { NumericFormat } from "react-number-format";
+import { TextField } from "@mui/material";
 
 export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
   const [showMax, setShowMax] = useState(false);
@@ -35,7 +37,7 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
   const [isPriceAlertModalOpen, setPriceAlertModalOpen] = useState(false);
   const [isPriceAlertLoading, setIsPriceAlertLoading] = useState(false);
   const [targetPrice, setTargetPrice] = useState();
-  const [priceAlertId, setPriceAlertId ] =  useState('')
+  const [priceAlertId, setPriceAlertId] = useState("");
   const [range, setRange] = useState("above");
   const [priceAlertStocks, setPriceAlertStocks] = useState([]);
   const [priceAlertCounter, setPriceAlertCounter] = useState(0);
@@ -63,7 +65,7 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
     setTargetPrice();
     setShowAlertForm(false);
     setRange("above");
-    setPriceAlertId('')
+    setPriceAlertId("");
     closePriceAlertModal();
   };
 
@@ -99,11 +101,14 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
     setIsPriceAlertLoading(true);
 
     try {
-      const res = await stockService.editPriceAlert({
-        Symbol: stockData.Symbol,
-        targetPrice,
-        range,
-      }, priceAlertId);
+      const res = await stockService.editPriceAlert(
+        {
+          Symbol: stockData.Symbol,
+          targetPrice,
+          range,
+        },
+        priceAlertId
+      );
       setIsPriceAlertLoading(false);
 
       toast.success(res.message, {
@@ -785,6 +790,10 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
                   }
 
                   handleAddRemoveFromWatchList();
+
+                  if (showAlertForm && targetPrice) {
+                    handlePriceAlertSubmit();
+                  }
                 }}
               >
                 {isWatchListLoading
@@ -807,8 +816,7 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
                     );
 
                     const alertStockObject = alertStock[0];
-                    console.log(alertStockObject._id, '....')
-                    setPriceAlertId(alertStockObject._id)
+                    setPriceAlertId(alertStockObject._id);
                     setTargetPrice(alertStockObject.targetPrice);
                     setRange(alertStockObject.range);
 
@@ -826,13 +834,15 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
 
               {showAlertForm && (
                 <>
-                  <NumberInput
-                    className="mt-4"
-                    label="Target Price"
-                    placeholder="Enter a number"
+                  <NumericFormat
                     value={targetPrice}
-                    onChange={setTargetPrice}
+                    onValueChange={(values, sourceInfo) => {
+                      console.log(values, sourceInfo)
+                      // setTargetPrice(values);
+                    }}
+                    customInput={TextField}
                   />
+                  
                   <Radio.Group
                     label="Price Range"
                     value={range}
@@ -843,6 +853,8 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
                     <Radio value="below" label="Below" />
                     <Radio value="exact" label="Exact" />
                   </Radio.Group>
+                  {/* <Button
+
                   <Button
                     className="mt-4"
                     style={{ background: "blue" }}
@@ -868,7 +880,8 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
                           .includes(stockData?.Symbol)
                       ? "Update Price alert"
                       : "Create price alert"}
-                  </Button>
+
+                  </Button> */}
                 </>
               )}
             </Modal>
