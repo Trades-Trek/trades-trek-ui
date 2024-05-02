@@ -96,7 +96,29 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
     }
   };
 
-  //editPriceAlert(body, id)
+  const cancelPriceAlert = async () => {
+    setIsWatchListLoading(true);
+
+    try {
+      const res = await stockService.cancelPriceAlert(stockData.Symbol);
+      setIsWatchListLoading(false);
+
+      toast.success(res.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+
+      if (res.success) {
+        resetPriceAlertModal();
+        setPriceAlertCounter(priceAlertCounter + 1);
+      }
+    } catch (error) {
+      setIsWatchListLoading(false);
+      toast.error(res.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
+
   const handleEditPriceAlertSubmit = async () => {
     setIsPriceAlertLoading(true);
 
@@ -749,11 +771,51 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
                     open();
                     return;
                   }
+                  handleAddRemoveFromWatchList();
+                }}
+              >
+                {isWatchListLoading
+                  ? "Loading.."
+                  : watchListData.includes(stockData.Symbol)
+                  ? "Remove from WatchList"
+                  : "Add to WatchList"}
+              </a>
+            )}
+
+            {stockData && (
+              <a
+                className="btn form--submit"
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  if (isWatchListLoading) return;
+
+                  if (user?.user?.subscriptionDuration === "free-lifetime") {
+                    open();
+                    return;
+                  }
+
+                  if (
+                    priceAlertStocks
+                      .map((e) => e.stockSymbol)
+                      .includes(stockData?.Symbol)
+                  ) {
+                    const alertStock = priceAlertStocks.filter(
+                      (e) => e.stockSymbol === stockData?.Symbol
+                    );
+
+                    const alertStockObject = alertStock[0];
+                    setPriceAlertId(alertStockObject._id);
+                    setTargetPrice(alertStockObject.targetPrice);
+                    setRange(alertStockObject.range);
+                  }
                   openPriceAlertModal();
                 }}
               >
-                watch List
-                {/* {isWatchListLoading ? "Loading.." : "Add Price Alert"} */}
+                {priceAlertStocks
+                  .map((e) => e.stockSymbol)
+                  .includes(stockData?.Symbol)
+                  ? "Edit Price Alert"
+                  : "Add Price Alert"}
               </a>
             )}
 
@@ -766,95 +828,75 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
             <Modal
               opened={isPriceAlertModalOpen}
               onClose={resetPriceAlertModal}
-              title="WatchList"
+              title="Price Alert"
             >
-              <a
-                className="btn form--submit"
-                style={
-                  showAlertForm
-                    ? !targetPrice
-                      ? { cursor: "not-allowed" }
-                      : { cursor: "pointer" }
-                    : { cursor: "pointer" }
-                }
-                onClick={() => {
-                  if (isWatchListLoading) return;
-
-                  if (user?.user?.subscriptionDuration === "free-lifetime") {
-                    open();
-                    return;
-                  }
-
-                  if (showAlertForm && !targetPrice) {
-                    return;
-                  }
-
-                  handleAddRemoveFromWatchList();
-
-                  if (showAlertForm && targetPrice) {
-                    handlePriceAlertSubmit();
-                  }
-                }}
-              >
-                {isWatchListLoading
-                  ? "Loading.."
-                  : watchListData.includes(stockData?.Symbol)
-                  ? "Remove from WatchList"
-                  : "Add to WatchList"}
-              </a>
-
+              {priceAlertStocks
+                .map((e) => e.stockSymbol)
+                .includes(stockData?.Symbol) && (
+                <Button
+                  className="mb-4"
+                  style={{ background: "red", width: "100%" }}
+                  variant="filled"
+                  type="submit"
+                  onClick={() => {
+                    cancelPriceAlert();
+                  }}
+                >
+                  {isWatchListLoading ? "Loading.." : "Cancel price alert"}
+                </Button>
+              )}
+              {/* 
               {priceAlertStocks
                 .map((e) => e.stockSymbol)
                 .includes(stockData?.Symbol) ? (
-                <Radio
-                  className="mt-4"
-                  label="Edit Price Alert"
-                  checked={showAlertForm}
-                  onChange={(event) => {
-                    const alertStock = priceAlertStocks.filter(
-                      (e) => e.stockSymbol === stockData?.Symbol
-                    );
+                <>
+                  <Radio
+                    className="mt-4 mb-4"
+                    label="Edit Price Alert"
+                    checked={showAlertForm}
+                    onChange={(event) => {
+                      const alertStock = priceAlertStocks.filter(
+                        (e) => e.stockSymbol === stockData?.Symbol
+                      );
 
-                    const alertStockObject = alertStock[0];
-                    setPriceAlertId(alertStockObject._id);
-                    setTargetPrice(alertStockObject.targetPrice);
-                    setRange(alertStockObject.range);
-
-                    setShowAlertForm(true);
-                  }}
-                />
+                      const alertStockObject = alertStock[0];
+                      setPriceAlertId(alertStockObject._id);
+                      setTargetPrice(alertStockObject.targetPrice);
+                      setRange(alertStockObject.range);
+                      setShowAlertForm(true);
+                    }}
+                  />
+                </>
               ) : (
                 <Radio
-                  className="mt-4"
+                  className="mt-4 mb-4"
                   label="Set price alert"
                   checked={showAlertForm}
                   onChange={(event) => setShowAlertForm(true)}
                 />
-              )}
+              )} */}
 
-              {showAlertForm && (
-                <>
-                  <NumericFormat
-                    value={targetPrice}
-                    onValueChange={(values, sourceInfo) => {
-                      console.log(values, sourceInfo)
-                      // setTargetPrice(values);
-                    }}
-                    customInput={TextField}
-                  />
-                  
-                  <Radio.Group
-                    label="Price Range"
-                    value={range}
-                    onChange={setRange}
-                    className="mt-4"
-                  >
-                    <Radio value="above" label="Above" />
-                    <Radio value="below" label="Below" />
-                    <Radio value="exact" label="Exact" />
-                  </Radio.Group>
-                  {/* <Button
+              <>
+                <NumericFormat
+                  value={targetPrice}
+                  onValueChange={(values) => {
+                    setTargetPrice(values.floatValue);
+                  }}
+                  placeholder="target Price"
+                  customInput={TextField}
+                />
 
+                <Radio.Group
+                  label="Price Range"
+                  value={range}
+                  onChange={setRange}
+                  className="mt-4"
+                >
+                  <Radio value="above" label="Above" />
+                  <Radio value="below" label="Below" />
+                  <Radio value="exact" label="Exact" />
+                </Radio.Group>
+                {
                   <Button
                     className="mt-4"
                     style={{ background: "blue" }}
@@ -880,10 +922,9 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
                           .includes(stockData?.Symbol)
                       ? "Update Price alert"
                       : "Create price alert"}
-
-                  </Button> */}
-                </>
-              )}
+                  </Button>
+                }
+              </>
             </Modal>
 
             <PreviewModal
