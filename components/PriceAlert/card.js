@@ -28,6 +28,10 @@ export default function WatchListCard({ listData, removeItem }) {
                   <p className="card--title">{listData?.targetPrice}</p>
                 </li>
             
+                <li>
+                  <p className="card--title--label">Range</p>
+                  <p className="card--title">{listData?.range}</p>
+                </li>
 
               <li>
                 <div className="card--data">
