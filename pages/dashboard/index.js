@@ -9,13 +9,10 @@ import LeaderView, {
   LeaderView2,
 } from "../../components/SectorLeaders/LeaderView";
 import Sidebar from "../../components/Sidebar/Sidebar";
-import GainerView, {
-  GainerView2,
-} from "../../components/TopGainers/GainerView";
+import GainerView from "../../components/TopGainers/GainerView";
 import LoserView, { LoserView2 } from "../../components/TopLosers/LoserView";
-import WatchListData, {
-  WatchListData2,
-} from "../../components/WatchList/WatchListData";
+import WatchListData from "../../components/WatchList/WatchListData";
+import PriceAlert from "../../components/PriceAlert";
 import { useSelector } from "react-redux";
 
 import NigerianTimeZone from "../../helpers/Negerian-TimeZone";
@@ -105,7 +102,7 @@ export default function Home() {
                       <ToolTipCustome text="Displays the total current value of your portfolio, which is updated nightly after the market’s close." />
                     </span>
                     <span>
-                    ₦&nbsp;
+                      ₦&nbsp;
                       {/* {user &&
                         (
                           user?.portfolio?.accountValue +
@@ -114,8 +111,7 @@ export default function Home() {
                           ?.toFixed(2)
                           ?.toString()
                           .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
-
-                          {user?.calculatedPortfolioValues?.calculatedAccountValue}
+                      {user?.calculatedPortfolioValues?.calculatedAccountValue}
                     </span>
                   </li>
                   <li>
@@ -134,10 +130,16 @@ export default function Home() {
                         ?.toFixed(2)
                         ?.toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0} */}
-                        {user?.calculatedPortfolioValues?.calculatedTodaysChangeNaira}
+                      {
+                        user?.calculatedPortfolioValues
+                          ?.calculatedTodaysChangeNaira
+                      }
                       <span>
                         (
-                        {user?.calculatedPortfolioValues?.calculatedTodaysChangePercentage}
+                        {
+                          user?.calculatedPortfolioValues
+                            ?.calculatedTodaysChangePercentage
+                        }
                         %)
                       </span>
                     </span>
@@ -159,6 +161,9 @@ export default function Home() {
           user.user.subscriptionDuration !== "free-lifetime" && (
             <WatchListData />
           )}
+        {user &&
+          user.user &&
+          user.user.subscriptionDuration !== "free-lifetime" && <PriceAlert />}
 
         {user &&
           user.user &&
