@@ -90,7 +90,7 @@ export default function WatchListData() {
         {!isLoading ? (
           watchListData.length > 0 ? (
             !showWatchList ? (
-              <div className="wrapper--text card--grid card--grid--4">
+              <div className="wrapper--text d-flex">
                 {watchListData.map((data, index) => {
                   if (index <= 3) {
                     return (
