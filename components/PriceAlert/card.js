@@ -2,6 +2,8 @@ import { Modal, Button, Radio, NumberInput } from "@mantine/core";
 import React, { useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { stockService } from "../../services/stock.service";
+import { NumericFormat } from "react-number-format";
+import { TextField } from "@mui/material";
 
 export default function WatchListCard({
   listData,
