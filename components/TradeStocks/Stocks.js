@@ -845,37 +845,7 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
                   {isWatchListLoading ? "Loading.." : "Cancel price alert"}
                 </Button>
               )}
-              {/* 
-              {priceAlertStocks
-                .map((e) => e.stockSymbol)
-                .includes(stockData?.Symbol) ? (
-                <>
-                  <Radio
-                    className="mt-4 mb-4"
-                    label="Edit Price Alert"
-                    checked={showAlertForm}
-                    onChange={(event) => {
-                      const alertStock = priceAlertStocks.filter(
-                        (e) => e.stockSymbol === stockData?.Symbol
-                      );
-
-                      const alertStockObject = alertStock[0];
-                      setPriceAlertId(alertStockObject._id);
-                      setTargetPrice(alertStockObject.targetPrice);
-                      setRange(alertStockObject.range);
-                      setShowAlertForm(true);
-                    }}
-                  />
-                </>
-              ) : (
-                <Radio
-                  className="mt-4 mb-4"
-                  label="Set price alert"
-                  checked={showAlertForm}
-                  onChange={(event) => setShowAlertForm(true)}
-                />
-              )} */}
-
+             
               <>
                 <NumericFormat
                   value={targetPrice}

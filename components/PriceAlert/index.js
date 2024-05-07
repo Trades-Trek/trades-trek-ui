@@ -8,6 +8,7 @@ export default function WatchListData() {
   const [watchListData, setWatchListData] = useState([]);
   const [showWatchList, setShowWatchList] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [priceAlertCounter, setPriceAlertCounter] = useState(0);
 
   useEffect(() => {
     stockService
@@ -25,7 +26,11 @@ export default function WatchListData() {
         setWatchListData([]);
         setIsLoading(false);
       });
-  }, []);
+  }, [priceAlertCounter]);
+
+  const refetchPriceAlert  = () => {
+    setPriceAlertCounter( priceAlertCounter + 1)
+  }
 
 
   const removeItem = (sym) => {
@@ -93,6 +98,7 @@ export default function WatchListData() {
                         key={index}
                         listData={data}
                         removeItem={removeItem}
+                        refetchPriceAlert={refetchPriceAlert}
                       />
                     );
                   }
@@ -106,6 +112,7 @@ export default function WatchListData() {
                       key={index}
                       listData={data}
                       removeItem={removeItem}
+                      refetchPriceAlert={refetchPriceAlert}
                     />
                   );
                 })}

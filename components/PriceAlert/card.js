@@ -1,14 +1,129 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React from "react";
+import { Modal, Button, Radio, NumberInput } from "@mantine/core";
+import React, { useState, useEffect } from "react";
 
-export default function WatchListCard({ listData, removeItem }) {
+export default function WatchListCard({
+  listData,
+  removeItem,
+  refetchPriceAlert,
+}) {
+  console.log(listData)
+  const [isPriceAlertModalOpen, setPriceAlertModalOpen] = useState(false);
+  const [isPriceAlertLoading, setIsPriceAlertLoading] = useState(false);
+  const [targetPrice, setTargetPrice] = useState();
+  const [range, setRange] = useState("above");
+
   const router = useRouter();
+
+  const openPriceAlertModal = () => setPriceAlertModalOpen(true);
+  const closePriceAlertModal = () => setPriceAlertModalOpen(false);
+
   const handleClick = (data) => {
-    router.push(`/dashboard/learning/?tab=stockdetails&symbol=${data.Symbol}`)
+    openPriceAlertModal();
   };
+
+  const resetPriceAlertModal = () => {
+    setTargetPrice();
+    // setShowAlertForm(false);
+    setRange("above");
+    // setPriceAlertId("");
+    closePriceAlertModal();
+  };
+
+  const cancelPriceAlert = async () => {
+    setIsPriceAlertLoading(true);
+
+    try {
+      const res = await stockService.cancelPriceAlert(stockData.Symbol);
+      setIsPriceAlertLoading(false);
+
+      toast.success(res.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+
+      if (res.success) {
+        resetPriceAlertModal();
+        refetchPriceAlert();
+      }
+    } catch (error) {
+      setIsWatchListLoading(false);
+      toast.error(res.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
+
   return (
     <>
+      <Modal
+        opened={isPriceAlertModalOpen}
+        onClose={resetPriceAlertModal}
+        title="Price Alert"
+      >
+        <Button
+          className="mb-4"
+          style={{ background: "red", width: "100%" }}
+          variant="filled"
+          type="submit"
+          onClick={() => {
+            cancelPriceAlert();
+          }}
+        >
+          {isPriceAlertLoading ? "Loading.." : "Cancel price alert"}
+        </Button>
+
+        <>
+          <NumericFormat
+            value={targetPrice}
+            onValueChange={(values) => {
+              setTargetPrice(values.floatValue);
+            }}
+            placeholder="target Price"
+            customInput={TextField}
+          />
+
+          <Radio.Group
+            label="Price Range"
+            value={range}
+            onChange={setRange}
+            className="mt-4"
+          >
+            <Radio value="above" label="Above" />
+            <Radio value="below" label="Below" />
+            <Radio value="exact" label="Exact" />
+          </Radio.Group>
+          {
+            <Button
+              className="mt-4"
+              style={{ background: "blue" }}
+              disabled={!targetPrice || isPriceAlertLoading}
+              variant="filled"
+              type="submit"
+              onClick={() => {
+                if (
+                  priceAlertStocks
+                    .map((e) => e.stockSymbol)
+                    .includes(stockData?.Symbol)
+                ) {
+                  handleEditPriceAlertSubmit();
+                } else {
+                  handlePriceAlertSubmit();
+                }
+              }}
+            >
+              {isPriceAlertLoading
+                ? "Loading.."
+                : priceAlertStocks
+                    .map((e) => e.stockSymbol)
+                    .includes(stockData?.Symbol)
+                ? "Update Price alert"
+                : "Create price alert"}
+            </Button>
+          }
+        </>
+      </Modal>
+
       <div
         className="card--style cardSelect"
         onClick={() => handleClick(listData?.result)}
@@ -16,22 +131,20 @@ export default function WatchListCard({ listData, removeItem }) {
         <div className="card--data">
           <div className="card--row">
             <ul>
-             
-                <li>
-                  <p className="card--title--label">Stock Symbol</p>
-                  <p className="card--title">{listData?.stockSymbol}</p>
-                </li>
-          
-            
-                <li>
-                  <p className="card--title--label">Alert Price</p>
-                  <p className="card--title">{listData?.targetPrice}</p>
-                </li>
-            
-                <li>
-                  <p className="card--title--label">Range</p>
-                  <p className="card--title">{listData?.range}</p>
-                </li>
+              <li>
+                <p className="card--title--label">Stock Symbol</p>
+                <p className="card--title">{listData?.stockSymbol}</p>
+              </li>
+
+              <li>
+                <p className="card--title--label">Alert Price</p>
+                <p className="card--title">{listData?.targetPrice}</p>
+              </li>
+
+              <li>
+                <p className="card--title--label">Range</p>
+                <p className="card--title">{listData?.range}</p>
+              </li>
 
               <li>
                 <div className="card--data">
