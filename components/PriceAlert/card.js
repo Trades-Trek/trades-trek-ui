@@ -1,41 +1,31 @@
-import Image from "next/image";
-import { useRouter } from "next/router";
 import { Modal, Button, Radio, NumberInput } from "@mantine/core";
 import React, { useState, useEffect } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import { stockService } from "../../services/stock.service";
 
 export default function WatchListCard({
   listData,
   removeItem,
   refetchPriceAlert,
 }) {
-  console.log(listData)
+ 
   const [isPriceAlertModalOpen, setPriceAlertModalOpen] = useState(false);
   const [isPriceAlertLoading, setIsPriceAlertLoading] = useState(false);
-  const [targetPrice, setTargetPrice] = useState();
-  const [range, setRange] = useState("above");
-
-  const router = useRouter();
+  const [targetPrice, setTargetPrice] = useState(listData.targetPrice);
+  const [range, setRange] = useState(listData.range);
 
   const openPriceAlertModal = () => setPriceAlertModalOpen(true);
   const closePriceAlertModal = () => setPriceAlertModalOpen(false);
 
-  const handleClick = (data) => {
-    openPriceAlertModal();
-  };
+  const handleClick = () => setPriceAlertModalOpen(true);
 
-  const resetPriceAlertModal = () => {
-    setTargetPrice();
-    // setShowAlertForm(false);
-    setRange("above");
-    // setPriceAlertId("");
-    closePriceAlertModal();
-  };
+  const resetPriceAlertModal = () => closePriceAlertModal();
 
   const cancelPriceAlert = async () => {
     setIsPriceAlertLoading(true);
 
     try {
-      const res = await stockService.cancelPriceAlert(stockData.Symbol);
+      const res = await stockService.cancelPriceAlert(listData.stockSymbol);
       setIsPriceAlertLoading(false);
 
       toast.success(res.message, {
@@ -54,8 +44,52 @@ export default function WatchListCard({
     }
   };
 
+
+  const handleEditPriceAlertSubmit = async () => {
+    setIsPriceAlertLoading(true);
+
+    try {
+      const res = await stockService.editPriceAlert(
+        {
+          Symbol: listData.stockSymbol,
+          targetPrice,
+          range,
+        },
+        priceAlertId
+      );
+      setIsPriceAlertLoading(false);
+
+      toast.success(res.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+
+      if (res.success) {
+        refetchPriceAlert()
+        setPriceAlertModalOpen(false);
+      }
+    } catch (error) {
+      setIsPriceAlertLoading(false);
+      toast.error(res.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
+
   return (
     <>
+
+<ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
       <Modal
         opened={isPriceAlertModalOpen}
         onClose={resetPriceAlertModal}
@@ -101,24 +135,11 @@ export default function WatchListCard({
               variant="filled"
               type="submit"
               onClick={() => {
-                if (
-                  priceAlertStocks
-                    .map((e) => e.stockSymbol)
-                    .includes(stockData?.Symbol)
-                ) {
-                  handleEditPriceAlertSubmit();
-                } else {
-                  handlePriceAlertSubmit();
-                }
+                handleEditPriceAlertSubmit();
               }}
             >
-              {isPriceAlertLoading
-                ? "Loading.."
-                : priceAlertStocks
-                    .map((e) => e.stockSymbol)
-                    .includes(stockData?.Symbol)
-                ? "Update Price alert"
-                : "Create price alert"}
+             Update Price alert
+             
             </Button>
           }
         </>
@@ -126,7 +147,7 @@ export default function WatchListCard({
 
       <div
         className="card--style cardSelect"
-        onClick={() => handleClick(listData?.result)}
+        onClick={() => handleClick()}
       >
         <div className="card--data">
           <div className="card--row">
