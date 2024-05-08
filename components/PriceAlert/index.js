@@ -105,7 +105,7 @@ export default function WatchListData() {
                 })}
               </div>
             ) : (
-              <div className="wrapper--text card--grid card--grid--4">
+              <div className="wrapper--text flex gap-5">
                 {watchListData.map((data, index) => {
                   return (
                     <WatchListCard
