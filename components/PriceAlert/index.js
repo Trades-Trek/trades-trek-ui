@@ -90,7 +90,7 @@ export default function WatchListData() {
         {!isLoading ? (
           watchListData.length > 0 ? (
             !showWatchList ? (
-              <div className="wrapper--text flex gap-5">
+              <div className="wrapper--text flex gap-5 flex-wrap">
                 {watchListData.map((data, index) => {
                   if (index <= 3) {
                     return (
