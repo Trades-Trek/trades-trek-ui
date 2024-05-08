@@ -8,14 +8,110 @@ import OverallChange from "../Table/OverallChange";
 import ReactPaginate from "react-paginate";
 import { Loader } from "@mantine/core";
 import { useRouter } from "next/router";
-import HighlightTrades from "../HighlightTrades/HighlightTrades";
-import LineChart from "../Chart/LineChart";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Grow from "@mui/material/Grow";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
+
 import AnotherStock from "../AnotherUserStock/AnotherStock";
 import ProfileAnotherUser from "../AnotherUserStock/ProfileAnotherUser";
 import HistoryUser from "../AnotherUserStock/history-user";
 import { CSVLink } from "react-csv";
 import PerformanceHistory from "../AnotherUserStock/performance-history";
 import moment from "moment";
+
+
+function SplitButton({ data }) {
+  const [open, setOpen] = React.useState(false);
+  const anchorRef = React.useRef(null);
+  const [selectedIndex, setSelectedIndex] = React.useState(1);
+
+  const options = [
+    `soldStockPoint: ${data.soldStockPoint}`,
+    `accountValuePoint: ${data.accountValuePoint}`,
+    `uniqueStockPurchasesPoint: ${data.uniqueStockPurchasesPoint}`,
+  ];
+ 
+
+  const handleMenuItemClick = (event, index) => {
+    setSelectedIndex(index);
+    setOpen(false);
+  };
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  return (
+    <React.Fragment>
+      <ButtonGroup
+        variant="contained"
+        ref={anchorRef}
+        aria-label="Button group with a nested menu"
+      >
+        <Button
+          size="small"
+          aria-controls={open ? "split-button-menu" : undefined}
+          aria-expanded={open ? "true" : undefined}
+          aria-label="select merge strategy"
+          aria-haspopup="menu"
+          onClick={handleToggle}
+        >
+         Click to view
+        </Button>
+      </ButtonGroup>
+      <Popper
+        sx={{
+          zIndex: 1,
+        }}
+        open={open}
+        anchorEl={anchorRef.current}
+        role={undefined}
+        transition
+        disablePortal
+      >
+        {({ TransitionProps, placement }) => (
+          <Grow
+            {...TransitionProps}
+            style={{
+              transformOrigin:
+                placement === "bottom" ? "center top" : "center bottom",
+            }}
+          >
+            <Paper>
+              <ClickAwayListener onClickAway={handleClose}>
+                <MenuList id="split-button-menu" autoFocusItem>
+                  {options.map((option, index) => (
+                    <MenuItem
+                      key={option}
+                      disabled={index === 2}
+                      selected={index === selectedIndex}
+                      onClick={(event) => handleMenuItemClick(event, index)}
+                    >
+                      {option}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
+    </React.Fragment>
+  );
+}
 
 function getCurrentNigerianTime() {
   return moment().tz("Africa/Lagos"); // Set the timezone to Nigerian time
@@ -49,7 +145,7 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
   const [loadingLeaderboard, setLoadingLeaderboard] = useState(false);
   const [mySubscriptionCategory, setMysubscriptionCategory] = useState("Basic");
   const [csvData, setCsvData] = useState([]);
-  const [showRankedNullMessage, setShowRankedNullMessage] = useState('');
+  const [showRankedNullMessage, setShowRankedNullMessage] = useState("");
   const linktarget = useRef();
 
   const [leaderHeaders, setLeaderHeaders] = useState([
@@ -102,7 +198,7 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
           const { topRanked, nearRank, rank, subscriptionCategory } = data;
 
           if (!rank) {
-            setShowRankedNullMessage(message)
+            setShowRankedNullMessage(message);
             setTop5([]);
             setNearResult([]);
             setMyGame();
@@ -215,6 +311,7 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
                       <th>Today’s Change</th>
                       <th>Overall Change</th>
                       <th>Points</th>
+                      <th>Points BreakDown</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -270,8 +367,10 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
                             item?.competitionStartingCash
                           )}
 
-<td>
-                           {item.points}
+                          <td>{item.points}</td>
+
+                          <td>
+                            <SplitButton data={item} />
                           </td>
                         </tr>
                       );
@@ -382,12 +481,14 @@ export default function CompetationSummeryView({ setDisabled, disabled }) {
 
                             {OverallChange(
                               item?.accountValue + item?.profitOrLossToday,
-                              item?.competitionStartingCash 
+                              item?.competitionStartingCash
                             )}
 
+                            <td>{item.points}</td>
 
-<td>
-                           {item.points}
+                            
+                          <td>
+                            <SplitButton data={item} />
                           </td>
                           </tr>
                         );
