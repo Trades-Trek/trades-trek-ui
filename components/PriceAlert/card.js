@@ -150,6 +150,7 @@ export default function WatchListCard({
       <div
         className="card--style cardSelect"
         onClick={() => handleClick()}
+        style={{ margin: '10px'}}
       >
         <div className="card--data">
           <div className="card--row">

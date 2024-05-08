@@ -90,7 +90,7 @@ export default function WatchListData() {
         {!isLoading ? (
           watchListData.length > 0 ? (
             !showWatchList ? (
-              <div className="wrapper--text flex gap-5 flex-wrap">
+              <div className="wrapper--text flex  flex-wrap">
                 {watchListData.map((data, index) => {
                   if (index <= 3) {
                     return (
@@ -105,7 +105,7 @@ export default function WatchListData() {
                 })}
               </div>
             ) : (
-              <div className="wrapper--text flex gap-5 flex-wrap">
+              <div className="wrapper--text flex  flex-wrap">
                 {watchListData.map((data, index) => {
                   return (
                     <WatchListCard
