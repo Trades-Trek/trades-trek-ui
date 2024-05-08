@@ -57,7 +57,7 @@ export default function WatchListCard({
           targetPrice,
           range,
         },
-        priceAlertId
+        listData._id
       );
       setIsPriceAlertLoading(false);
 
@@ -71,7 +71,7 @@ export default function WatchListCard({
       }
     } catch (error) {
       setIsPriceAlertLoading(false);
-      toast.error(res.message, {
+      toast.error(error.message, {
         position: toast.POSITION.TOP_RIGHT,
       });
     }
