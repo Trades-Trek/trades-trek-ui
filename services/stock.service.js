@@ -193,6 +193,23 @@ function addToWatchListStock(stock) {
       return error;
     });
 }
+
+function getExtraStockDetails(stockId){
+  return fetchWrapper
+    .get(`${baseUrl}/stock/extra-stock-details/${stockId}`)
+
+    .then((res) => {
+      if (res.success) {
+      }
+      return res;
+    })
+    .catch((error) => {
+      if (error?.length > 0) {
+        return error[0];
+      }
+      return error;
+    });
+}
 function AllWathchList() {
   return fetchWrapper
     .get(`${baseUrl}/watchlist`)
@@ -245,4 +262,5 @@ export const stockService = {
   removeItem,
   stockDetailGraph,
   getPriceAlertStocks,
+  getExtraStockDetails,
 };

@@ -5,16 +5,40 @@ import { DataConvert, TimeConverter } from "../../helpers/DateTimeConverter";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-
+import { stockService } from "../../services/stock.service";
+import Table from '@mui/material/Table';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import Paper from '@mui/material/Paper';
 
 const StockInfo = ({ stockAllData, setSelectedStock_StockDetailsTab }) => {
   const router = useRouter();
   const [value, setValue] = useState("");
+  const [stockId, setStockId] = useState("");
+  const [extraDetails, setExtraDetails] = useState([]);
 
   useEffect(() => {
     setValue(router.query?.symbol);
     return () => {};
   }, [router.query?.symbol]);
+
+  useEffect(() => {
+    if (!stockId) return;
+    stockService
+      .getExtraStockDetails(stockId)
+      .then((res) => {
+        if (res.success) {
+          setExtraDetails([res.data]);
+        } else {
+          setExtraDetails([]);
+        }
+      })
+      .catch(() => {
+        setExtraDetails([]);
+      });
+    return () => {};
+  }, [stockId]);
 
   const arrayOfSymbol = stockAllData.map((e) => e.Symbol);
   const arrayOfName = stockAllData.map((e) => e.Name);
@@ -38,9 +62,10 @@ const StockInfo = ({ stockAllData, setSelectedStock_StockDetailsTab }) => {
             sx={{ width: "100%" }}
             options={stockAllData}
             onChange={(event, value) => {
-              if(value){
-                setValue(value.Symbol)
-                setSelectedStock_StockDetailsTab(value.Symbol)
+              if (value) {
+                setValue(value.Symbol);
+                setSelectedStock_StockDetailsTab(value.Symbol);
+                setStockId(value._id);
               }
             }}
             autoHighlight
@@ -213,10 +238,7 @@ const StockInfo = ({ stockAllData, setSelectedStock_StockDetailsTab }) => {
                   </div>
                 </div>
               </div>
-              {/* <div className="gridColRight">
-         
-                <iframe className="graphBox" src=''></iframe>
-              </div> */}
+            
             </div>
           </div>
         )}
@@ -234,7 +256,180 @@ const StockInfo = ({ stockAllData, setSelectedStock_StockDetailsTab }) => {
           </div>
         )}
       </div>
+      {extraDetails.length  > 0 && <ExtraDetailsTable data={extraDetails} />}
+      
     </div>
+  );
+};
+
+const ExtraDetailsTable = ({ data }) => {
+ 
+  const extraDetails = data[0]?.extraDetails;
+  const sector = data[0]?.sector;
+
+  const tableData = [
+    {
+      key: "Exchange",
+      label: "Exchange",
+      value: extraDetails?.Exchange,
+    },
+    {
+      key: "Description",
+      label: "Description",
+      value: extraDetails?.Description,
+    },
+    {
+      key: "Subsector",
+      label: "Subsector",
+      value: extraDetails?.Subsector,
+    },
+    {
+      key: "NatureOfBusiness",
+      label: "Nature Of Business",
+      value: extraDetails?.NatureOfBusiness,
+    },
+    {
+      key: "CompanyAddress",
+      label: "Company Address",
+      value: extraDetails?.CompanyAddress,
+    },
+    {
+      key: "ContactEmail",
+      label: "Contact Email",
+      value: extraDetails?.ContactEmail,
+    },
+    {
+      key: "ContactNumber",
+      label: "Contact Number",
+      value: extraDetails?.ContactNumber,
+    },
+
+    {
+      key: "Auditor",
+      label: "Auditor",
+      value: extraDetails?.Auditor,
+    },
+
+    {
+      key: "Registrar",
+      label: "Registrar",
+      value: extraDetails?.Registrar,
+    },
+    {
+      key: "CompanySecretary",
+      label: "Company Secretary",
+      value: extraDetails?.CompanySecretary,
+    },
+    {
+      key: "Registrar",
+      label: "Registrar",
+      value: extraDetails?.Registrar,
+    },
+    {
+      key: "Website",
+      label: "Website",
+      value: extraDetails?.Website,
+    },
+
+    {
+      key: "BoardChairperson",
+      label: "Board Chairperson",
+      value: extraDetails?.BoardChairperson,
+    },
+
+    {
+      key: "LegalStatus",
+      label: "LegalStatus",
+      value: extraDetails?.LegalStatus,
+    },
+
+    {
+      key: "RegulatoryBody",
+      label: "Regulatory Body",
+      value: extraDetails?.RegulatoryBody,
+    },
+
+    {
+      key: "PatentsOwned",
+      label: "Patents Owned ",
+      value: extraDetails?.PatentsOwned,
+    },
+
+    {
+      key: "EmployeeCount",
+      label: "EmployeeCount",
+      value: extraDetails?.EmployeeCount,
+    },
+
+    {
+      key: "Description",
+      label: "Description",
+      value: extraDetails?.Description,
+    },
+
+    {
+      key: "MarketClassification",
+      label: "Market Classification",
+      value: extraDetails?.MarketClassification,
+    },
+
+    // {
+    //   key: "BoardOfDirectors",
+    //   label: "Board Of Directors",
+    //   value: extraDetails?.BoardOfDirectors,
+    // },
+
+    {
+      key: "SharesOutstanding",
+      label: "SharesOutstanding",
+      value: extraDetails?.SharesOutstanding,
+    },
+
+    {
+      key: "Instagram",
+      label: "Instagram",
+      value: extraDetails?.Instagram,
+    },
+
+    {
+      key: "Instagram",
+      label: "Instagram",
+      value: extraDetails?.Instagram,
+    },
+
+    {
+      key: "Twitter",
+      label: "Twitter",
+      value: extraDetails?.Twitter,
+    },
+
+    {
+      key: "Facebook",
+      label: "Facebook",
+      value: extraDetails?.Facebook,
+    },
+    {
+      key: "category",
+      label: "category",
+      value: sector?.category,
+    },
+  ];
+
+  const rows = tableData.map((item, index) => (
+    <TableRow key={index}>
+      <TableCell>{item.label}</TableCell>
+      <TableCell>{item.value}</TableCell>
+    </TableRow>
+  ));
+
+  return (
+    <TableContainer component={Paper}>
+    <Table aria-label="extra details table">
+      <tbody>
+        {rows}
+      </tbody>
+    </Table>
+  </TableContainer>
   );
 };
 

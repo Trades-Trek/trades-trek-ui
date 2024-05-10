@@ -392,7 +392,7 @@ const Screener = ({ stockAllData, switchToStockDetails }) => {
                         <td key={column}>
                           {eachStock[column]
                             ? eachStock[column].toFixed(2)
-                            : eachStock["Last"].toFixed(2)}
+                            : eachStock["Last"]?.toFixed(2)}
                         </td>
                       );
                     }
