@@ -11,6 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
+import moment from "moment";
 
 const StockInfo = ({ stockAllData, setSelectedStock_StockDetailsTab }) => {
   const router = useRouter();
@@ -356,6 +357,18 @@ const ExtraDetailsTable = ({ data }) => {
     },
 
     {
+      key: "FoundedDate",
+      label: "Founded Date",
+      value: extraDetails?.FoundedDate ? moment(extraDetails?.FoundedDate).format("YYYY-MM-DD") : "-" 
+    },
+
+    {
+      key: "DateListed",
+      label: "Date Listed",
+      value: extraDetails?.DateListed ? moment(extraDetails?.DateListed).format("YYYY-MM-DD") : "-",
+    },
+
+    {
       key: "EmployeeCount",
       label: "EmployeeCount",
       value: extraDetails?.EmployeeCount,
@@ -373,11 +386,11 @@ const ExtraDetailsTable = ({ data }) => {
       value: extraDetails?.MarketClassification,
     },
 
-    // {
-    //   key: "BoardOfDirectors",
-    //   label: "Board Of Directors",
-    //   value: extraDetails?.BoardOfDirectors,
-    // },
+    {
+      key: "BoardOfDirectors",
+      label: "Board Of Directors",
+      value: extraDetails?.BoardOfDirectors.join(", "),
+    },
 
     {
       key: "SharesOutstanding",
