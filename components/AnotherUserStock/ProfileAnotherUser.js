@@ -237,7 +237,8 @@ const ProfileAnotherUser = ({ userName }) => {
                         </Link>
                       </span>{" "}
                       ₦
-                      {infoData?.top?.accountValue
+                      {(infoData?.top?.accountValue +
+                       infoData?.top?.profitOrLossToday)
                         ?.toFixed(2)
                         ?.toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
