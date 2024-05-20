@@ -55,7 +55,7 @@ export default function Signup() {
     data.mobileDeviceToken = "";
     data.device = device;
     data.username = ""
-    data.reffercode =""
+    data.refferalCode =""
 
     userService
       .signup(data)
