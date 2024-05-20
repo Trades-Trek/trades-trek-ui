@@ -43,11 +43,6 @@ export default function Signup() {
         refferalCode: router?.query?.reffercode || "",
       });
     }
-    if (router.query?.campaign) {
-      reset({
-        campaign: router?.query?.campaign || "download-app",
-      });
-    }
   }, [router]);
   useEffect(() => {
     if (isBrowser) {
@@ -64,7 +59,6 @@ export default function Signup() {
     setIsLoading(true);
     data.mobileDeviceToken = ""
     data.device=device
-  
     userService
       .signup(data)
       .then((res) => {
@@ -73,8 +67,9 @@ export default function Signup() {
           localStorage.setItem("email", data.email);
           setError(res.message);
           localStorage.setItem("otp", data.email);
+          // dispatch(setUser(res.user));
           setIsLoading(false);
-          router.replace("/otp?campaign=download-app");
+          router.replace("/otp");
         } else if (res?.success === false) {
           setValidate(true);
           setError(res.message);
