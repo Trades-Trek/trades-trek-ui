@@ -85,7 +85,7 @@ export default function Signup() {
       });
   };
   return (
-    <section className="bg-gray-50 bg-[#E6CCFF]">
+    <section className="bg-gray-50 bg-[#E6CCFF] h-screen">
       <ToastContainer
         position="top-center"
         autoClose={3000}
