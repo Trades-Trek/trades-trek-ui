@@ -54,6 +54,7 @@ export default function Signup() {
     setIsLoading(true);
     data.mobileDeviceToken = "";
     data.device = device;
+    data.username = ""
 
     userService
       .signup(data)
@@ -125,7 +126,7 @@ export default function Signup() {
                 </p>
               </div>
             )}
-            
+
             <form
               className="space-y-4 md:space-y-6"
               onSubmit={handleSubmit(onSubmit)}
