@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }) {
 
   function authCheck(url) {
     // redirect to login page if accessing a private page and not logged in
-    const publicPaths = ['/login', '/', '/sign-up/', '/otp/', '/privacy-policy/', '/terms/', '/campaign-signup/'];
+    const publicPaths = ['/login', '/', '/sign-up/', '/otp/', '/privacy-policy/', '/terms/', '/campaign-signup/', '/download-app/'];
     const path = url.split('?')[0];
     if (!userService.userValue && !publicPaths.includes(path)) {
       setAuthorized(false);
