@@ -22,26 +22,15 @@ const thankyou = () => {
 
           </p>
           <div className="flex flex-col items-center md:flex-row gap-y-4 gap-x-3">
-            {/* <a 
-                          href={data?.ios_download_url??''}
-             target="_blank" rel="noreferrer">
-                 <img src={Appstore.src} alt="appstore" />
-            </a>
+          
             <a
-              href={data?.android_download_url??''}
-              target="_blank"
-              rel="noreferrer"
-            >
-                <img src={Playstore.src} alt="playstore" />
-            </a> */}
-            <a
-              href="https://blog.tradestrek.com"
+              href="https://tradestrek.page.link/UdTB"
               target="_blank"
               rel="noreferrer"
               className="text-lg font-medium text-black"
             >
               <button className="text-white border-0 rounded-[px] bg-palette-two" type="button" >
-                See Blog
+                Click here to download app
               </button>
             </a>
           </div>
