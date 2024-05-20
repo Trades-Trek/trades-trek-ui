@@ -119,7 +119,7 @@ export default function Signup() {
               <div>
                 <label
                   htmlFor="first-name"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-gray-900 text-white"
                 >
                   First Name
                 </label>
@@ -144,17 +144,17 @@ export default function Signup() {
                   {errors.firstName?.type === "required" &&
                     "First Name is required"}
                   {errors.firstName?.type === "minLength" &&
-                    "First Name should be atleast 3 characters"}
+                    "First Name should be at least 3 characters"}
                   {errors.firstName?.type === "maxLength" &&
                     "First Name should be less than 20 characters"}
                   {errors.firstName?.type === "pattern" &&
-                    "Only alphabets is allowed"}
+                    "Only alphabets are allowed"}
                 </div>
               </div>
               <div>
                 <label
                   htmlFor="last-name"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-gray-900 text-white"
                 >
                   Last Name
                 </label>
@@ -179,17 +179,17 @@ export default function Signup() {
                   {errors.lastName?.type === "required" &&
                     "Last Name is required"}
                   {errors.lastName?.type === "minLength" &&
-                    "Last Name should be atleast 3 characters"}
+                    "Last Name should be at least 3 characters"}
                   {errors.lastName?.type === "maxLength" &&
                     "Last Name should be less than 20 characters"}
                   {errors.lastName?.type === "pattern" &&
-                    "Only alphabets is allowed"}
+                    "Only alphabets are allowed"}
                 </div>
               </div>
               <div>
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-gray-900 text-white"
                 >
                   Email Address
                 </label>
@@ -252,7 +252,7 @@ export default function Signup() {
               </div>
 
               <div className="flex items-start">
-              <p className='dark:text-white'>
+              <p className='text-white'>
                   By registering, you agree to the{" "}
                   <Link href="https://www.tradestrek.com/terms">
                     <a>Terms Of Use</a>
