@@ -50,7 +50,7 @@ function signup(data) {
     });
 }
 //Verify Otp
-function verifyLoginOtp(email, otp) {
+function verifyLoginOtp(email, otp, isDownloadCampaign) {
   return fetchWrapper
     .post(`${baseUrl}/user/verifyEmail`, {
       email: email,
@@ -59,14 +59,16 @@ function verifyLoginOtp(email, otp) {
     .then((res) => {
       if (res.success) {
         userSubject.next(res.token);
-        localStorage.setItem('token', res.token);
-        Router.replace('/dashboard')
-
-        
+        if (!isDownloadCampaign) {
+          localStorage.setItem("token", res.token);
+          Router.replace("/dashboard");
+        } else {
+          Router.replace("/download-app");
+        }
       }
       return res;
     })
-    .catch(function (error) {
+    .catch(function(error) {
       return error;
     });
 }

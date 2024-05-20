@@ -16,7 +16,7 @@ export default function Otp() {
   const [emailAddress, setEmailAddress] = useState();
   const [btnStatus, setBtnStatus] = useState(false);
   const [isLoaderActive, setLoaderStatus] = useState(false);
-
+  const [isDownloadCampaign, setIsDownloadCampaign] = useState(false);
 
   useEffect(() => {
     let email = localStorage.getItem('email');
@@ -26,8 +26,10 @@ export default function Otp() {
 
     if(!email && !emailAddress)
     window.location.href = '/login/';
+    }
 
-
+    if (router.query?.campaign && router.query?.campaign === "download-app") {
+      setIsDownloadCampaign(true)
     }
   }, []);
 
@@ -42,7 +44,7 @@ export default function Otp() {
     } else {
       setError('');
       let email = localStorage.getItem('email');
-      const response = await userService.verifyLoginOtp(email,Number(otp));
+      const response = await userService.verifyLoginOtp(email,Number(otp), isDownloadCampaign);
        if (response.success === false) {
         setBtnStatus(false);
         setLoaderStatus(false)
