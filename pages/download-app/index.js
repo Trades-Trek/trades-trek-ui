@@ -1,6 +1,13 @@
 import React from "react";
+import {
+  GooglePlayButton,
+  AppGalleryButton,
+  ButtonsContainer,
+} from "react-mobile-app-button";
 
 const DownloadApp = () => {
+  const APKUrl = "https://play.google.com/store/apps/details?id=com.tradestrek.tradestrek";
+  const IOSUrl = "https://apps.apple.com/ng/app/trades-trek/id6451382635";
   return (
     <div className="flex flex-col items-center justify-center gap-y-7 md:flex-row bg-palette-one gap-x-14 h-screen">
       <div className="md:w-[579px] px-3 md:px-0">
@@ -15,19 +22,19 @@ const DownloadApp = () => {
           prizes in our Trades Trek simulation trades competitions.
         </p>
         <div className="flex flex-col items-center md:flex-row gap-y-4 gap-x-3">
-          <a
-            href="https://tradestrek.page.link/UdTB"
-            target="_blank"
-            rel="noreferrer"
-            className="text-lg font-medium text-black"
-          >
-            <button
-              className="text-white border-0 rounded-[px] bg-palette-two"
-              type="button"
-            >
-              Click here to download app
-            </button>
-          </a>
+          <ButtonsContainer>
+            <GooglePlayButton
+              url={APKUrl}
+              theme={"light"}
+              className={"custom-style"}
+            />
+
+            <AppGalleryButton
+              url={IOSUrl}
+              theme={"light"}
+              className={"custom-style"}
+            />
+          </ButtonsContainer>
         </div>
         <br />
         <br />
