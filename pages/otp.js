@@ -5,6 +5,8 @@ export default function OtpProcess() {
   useEffect(() => {
     document.body.classList.add('otp--page');
     document.body.classList.remove('signUp--page');
+    document.body.style.backgroundColor = '#e6ccff';
+
   });
   return (
     <>
