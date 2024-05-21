@@ -22,8 +22,8 @@ const DownloadApp = () => {
         </h2>
         <p className=" mb-8 text-lg font-light text-center md:text-left leading-[25px]">
           To start
-          Learning How to Trade Stocks Risk-Free! Win weekly and monthly cash
-          prizes in our Trades Trek simulation trades competitions.
+          Learning How to Trade Stocks Risk-Free! <b>Win weekly and monthly cash
+          prizes</b>  in our Trades Trek simulation trades competitions.
         </p>
        
           <div className="flex justify-between">
