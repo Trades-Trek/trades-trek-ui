@@ -248,7 +248,6 @@ export default function Signup() {
                     required: true,
                     maxLength: 15,
                     minLength: 8,
-
                     pattern: {
                       value: /^(?=.*[0-9])(?=.*[a-z])(?=.*[@$#!%*?_&])([a-zA-Z0-9@$#!%*?_&]{8,})$/,
                     },

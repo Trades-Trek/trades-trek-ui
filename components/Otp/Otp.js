@@ -112,7 +112,7 @@ export default function Otp() {
         draggable
         pauseOnHover
       />
-      <div className="center--block bg-[#E6CCFF] h-screen">
+      <div className="center--block  h-screen bg-[#E6CCFF]">
         <div className="small--block text--center">
           <div className="block--title block--back--link">
          <h1> <button onClick={()=>{router.back()}} style={{marginRight:'20px'}}>{"<"}</button> Check your email</h1>
