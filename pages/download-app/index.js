@@ -9,7 +9,7 @@ const DownloadApp = () => {
     <div className="flex flex-col items-center justify-center gap-y-7 md:flex-row bg-palette-one gap-x-14 h-screen">
       <div className="md:w-[579px] px-3 md:px-0">
 
-      <h2 className="font-bold text-[32px] text-center md:text-left mb-2 pt-12 md:pt-0 text-[#8000ff]">
+      <h2 className="font-bold text-[32px] text-center md:text-left mb-2 pt-12 md:pt-0 text-[#8000ff] text-center">
           Congratulations
         </h2>
         <p className=" mb-8 text-lg font-light text-center md:text-left leading-[25px] text-[#8000ff]">
@@ -18,10 +18,10 @@ const DownloadApp = () => {
         <br />
 
         <h2 className="font-bold text-[32px] text-center md:text-left mb-2 pt-12 md:pt-0">
-          Download the Trades Trek Stock Trading Simulator App Today
+           Now download the Trades Trek Stock Trading Simulator App Today
         </h2>
         <p className=" mb-8 text-lg font-light text-center md:text-left leading-[25px]">
-          Download the Trades Trek Stock Trading Simulator App Today and Start
+          To start
           Learning How to Trade Stocks Risk-Free! Win weekly and monthly cash
           prizes in our Trades Trek simulation trades competitions.
         </p>
