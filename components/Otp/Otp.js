@@ -28,7 +28,7 @@ export default function Otp() {
     window.location.href = '/login/';
     }
 
-    if (router.query?.campaign && router.query?.campaign === "download-app") {
+    if (router.query?.campaign) {
       setIsDownloadCampaign(true)
     }
   }, []);
