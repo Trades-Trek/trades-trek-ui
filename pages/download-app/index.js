@@ -26,7 +26,7 @@ const DownloadApp = () => {
           prizes in our Trades Trek simulation trades competitions.
         </p>
        
-          <div className="flex justify-around">
+          <div className="flex justify-between">
             <Link href={IOSUrl}>
               <div className="flex mt-3 w-48 h-14 bg-black text-white rounded-xl items-center justify-center cursor-pointer">
                 <div className="mr-3">
