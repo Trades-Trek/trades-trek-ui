@@ -1,9 +1,6 @@
-import { Loader } from "@mantine/core";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-const thankyou = () => {
+const DownloadApp = () => {
   return (
     <div className="flex flex-col items-center justify-center gap-y-7 md:flex-row bg-palette-one gap-x-14 h-screen">
       <div className="md:w-[579px] px-3 md:px-0">
@@ -39,4 +36,4 @@ const thankyou = () => {
   );
 };
 
-export default thankyou;
+export default DownloadApp;
