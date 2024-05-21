@@ -17,13 +17,13 @@ const DownloadApp = () => {
         </p>
         <br />
 
-        <h2 className="font-bold text-[32px] text-center md:text-left mb-2 pt-12 md:pt-0">
+        <h2 className="font-bold text-[32px] text-center md:text-left mb-2 pt-12 md:pt-0 leading-none">
            Now download the Trades Trek Stock Trading Simulator App Today
         </h2>
         <p className=" mb-8 text-lg font-light text-center md:text-left leading-[25px]">
           To start
-          Learning How to Trade Stocks Risk-Free! <b>Win weekly and monthly cash
-          prizes</b>  in our Trades Trek simulation trades competitions.
+          Learning How to Trade Stocks Risk-Free! <span className='font-extrabold'>Win weekly and monthly cash
+          prizes</span>  in our Trades Trek simulation trades competitions.
         </p>
        
           <div className="flex justify-between">
