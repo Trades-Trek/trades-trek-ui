@@ -3154,6 +3154,11 @@ table.order-table th {
   height: 1.275rem;
 }
 
+.passwordView2{
+  @apply absolute right-2 bottom-2 cursor-pointer;
+  height: 1.275rem;
+}
+
 .PhoneInputCountryIconUnicode{
   font-size: 1.59rem !important;
 }

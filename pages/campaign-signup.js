@@ -54,8 +54,8 @@ export default function Signup() {
     setIsLoading(true);
     data.mobileDeviceToken = "";
     data.device = device;
-    data.username = ""
-    data.refferalCode =""
+    data.username = "";
+    data.refferalCode = "";
 
     userService
       .signup(data)
@@ -230,7 +230,7 @@ export default function Signup() {
                   {errors.email?.type === "pattern" && "Invalid Email"}
                 </div>
               </div>
-              <div>
+              <div className="relative">
                 <label
                   htmlFor="password"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -254,19 +254,19 @@ export default function Signup() {
                   })}
                 />
 
-{showPassword ? (
-                    <img
-                      src="/images/view.png"
-                      className="passwordView"
-                      onClick={() => setShowPassword(!showPassword)}
-                    />
-                  ) : (
-                    <img
-                      onClick={() => setShowPassword(!showPassword)}
-                      src="/images/invisible.png"
-                      className="passwordView"
-                    />
-                  )}
+                {showPassword ? (
+                  <img
+                    src="/images/view.png"
+                    className="passwordView2"
+                    onClick={() => setShowPassword(!showPassword)}
+                  />
+                ) : (
+                  <img
+                    onClick={() => setShowPassword(!showPassword)}
+                    src="/images/invisible.png"
+                    className="passwordView2"
+                  />
+                )}
 
                 <div className="invalid-feedback">
                   {errors.password?.type === "required" &&
@@ -281,7 +281,7 @@ export default function Signup() {
               </div>
 
               <div className="flex items-start">
-              <p className='text-white'>
+                <p className="text-white">
                   By registering, you agree to the{" "}
                   <Link href="https://www.tradestrek.com/terms">
                     <a>Terms Of Use</a>
@@ -293,8 +293,8 @@ export default function Signup() {
                 </p>
               </div>
               <button disabled={isLoading} className="btn" type="submit">
-                  {isLoading ? <Loader color="#8000ff" /> : "Sign Up"}
-                </button>
+                {isLoading ? <Loader color="#8000ff" /> : "Sign Up"}
+              </button>
             </form>
           </div>
         </div>
