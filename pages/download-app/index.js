@@ -18,8 +18,8 @@ const DownloadApp = () => {
           Learning How to Trade Stocks Risk-Free! Win weekly and monthly cash
           prizes in our Trades Trek simulation trades competitions.
         </p>
-        <div className="flex justify-center">
-          <div>
+       
+          <div className="flex justify-around">
             <Link href={IOSUrl}>
               <div className="flex mt-3 w-48 h-14 bg-black text-white rounded-xl items-center justify-center cursor-pointer">
                 <div className="mr-3">
@@ -70,7 +70,7 @@ const DownloadApp = () => {
               </div>
             </Link>
           </div>
-        </div>
+       
 
         <br />
         <br />
