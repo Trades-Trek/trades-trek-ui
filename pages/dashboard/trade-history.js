@@ -149,8 +149,8 @@ export default function TradeHistory() {
                               </td>
                               <td>{item.quantity}</td>
                               <td>₦{item.rate.toFixed(2)}</td>
-                              <td>₦{item.rateAtStockExecution === 0 ? "not available" : item.rateAtStockExecution.toFixed(2)}</td>
-                              <td>{item.commission.toFixed(2)}</td>
+                              <td>{item.rateAtStockExecution === 0 ? "not available" : item.rateAtStockExecution.toFixed(2)}</td>
+                              <td>₦{item.commission.toFixed(2)}</td>
                               <td>₦{(item.rate * item.quantity).toFixed(2)}</td>
                             </tr>
                           ))}
