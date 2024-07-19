@@ -85,7 +85,7 @@ export default function TradeFailedOrders({ modelOpened }) {
                   </td>
 
                   <td>{item.symbol}</td>
-                  <td>failed</td>
+                  <td>{item.status === "Failed" ? "Failed" : item.status === "Cancel" ? "Cancelled" : ""}</td>
                   <td>
                     {item.action}
                     {item.orderType == "Limit" ? (
