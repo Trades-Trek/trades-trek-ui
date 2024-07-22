@@ -69,7 +69,7 @@ console.log(infoData?.calculatePortfoliValues?.calculatedAccountValue, '<><><><>
                 </span>
                 <p>
                 ₦{" "}
-                  {infoData
+                  {infoData?.calculatePortfoliValues
                     ? 
                         infoData?.calculatePortfoliValues?.calculatedAccountValue
                       .toFixed(2)
@@ -89,7 +89,7 @@ console.log(infoData?.calculatePortfoliValues?.calculatedAccountValue, '<><><><>
                     </span>
                     <p>
                       ₦{" "}
-                      {infoData
+                      {infoData?.calculatePortfoliValues
                         ? 
                             infoData?.calculatePortfoliValues.calculatedTodaysChangeNaira
                           .toFixed(2)
@@ -99,7 +99,7 @@ console.log(infoData?.calculatePortfoliValues?.calculatedAccountValue, '<><><><>
                     </p>
                     <span>
                       (
-                      {infoData
+                      {infoData?.calculatePortfoliValues
                         ? 
                             infoData?.calculatePortfoliValues.calculatedTodaysChangePercentage
                             .toFixed(2)
@@ -145,7 +145,7 @@ console.log(infoData?.calculatePortfoliValues?.calculatedAccountValue, '<><><><>
 
                     <p>
                       ₦{" "}
-                      {infoData
+                      {infoData?.calculatePortfoliValues
                         ? 
                             infoData?.calculatePortfoliValues.calculatedBuyingPower
                             .toFixed(2)
@@ -154,7 +154,7 @@ console.log(infoData?.calculatePortfoliValues?.calculatedAccountValue, '<><><><>
                         : "0.00"}
                     </p>
                   </div>
-                  {/* {console.log(infoData)} */}
+                
                   <div>
                     <span className="itemAlign">
                       CASH
@@ -165,7 +165,7 @@ console.log(infoData?.calculatePortfoliValues?.calculatedAccountValue, '<><><><>
 
                     <p>
                       ₦{" "}
-                      {infoData
+                      {infoData?.calculatePortfoliValues
                         ? 
                             infoData?.calculatePortfoliValues.calculatedCash
                             .toFixed(2)
