@@ -70,7 +70,7 @@ const ProfileAnotherUser = ({ userName }) => {
                     ? (
                         infoData?.calculatePortfoliValues?.calculatedAccountValue
                       )
-                        ?.toFixed(2)
+                        .toFixed(2)
                         ?.toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     : "0.00"}
@@ -91,7 +91,7 @@ const ProfileAnotherUser = ({ userName }) => {
                         ? (
                             infoData?.calculatePortfoliValues.calculatedTodaysChangeNaira
                           )
-                            ?.toFixed(2)
+                            .toFixed(2)
                             ?.toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         : "0.00"}
@@ -102,7 +102,7 @@ const ProfileAnotherUser = ({ userName }) => {
                         ? (
                             infoData?.calculatePortfoliValues.calculatedTodaysChangePercentage
                           )
-                            ?.toFixed(2)
+                            .toFixed(2)
                             ?.toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         : "0.00"}
@@ -149,7 +149,7 @@ const ProfileAnotherUser = ({ userName }) => {
                         ? (
                             infoData?.calculatePortfoliValues.calculatedBuyingPower
                           )
-                            ?.toFixed(2)
+                            .toFixed(2)
                             ?.toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         : "0.00"}
@@ -170,7 +170,7 @@ const ProfileAnotherUser = ({ userName }) => {
                         ? (
                             infoData?.calculatePortfoliValues.calculatedCash
                           )
-                            ?.toFixed(2)
+                            .toFixed(2)
                             ?.toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         : "0.00"}
