@@ -41,7 +41,10 @@ const ProfileAnotherUser = ({ userName }) => {
       })
       .catch((err) => console.log(err));
   }, [userName, typeData, perSelected, user1, user2]);
-console.log(infoData?.calculatePortfoliValues?.calculatedAccountValue, '<><><><><><>><><<<><><<)
+
+
+console.log(infoData?.calculatePortfoliValues?.calculatedAccountValue, '<><><><><><>><><<<><><<' )
+
   return (
     <>
       <div>
