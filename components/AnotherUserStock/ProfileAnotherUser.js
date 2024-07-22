@@ -46,10 +46,11 @@ const ProfileAnotherUser = ({ userName }) => {
     fetchData();
   }, [userName, typeData, perSelected, user1, user2, user]);
 
-  const formatNumber = (number) => {
-    return number && typeof number === 'number'
-      ? number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      : "0.00";
+const formatNumber = (number) => {
+    if (number === undefined) return "0.00";
+    const numericValue = parseFloat(number);
+    if (isNaN(numericValue)) return "0.00";
+    return numericValue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   const renderAccountValue = () => {
