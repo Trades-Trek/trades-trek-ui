@@ -68,8 +68,7 @@ const ProfileAnotherUser = ({ userName }) => {
                 ₦{" "}
                   {infoData
                     ? (
-                        infoData?.Competition?.accountValue +
-                        infoData?.Competition?.profitOrLossToday
+                        infoData?.calculatePortfoliValues?.calculatedAccountValue
                       )
                         ?.toFixed(2)
                         ?.toString()
@@ -90,8 +89,7 @@ const ProfileAnotherUser = ({ userName }) => {
                       ₦{" "}
                       {infoData
                         ? (
-                            infoData?.Competition?.currentValue -
-                            infoData?.Competition?.previousValue
+                            infoData?.calculatePortfoliValues.calculatedTodaysChangeNaira
                           )
                             ?.toFixed(2)
                             ?.toString()
@@ -101,10 +99,8 @@ const ProfileAnotherUser = ({ userName }) => {
                     <span>
                       (
                       {infoData
-                        ? TodayPerChange(
-                            infoData?.Competition?.previousValue,
-                            infoData?.Competition?.currentValue -
-                              infoData?.Competition?.previousValue
+                        ? (
+                            infoData?.calculatePortfoliValues.calculatedTodaysChangePercentage
                           )
                             ?.toFixed(2)
                             ?.toString()
@@ -151,11 +147,7 @@ const ProfileAnotherUser = ({ userName }) => {
                       ₦{" "}
                       {infoData
                         ? (
-                            infoData?.Competition?.buyingPower +
-                            (infoData?.Competition?.gameId
-                              ?.allowTradingWithMargin
-                              ? infoData?.Competition?.profitOrLossToday / 2
-                              : infoData?.Competition?.profitOrLossToday)
+                            infoData?.calculatePortfoliValues.calculatedBuyingPower
                           )
                             ?.toFixed(2)
                             ?.toString()
@@ -176,8 +168,7 @@ const ProfileAnotherUser = ({ userName }) => {
                       ₦{" "}
                       {infoData
                         ? (
-                            infoData?.Competition?.cash +
-                            infoData?.Competition?.profitOrLossToday
+                            infoData?.calculatePortfoliValues.calculatedCash
                           )
                             ?.toFixed(2)
                             ?.toString()
