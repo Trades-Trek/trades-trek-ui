@@ -54,12 +54,14 @@ const ProfileAnotherUser = ({ userName }) => {
 
   const renderAccountValue = () => {
     const value = infoData?.calculatePortfoliValues?.calculatedAccountValue;
+    console.log('AccountValue', value )
     return `₦ ${formatNumber(value)}`;
   };
 
   const renderTodaysChange = () => {
     const value = infoData?.calculatePortfoliValues?.calculatedTodaysChangeNaira;
     const percentage = infoData?.calculatePortfoliValues?.calculatedTodaysChangePercentage;
+     console.log('odaysChange', value )
     return (
       <>
         <p>₦ {formatNumber(value)}</p>
@@ -70,6 +72,7 @@ const ProfileAnotherUser = ({ userName }) => {
 
   const renderBuyingPower = () => {
     const value = infoData?.calculatePortfoliValues?.calculatedBuyingPower;
+    console.log('BuyingPower ', value )
     return `₦ ${formatNumber(value)}`;
   };
 
