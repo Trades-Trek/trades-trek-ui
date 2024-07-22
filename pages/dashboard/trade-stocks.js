@@ -87,14 +87,7 @@ const handleTab=(index)=>{
                 <span className="font-20 font-bold">
             
                 ₦
-                      {user &&
-                        (
-                          user?.portfolio?.accountValue +
-                          user?.portfolio?.profitOrLossToday
-                        )
-                          ?.toFixed(2)
-                          ?.toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                       &nbsp;{user?.calculatedPortfolioValues?.calculatedAccountValue}
                  </span>
               </p>
             </div>
@@ -105,7 +98,7 @@ const handleTab=(index)=>{
                 Buying Power <ToolTipCustome text={`The total value of your cash and margin accounts that can be used to make trades. Calculated as: cash + (Long Stocks x 50%) - (Shorted Stocks x 150%).`}/>
               </span>
                 <span className="font-20 font-bold">
-                ₦{user && ((user?.portfolio?.buyingPower+(user?.portfolio?.gameId?.allowTradingWithMargin?(user?.portfolio?.profitOrLossToday/2):user?.portfolio?.profitOrLossToday))?.toFixed(2))?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+               ₦&nbsp;{user?.calculatedPortfolioValues?.calculatedBuyingPower}
                 </span>
               </p>
             </div>
@@ -115,7 +108,7 @@ const handleTab=(index)=>{
                 Cash <ToolTipCustome text={`Total amount of cash available for making trades.`}/>
               </span>
                 <span className="font-20 font-bold">
-                ₦{user && ((user?.portfolio?.cash+user?.portfolio?.profitOrLossToday)?.toFixed(2))?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                ₦&nbsp;{user?.calculatedPortfolioValues?.calculatedCash}
                 </span>
               </p>
             </div>
