@@ -67,10 +67,9 @@ const ProfileAnotherUser = ({ userName }) => {
                 <p>
                 ₦{" "}
                   {infoData
-                    ? (
+                    ? 
                         infoData?.calculatePortfoliValues?.calculatedAccountValue
-                      )
-                        .toFixed(2)
+                      .toFixed(2)
                         ?.toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     : "0.00"}
@@ -88,10 +87,9 @@ const ProfileAnotherUser = ({ userName }) => {
                     <p>
                       ₦{" "}
                       {infoData
-                        ? (
+                        ? 
                             infoData?.calculatePortfoliValues.calculatedTodaysChangeNaira
-                          )
-                            .toFixed(2)
+                          .toFixed(2)
                             ?.toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         : "0.00"}
@@ -99,9 +97,8 @@ const ProfileAnotherUser = ({ userName }) => {
                     <span>
                       (
                       {infoData
-                        ? (
+                        ? 
                             infoData?.calculatePortfoliValues.calculatedTodaysChangePercentage
-                          )
                             .toFixed(2)
                             ?.toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -146,9 +143,8 @@ const ProfileAnotherUser = ({ userName }) => {
                     <p>
                       ₦{" "}
                       {infoData
-                        ? (
+                        ? 
                             infoData?.calculatePortfoliValues.calculatedBuyingPower
-                          )
                             .toFixed(2)
                             ?.toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -167,9 +163,8 @@ const ProfileAnotherUser = ({ userName }) => {
                     <p>
                       ₦{" "}
                       {infoData
-                        ? (
+                        ? 
                             infoData?.calculatePortfoliValues.calculatedCash
-                          )
                             .toFixed(2)
                             ?.toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
