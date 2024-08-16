@@ -91,6 +91,7 @@ export default function HistoryUser({ userName }) {
     "QTY",
     "Price",
     "Price At Execution",
+    "Account value after sell",
     "Total Cash Value",
   ];
   return (
@@ -153,6 +154,7 @@ export default function HistoryUser({ userName }) {
                               <td>{item.quantity}</td>
                               <td>₦{item.rate.toFixed(2)}</td>
                               <td>{item.rateAtStockExecution === 0 ? "not available" : item.rateAtStockExecution.toFixed(2)}</td>
+                              <td>{item.accountValueAfterSell === 0 ? "not available" : item.accountValueAfterSell}</td>
                               <td>₦{(item.rate * item.quantity).toFixed(2)}</td>
                             </tr>
                           ))}
