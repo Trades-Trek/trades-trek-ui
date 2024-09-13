@@ -222,6 +222,40 @@ export default function Sidebar() {
                 </a>
               </Link>
             </li>
+
+
+            <li
+              className={
+                router.pathname == "/dashboard/quiz"
+                  ? "menu__list--item active--menu"
+                  : "menu__list--item"
+              }
+            >
+              <Link href="/dashboard/quiz">
+                <a>
+                  <span className="menu--icons">
+                    <Image
+                      src="/images/learning-menu.svg"
+                      layout="responsive"
+                      width={24}
+                      height={24}
+                      alt={"Quiz"}
+                    />
+                  </span>
+                  <span className="menu--icons--hover">
+                    <Image
+                      src="/images/learning-menu--hover.svg"
+                      layout="responsive"
+                      width={24}
+                      height={24}
+                      alt={"Quiz"}
+                    />
+                  </span>{" "}
+                  Quiz
+                </a>
+              </Link>
+            </li>
+
             <li
               className={
                 router.pathname == "/dashboard/competition-summary"
