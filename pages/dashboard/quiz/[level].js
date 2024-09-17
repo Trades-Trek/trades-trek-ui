@@ -11,9 +11,10 @@ import {
   Badge,
   Progress,
 } from "@mantine/core";
-import Layout from "../../../components/quiz/layout";
+
 import { toast, ToastContainer } from "react-toastify";
 import { Loader } from "@mantine/core";
+import Layout, { useQuizData } from "../../../components/quiz/layout";
 
 const CourseCard = ({
   title,
@@ -22,15 +23,22 @@ const CourseCard = ({
   isSubscribed,
   sectors,
   onClick,
+
+  content,
+  cutoffPercentage,
+  disabled,
+  name,
+  order,
+  questions,
+  _id,
 }) => (
   <Card shadow="sm" padding="lg" radius="md" withBorder className="w-full mb-4">
     <Group position="apart" mb="xs">
-      <Text weight={500}>{title}</Text>
-      <Badge color="green">5 questions</Badge>
+      <Text weight={900}> {name}</Text>
+      <Badge color="green">{questions?.length || 0} questions</Badge>
     </Group>
     <Text size="sm" color="dimmed" mb="md">
-      Understand the fundamental concepts of stock trading, including how stocks
-      are bought and sold, and the role of stock exchanges.
+      Cut off Percentage: {cutoffPercentage}
     </Text>
     {isSubscribed && (
       <Progress value={progress} mb="md" size="sm" color="green" />
@@ -54,18 +62,20 @@ export default function Quiz() {
   const [modules, setGroupsModules] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const { userProgressData, loading } = useQuizData();
+
   const router = useRouter();
   const { level } = router.query;
 
   useEffect(() => {
     fetchGroupModule(level);
-  }, []);
+  }, [level]);
 
   const fetchGroupModule = async (level) => {
-    if (!level) router.push("/dashboard/quiz");
+    if (!level) return;
     try {
       const response = await quizService.getLearningModuleByGroupName(level);
-      setSelectedTrack(response.data.group);
+      setSelectedTrack(response.data.group); //  {_id: '66e7e8d1fab02f9b607b2ff0', name: 'beginner'}
       setGroupsModules(response.data.modules);
     } catch (error) {
       toast.error("Failed to fetch groups", {
@@ -75,24 +85,6 @@ export default function Quiz() {
       setIsLoading(false);
     }
   };
-
-  console.log("....groups.......", modules);
-
-  //   const courses = {
-  //     beginner: [
-  //       {
-  //         id: "intro",
-  //         title: "Why is stock important",
-  //         description: "Learn the basics of stock market",
-  //       },
-  //       {
-  //         id: "guide",
-  //         title: "Beginner's Guide to Stock Market",
-  //         description: "Comprehensive introduction to stocks",
-  //       },
-  //     ],
-  //     // Add more courses for other tracks
-  //   };
 
   const courses = [
     {
@@ -234,11 +226,14 @@ export default function Quiz() {
   return (
     <Layout>
       <div className="p-8">
-        <div className="flex flex-wrap" style={{ justifyContent: "center" }}>
-          {isLoading ? (
+        <div
+          className="flex flex-wrap"
+          style={{ justifyContent: "center", width: "80%" }}
+        >
+          {isLoading || loading ? (
             <Loader color="blue" />
           ) : (
-            <div className="p-8">
+            <div style={{ width: "100%" }} className="p-8">
               <h1 className="text-3xl font-bold mb-6">{selectedTrack.name}</h1>
               <Text size="lg" mb="lg">
                 {selectedTrack.title}
@@ -247,27 +242,21 @@ export default function Quiz() {
               <Tabs defaultValue="all">
                 <Tabs.List>
                   <Tabs.Tab value="all">All courses</Tabs.Tab>
-                  {/* <Tabs.Tab value="incomplete">Incomplete</Tabs.Tab>
-                  <Tabs.Tab value="completed">Completed</Tabs.Tab> */}
+                  <Tabs.Tab value="incomplete">Incomplete</Tabs.Tab>
+                  <Tabs.Tab value="completed">Completed</Tabs.Tab>
                 </Tabs.List>
 
                 <Tabs.Panel value="all" pt="xs">
-                  {courses
-                    .filter((course) => course.isSubscribed)
-                    .map((course) => (
-                      <CourseCard
-                        key={course.id}
-                        {...course}
-                        onClick={() => setSelectedCourse(course)}
-                      />
-                    ))}
-                  {/* <Text weight={500} size="lg" my="md">Unsubscribed (4)</Text>
-                    {courses.filter(course => !course.isSubscribed).map(course => (
-                      <CourseCard key={course.id} {...course} onClick={() => setSelectedCourse(course)} />
-                    ))} */}
+                  {modules.map((module) => (
+                    <CourseCard
+                      key={module._id}
+                      {...module}
+                      onClick={() => setSelectedCourse(module)}
+                    />
+                  ))}
                 </Tabs.Panel>
 
-                <Tabs.Panel value="incomplete" pt="xs">
+                {/* <Tabs.Panel value="incomplete" pt="xs">
                   {courses
                     .filter(
                       (course) => course.isSubscribed && course.progress < 100
@@ -279,9 +268,9 @@ export default function Quiz() {
                         onClick={() => setSelectedCourse(course)}
                       />
                     ))}
-                </Tabs.Panel>
+                </Tabs.Panel> */}
 
-                <Tabs.Panel value="completed" pt="xs">
+                {/* <Tabs.Panel value="completed" pt="xs">
                   {courses
                     .filter(
                       (course) => course.isSubscribed && course.progress === 100
@@ -293,7 +282,7 @@ export default function Quiz() {
                         onClick={() => setSelectedCourse(course)}
                       />
                     ))}
-                </Tabs.Panel>
+                </Tabs.Panel> */}
               </Tabs>
             </div>
           )}

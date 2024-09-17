@@ -1,54 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { quizService } from "../../../services/quiz.service";
 import { Tab, TabList, TabPanel } from "react-tabs";
 import { useRouter } from "next/router";
 import { useContext } from "react";
-
 import { Card, Text, Button } from "@mantine/core";
-import Layout from "../../../components/quiz/layout";
-
+import Layout, { useQuizData } from "../../../components/quiz/layout";
 import { toast, ToastContainer } from "react-toastify";
 import { Loader } from "@mantine/core";
 
 export default function Quiz() {
-  const [isLoading, setIsLoading] = useState(false);
-const router  = useRouter()
-  const [userProgressData, setUserProgressData] = useState(null);
-  const [groups, setGroups] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const router = useRouter();
 
-  // Fetch data from the API when the component mounts
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [userProgress, learningModuleGroups] = await Promise.all([
-          quizService.getUserProgress(),
-          quizService.getLearningModuleGroups(),
-        ]);
-
-        // Combine the data and update state
-        setUserProgressData(userProgress);
-        setGroups(learningModuleGroups); // assuming response structure has .data
-      } catch (err) {
-        setError(err);
-        toast.error("Failed to fetch data", {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { userProgressData, groups, loading, error } = useQuizData();
 
   return (
     <Layout>
       <div className="p-8">
         <h1 className="text-3xl font-bold mb-6">Choose Your Learning Track</h1>
         <div className="flex flex-wrap" style={{ justifyContent: "center" }}>
-          {isLoading ? (
+          {loading ? (
             <Loader color="blue" />
           ) : (
             groups.map((track) => (
@@ -72,19 +41,24 @@ const router  = useRouter()
 }
 
 const TrackCard = ({ title, description, onClick, userProgressData }) => {
-  const cardStyle =
-  userProgressData.currentGroup === null && title === 'beginner'
-    ? { background: 'white' }
-    : { background: '#C9E4CA' };
+  const cardStyle = { background: "white" }
+    // userProgressData.currentGroup === null && title === "beginner"
+    //   ? { background: "white" }
+    //   : { background: "#C9E4CA" };
 
-    const isButtonDisabled =
-    userProgressData.currentGroup === null && title === 'beginner'
-      ? false
-      : true
+  const isButtonDisabled = false
+    // userProgressData.currentGroup === null && title === "beginner"
+    //   ? false
+    //   : true;
   return (
     <Card
-    style={cardStyle}
-    shadow="sm" padding="lg" radius="md" withBorder className="w-70 m-4" >
+      style={cardStyle}
+      shadow="sm"
+      padding="lg"
+      radius="md"
+      withBorder
+      className="w-70 m-4"
+    >
       <Text fw={500} size="xl" mb="xs">
         {title}
       </Text>
@@ -93,7 +67,7 @@ const TrackCard = ({ title, description, onClick, userProgressData }) => {
       </Text>
 
       <Button
-         disabled={isButtonDisabled}
+        disabled={isButtonDisabled}
         color="blue"
         fullWidth
         onClick={onClick}
