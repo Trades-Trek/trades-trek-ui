@@ -2791,9 +2791,9 @@ table.order-table th {
 }
 
 .mantine-Modal-inner .mantine-Paper-root{
-  border-radius: var(--radius);
+  /* border-radius: var(--radius);
   width: 40rem;
-  @apply p-6 max-w-full;
+  @apply p-6 max-w-full; */
 }
 
 .mantine-Modal-inner .mantine-Modal-close{

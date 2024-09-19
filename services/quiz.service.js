@@ -20,6 +20,18 @@ function getLearningModuleByGroupName(name) {
     });
 }
 
+
+function saveUserModuleProgress(body) {
+  return fetchWrapper
+    .post(`${baseUrl}/user-progress/update-module-progress`, body)
+    .then((res) => {
+      return res;
+    })
+    .catch(function(error) {
+      return error;
+    });
+}
+
 function getLearningModule() {
   return fetchWrapper
     .get(`${baseUrl}/learning-quiz-module`)
@@ -61,5 +73,6 @@ export const quizService = {
   getLearningModuleGroups,
   getLearningModule,
   getLearningModuleByGroupName,
-  getUserProgress
+  getUserProgress,
+  saveUserModuleProgress,
 };
