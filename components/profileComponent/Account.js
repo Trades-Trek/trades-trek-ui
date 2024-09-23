@@ -10,6 +10,7 @@ import { setUser } from "../../actions/users";
 import { toast, ToastContainer } from "react-toastify";
 import { Loader, Modal, useMantineTheme } from "@mantine/core";
 import getConfig from "next/config";
+import { useRouter } from 'next/router';
 
 export default function Account() {
   const { publicRuntimeConfig } = getConfig();
