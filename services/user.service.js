@@ -653,6 +653,22 @@ function getNews() {
     });
 }
 
+function deleteUser(){
+  return fetchWrapper
+    .delete(`${baseUrl}/user/delete-account`
+    )
+    .then((res) => {
+      if(res.success){
+       
+      }
+     
+      return res;
+    })
+    .catch(function (error) {
+      return error;
+    });
+}
+
 
 export const userService = {
   user: userSubject.asObservable(),
@@ -694,6 +710,7 @@ export const userService = {
   allowNotificationStatus,
   updateProfile,
   GetUserSubscriptionHistory,
-  updateTimeStamp
-
+  updateTimeStamp,
+  logout,
+  deleteUser
 };

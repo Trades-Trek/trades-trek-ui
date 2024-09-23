@@ -34,12 +34,44 @@ export default function Account() {
   const dispatch = useDispatch();
   const [imageLoader, setImageLoader] = useState(true);
   const [clearLoading, setClearLoading] = useState(false);
+  const [deleteModalOpened, setDeleteModalOpened] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setStaus(user?.user?.allowNotification);
     setUrl(user?.user?.profilePic);
     setImageLoader(false);
   }, [user]);
+
+  const handleDeleteAccount = () => {
+    setDeleteModalOpened(true);
+  };
+
+  const confirmDeleteAccount = async () => {
+    setDeleteLoading(true);
+    try {
+      const response = await userService.deleteUser();
+      if (response.success) {
+        toast.success(response.message, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+
+        userService.logout();
+      } else {
+        toast.error(response.message || "Failed to delete account", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    } catch (error) {
+      toast.error("An error occurred while deleting the account", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    } finally {
+      setDeleteLoading(false);
+      setDeleteModalOpened(false);
+    }
+  };
 
   useEffect(() => {
     userService
@@ -225,12 +257,7 @@ export default function Account() {
             <div className="mb--32 profileImage">
               {/* <div className="light--purple--circle1">{user?.user?.firstName[0]}</div> */}
 
-              <img
-                src={
-                  url
-                   
-                }
-              />
+              <img src={url} />
               {url ? (
                 <label onClick={() => setModelOpened(true)}>
                   <div className="deleteProfile">
@@ -357,6 +384,19 @@ export default function Account() {
                 >
                   {isLoading ? <Loader color="#8000ff" /> : "Update"}
                 </button>
+
+                <button
+                  disabled={deleteLoading}
+                  className="btn btn-danger"
+                  type="button"
+                  onClick={handleDeleteAccount}
+                >
+                  {deleteLoading ? (
+                    <Loader color="#8000ff" />
+                  ) : (
+                    "Delete my account"
+                  )}
+                </button>
               </div>
             </form>
           </div>
@@ -403,7 +443,9 @@ export default function Account() {
                 {user && user.user
                   ? user.user.subscriptionDuration === "free-lifetime"
                     ? "free-lifetime"
-                    : moment(user.user.currentSubscriptionExpiryDate).format("lll")
+                    : moment(user.user.currentSubscriptionExpiryDate).format(
+                        "lll"
+                      )
                   : "Loading..."}
               </h4>
             </div>
@@ -556,6 +598,53 @@ export default function Account() {
 
               <button
                 onClick={() => setModelOpened2(false)}
+                style={{
+                  width: "50%",
+                  borderRight: "0.5px solid #c9cdd1",
+                  padding: "10px",
+                }}
+                className="cancel"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </Modal>
+
+        <Modal
+          withCloseButton={false}
+          overlayColor={theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.colors.gray[2]}
+          overlayOpacity={0.55}
+          overlayBlur={3}
+          opened={deleteModalOpened}
+          size="35%"
+          centered={true}
+          onClose={() => setDeleteModalOpened(false)}
+        >
+          <div>
+            <h2 style={{ textAlign: "center", margin: "20px 10px" }}>
+              <b>Are you sure you want to delete your account?</b>
+            </h2>
+            <p style={{ textAlign: "center", margin: "20px 10px" }}>
+              This action cannot be undone. All your data will be permanently deleted.
+            </p>
+
+            <div style={{ border: "1px solid #c9cdd1", marginTop: "40px" }}>
+              <button
+                style={{
+                  width: "50%",
+                  borderRight: "0.5px solid #c9cdd1",
+                  padding: "10px",
+                }}
+                onClick={confirmDeleteAccount}
+                disabled={deleteLoading}
+                className="btn-danger"
+              >
+                {deleteLoading ? <Loader color="#ffffff" size="sm" /> : "Yes, delete my account"}
+              </button>
+
+              <button
+                onClick={() => setDeleteModalOpened(false)}
                 style={{
                   width: "50%",
                   borderRight: "0.5px solid #c9cdd1",
