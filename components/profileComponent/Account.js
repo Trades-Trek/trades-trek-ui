@@ -387,6 +387,7 @@ export default function Account() {
                 </button>
 
                 <button
+                  style={{ background: 'red'}}
                   disabled={deleteLoading}
                   className="btn btn-danger"
                   type="button"
