@@ -711,6 +711,5 @@ export const userService = {
   updateProfile,
   GetUserSubscriptionHistory,
   updateTimeStamp,
-  logout,
   deleteUser
 };
