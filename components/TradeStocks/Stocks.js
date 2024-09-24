@@ -55,6 +55,7 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
   const [search, setSearch] = useState();
   const [graph, setGraph] = useState("");
   const [token, setToken] = useState("");
+  const [messageForNoAccessModal, setMessageForNoAccessModal]  = useState("");
   const router = useRouter();
   let { user } = useSelector((state) => state.userWrapper);
 
@@ -768,6 +769,7 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
                   if (isWatchListLoading) return;
 
                   if (user?.user?.subscriptionDuration === "free-lifetime") {
+                    setMessageForNoAccessModal("Subscribe to a paid plan to add to watchlist")
                     open();
                     return;
                   }
@@ -789,7 +791,8 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
                 onClick={() => {
                   if (isWatchListLoading) return;
 
-                  if (user?.user?.subscriptionDuration === "free-lifetime") {
+                  if (user?.subscriptionDetails?.category !== "Premium") {
+                    setMessageForNoAccessModal("Subscribe to premium plan to add a price alert")
                     open();
                     return;
                   }
@@ -822,7 +825,7 @@ export default function Stocks({ setShowTrade, setStockName, setStockAction }) {
             <Modal
               opened={opened}
               onClose={close}
-              title="Subscribe to a Plan to Add to Watchlist"
+              title={messageForNoAccessModal}
             ></Modal>
 
             <Modal
