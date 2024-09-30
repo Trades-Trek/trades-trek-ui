@@ -12,7 +12,6 @@ import ExportExcel from "../../helpers/ExportExcel";
 import { DataConvert } from "../../helpers/DateTimeConverter";
 import { orderService } from "../../services/order.service";
 
-
 export default function HistoryUser({ userName }) {
   const [tradeHistoryData, setTradeHistoryData] = useState();
   const [currentPage, setCurrentPage] = useState(1);
@@ -62,20 +61,25 @@ export default function HistoryUser({ userName }) {
 
   const downloadTradeHistoryAnotherUserAll = async (str) => {
     try {
-      const { success, orders } = await orderService.tradeHistoryAnotherUserAll(userName);
+      const { success, orders } = await orderService.tradeHistoryAnotherUserAll(
+        userName
+      );
       if (success) {
-
-        if(!orders.length){
+        if (!orders.length) {
           alert("No record available for download");
-          return
+          return;
         }
 
-        const transformedOrders = orders.map(item => ({
+        const transformedOrders = orders.map((item) => ({
           ...item,
-          total_cash_value: item.rate * item.quantity
+          total_cash_value: item.rate * item.quantity,
         }));
 
-        ExportExcel(tradeHistoryHeaders, transformedOrders, `Trade_History_${userName}_`);
+        ExportExcel(
+          tradeHistoryHeaders,
+          transformedOrders,
+          `Trade_History_${userName}_`
+        );
       }
       setXlsxDownloading(false);
     } catch (err) {
@@ -91,7 +95,10 @@ export default function HistoryUser({ userName }) {
     "QTY",
     "Price",
     "Price At Execution",
+    "Account value pre sell",
     "Account value after sell",
+    "Account value pre buy",
+    "Account value after buy",
     "Total Cash Value",
   ];
   return (
@@ -153,8 +160,33 @@ export default function HistoryUser({ userName }) {
                               </td>
                               <td>{item.quantity}</td>
                               <td>₦{item.rate.toFixed(2)}</td>
-                              <td>{item.rateAtStockExecution === 0 ? "not available" : item.rateAtStockExecution.toFixed(2)}</td>
-                              <td>{item.accountValueAfterSell === 0 ? "not available" : item.accountValueAfterSell}</td>
+                              <td>
+                                {item.rateAtStockExecution === 0
+                                  ? "not available"
+                                  : item.rateAtStockExecution.toFixed(2)}
+                              </td>
+                              <td>
+                                {item.accountValuePreSell === 0
+                                  ? "not available"
+                                  : item.accountValuePreSell}
+                              </td>
+                              <td>
+                                {item.accountValueAfterSell === 0
+                                  ? "not available"
+                                  : item.accountValueAfterSell}
+                              </td>
+
+                              <td>
+                                {item.accountValuePreBuy === 0
+                                  ? "not available"
+                                  : item.accountValuePreBuy}
+                              </td>
+                              <td>
+                                {item.accountValueAfterBuy === 0
+                                  ? "not available"
+                                  : item.accountValueAfterBuy}
+                              </td>
+
                               <td>₦{(item.rate * item.quantity).toFixed(2)}</td>
                             </tr>
                           ))}
@@ -208,7 +240,7 @@ export default function HistoryUser({ userName }) {
                 <Link href="javascript:void(0)">
                   <a
                     className="btn downloadButtonStyle"
-                    style={{width: '100px', margin: '10px'}}
+                    style={{ width: "100px", margin: "10px" }}
                     onClick={() => {
                       setXlsxDownloading(true);
                       downloadTradeHistoryAnotherUserAll("xlsx");

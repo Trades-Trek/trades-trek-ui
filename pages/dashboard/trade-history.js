@@ -86,7 +86,10 @@ export default function TradeHistory() {
     "QTY",
     "Price",
     "Price At Execution",
+    "Account Value pre sell",
     "Account value after sell",
+    "Account value pre buy",
+    "Account value after buy",
     "Commission",
     "Total Cash Value",
   ];
@@ -151,7 +154,20 @@ export default function TradeHistory() {
                               <td>{item.quantity}</td>
                               <td>₦{item.rate.toFixed(2)}</td>
                               <td>{item.rateAtStockExecution === 0 ? "not available" : item.rateAtStockExecution.toFixed(2)}</td>
+                              <td>{item.accountValuePreSell  === 0 ? "not available" : item.accountValuePreSell }</td>
                               <td>{item.accountValueAfterSell === 0 ? "not available" : item.accountValueAfterSell}</td>
+
+                              <td>
+                                {item.accountValuePreBuy === 0
+                                  ? "not available"
+                                  : item.accountValuePreBuy}
+                              </td>
+                              <td>
+                                {item.accountValueAfterBuy === 0
+                                  ? "not available"
+                                  : item.accountValueAfterBuy}
+                              </td>
+                              
                               <td>₦{item.commission.toFixed(2)}</td>
                               <td>₦{(item.rate * item.quantity).toFixed(2)}</td>
                             </tr>
