@@ -32,7 +32,7 @@ import Layout, { useQuizData } from "../../../components/quiz/layout";
 const CourseCard = ({
   groupProgress,
   isSubscribed,
-
+  selectedTrack,
   onClick,
 
   content,
@@ -43,7 +43,32 @@ const CourseCard = ({
   questions,
   _id,
 }) => {
-  console.log(groupProgress,  _id)
+
+  //pick out the the current track from the groupProgress
+
+  // const data  = groupProgress[selectedTrack._id]
+  console.log(groupProgress[selectedTrack._id], '...', groupProgress) // {_id: '66e7e8d1fab02f9b607b2ff0', name: 'beginner'} 
+  // console.log(groupProgress,  _id)
+ 
+//   {  // id of beginner learning module group
+//     "66e7e8d1fab02f9b607b2ff0": {
+//       "groupId": "66e7e8d1fab02f9b607b2ff0",
+//       "name": "beginner",
+//       "modules": [
+//           {
+//               "moduleId": "66e7ed97fab02f9b607b3a57",
+//               "name": "Nigerian Exchange Group (NGX Group)",
+//               "answeredQuestions": {
+//                   "66e7ed97fab02f9b607b3a58": "Africa",
+//                   "66e7ed97fab02f9b607b3a59": "listing and trading securities, licensing, market data solutions, ancillary technology, regulation, real estate"
+//               },
+//               "score": 100,
+//               "completed": true
+//           }
+//       ],
+//       "completed": true
+//   }
+// }
   return(
     <Card shadow="sm" padding="lg" radius="md" withBorder className="w-full mb-4">
       <Group position="apart" mb="xs">
@@ -53,9 +78,7 @@ const CourseCard = ({
       <Text size="sm" color="dimmed" mb="md">
         Cut off Percentage: {cutoffPercentage}
       </Text>
-      {isSubscribed && (
-        <Progress value={progress} mb="md" size="sm" color="green" />
-      )}
+      <Progress value={50} mb="md" size="sm" color="green" />
   
       <Button
         color="blue"
@@ -147,6 +170,7 @@ export default function Quiz() {
                     {modules.map((module) => (
                       <CourseCard
                         key={module._id}
+                        selectedTrack={selectedTrack}
                         groupProgress={userProgressData.groupProgress}
                         {...module}
                         onClick={() => {
@@ -368,22 +392,4 @@ const ModuleModal = ({ opened, close, selectedModule }) => {
   );
 };
 
-const TrackCard = ({ title, description, onClick }) => (
-  <Card shadow="sm" padding="lg" radius="md" withBorder className="w-70 m-4">
-    <Text fw={500} size="xl" mb="xs">
-      {title}
-    </Text>
-    <Text size="sm" c="dimmed" mb="md">
-      {description}
-    </Text>
 
-    <Button
-      color="blue"
-      fullWidth
-      onClick={onClick}
-      style={{ background: "blue" }}
-    >
-      View Courses
-    </Button>
-  </Card>
-);
