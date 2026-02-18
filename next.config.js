@@ -10,23 +10,15 @@ const nextConfig = {
   },
   images: {
     loader: 'imgix',
-    path: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://client-staging-green.vercel.app/',
+    path: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000/',
   },
   env: {
-    baseApiUrl:       process.env.NODE_ENV === 'development'
-    ? 'http://localhost:5000' // development api
-    : 'https://staging-api.tradestrek.com',
+    baseApiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
   },
   publicRuntimeConfig: {
-    apiUrl:
-      process.env.NODE_ENV === 'development'
-        ? 'http://localhost:5000' // development api
-        : 'https://staging-api.tradestrek.com', // production api
-        secondaryUrl: "https://tradestrek.salitastech.com/api/v1"
+    apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
+    secondaryUrl: process.env.NEXT_PUBLIC_SECONDARY_URL || '',
   },
 };
 
 module.exports = nextConfig;
-
-// Injected content via Sentry wizard below
-

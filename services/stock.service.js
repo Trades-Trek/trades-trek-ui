@@ -244,6 +244,23 @@ function removeItem(symbol) {
     });
 }
 
+function getStockRatios(symbol) {
+  return fetchWrapper
+    .get(`${baseUrl}/stock/stocks/${symbol}/ratios`)
+
+    .then((res) => {
+      if (res.success) {
+      }
+      return res;
+    })
+    .catch((error) => {
+      if (error?.length > 0) {
+        return error[0];
+      }
+      return error;
+    });
+}
+
 export const stockService = {
   user: userSubject.asObservable(),
   get userValue() {
@@ -263,4 +280,5 @@ export const stockService = {
   stockDetailGraph,
   getPriceAlertStocks,
   getExtraStockDetails,
+  getStockRatios,
 };

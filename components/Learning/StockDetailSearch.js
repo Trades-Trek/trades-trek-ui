@@ -13,11 +13,82 @@ import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import moment from "moment";
 
+const PerformanceMetrics = ({ ratioData }) => {
+  const timeframes = [
+    { label: '1 day', value: ratioData?.oneDay?.ratio },
+    { label: '5 days', value: ratioData?.fiveDays?.ratio },
+    { label: '1 month', value: ratioData?.oneMonth?.ratio },
+    { label: '6 months', value: ratioData?.sixMonths?.ratio  },
+    { label: 'Year to date', value: ratioData?.yearToDate?.ratio },
+    { label: '1 year', value: ratioData?.oneYear?.ratio },
+  ];
+
+  const formatValue = (value) => {
+    if (!value) return '0.00%';
+    const numericValue = parseFloat(value);
+    return `${numericValue.toFixed(2)}%`;
+  };
+
+  const getValueColor = (value) => {
+    if (!value) return 'text-gray-500';
+    const numericValue = parseFloat(value);
+    return numericValue >= 0 ? 'text-emerald-500' : 'text-red-500';
+  };
+
+  if (!ratioData) {
+    return (
+      <div className="flex justify-center items-center h-24 bg-gray-50 rounded-lg">
+        <p className="text-gray-500">Select a stock to view performance metrics</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-wrap gap-4 p-4 bg-white rounded-lg shadow-sm">
+      {timeframes.map((timeframe, index) => (
+        <div
+          key={timeframe.label}
+          className={`flex flex-col items-center p-3 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors
+            ${index === 0 ? 'bg-gray-100' : ''}`}
+        >
+          <div className="text-sm text-gray-600 mb-1">{timeframe.label}</div>
+          <div className={`text-lg font-semibold ${getValueColor(timeframe.value)}`}>
+            {formatValue(timeframe.value)}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const StockInfo = ({ stockAllData, setSelectedStock_StockDetailsTab }) => {
   const router = useRouter();
   const [value, setValue] = useState("");
   const [stockId, setStockId] = useState("");
   const [extraDetails, setExtraDetails] = useState([]);
+  const [ratioData, setRatioData] = useState(null)
+  const [isLoading, setIsLoading] = useState(false);
+
+
+  useEffect(() => {
+    if (!value) return;
+    setIsLoading(true);
+    stockService
+      .getStockRatios(value)
+      .then((res) => {
+        if (res.success) {
+          setRatioData(res.data);
+        } else {
+          setRatioData(null);
+        }
+      })
+      .catch(() => {
+        setRatioData(null);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [value]);
 
   useEffect(() => {
     setValue(router.query?.symbol);
@@ -92,6 +163,15 @@ const StockInfo = ({ stockAllData, setSelectedStock_StockDetailsTab }) => {
             )}
           />
         </div>
+
+        {isLoading ? (
+          <div className="flex justify-center items-center h-24">
+            <div className="animate-pulse text-gray-500">Loading metrics...</div>
+          </div>
+        ) : (
+          <PerformanceMetrics ratioData={ratioData} />
+        )}
+
         {selectedStockArray.length > 0 && (
           <div className="showMax">
             <div className="grid--2">
@@ -239,7 +319,7 @@ const StockInfo = ({ stockAllData, setSelectedStock_StockDetailsTab }) => {
                   </div>
                 </div>
               </div>
-            
+
             </div>
           </div>
         )}
@@ -258,13 +338,13 @@ const StockInfo = ({ stockAllData, setSelectedStock_StockDetailsTab }) => {
         )}
       </div>
       {extraDetails.length  > 0 && <ExtraDetailsTable data={extraDetails} />}
-      
+
     </div>
   );
 };
 
 const ExtraDetailsTable = ({ data }) => {
- 
+
   const extraDetails = data[0]?.extraDetails;
   const sector = data[0]?.sector;
 
@@ -359,7 +439,7 @@ const ExtraDetailsTable = ({ data }) => {
     {
       key: "FoundedDate",
       label: "Founded Date",
-      value: extraDetails?.FoundedDate ? moment(extraDetails?.FoundedDate).format("YYYY-MM-DD") : "-" 
+      value: extraDetails?.FoundedDate ? moment(extraDetails?.FoundedDate).format("YYYY-MM-DD") : "-"
     },
 
     {
