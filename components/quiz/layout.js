@@ -1,5 +1,5 @@
 import Sidebar from "../Sidebar/Sidebar";
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext } from "react";
 import { quizService } from "../../services/quiz.service";
 
 export const useQuizData = () => {
@@ -15,13 +15,12 @@ export const useQuizData = () => {
           quizService.getUserProgress(),
           quizService.getLearningModuleGroups(),
         ]);
-
-        setUserProgressData(userProgress.data);
-        setGroups(learningModuleGroups.data);
+        setUserProgressData(userProgress.data.data); // { _id, userId, ... }
+        setGroups(learningModuleGroups.data.data);
       } catch (err) {
         setError(err);
         // Handle error here, e.g., show a toast message
-        console.error('Error fetching quiz data:', err);
+        console.error("Error fetching quiz data:", err);
       } finally {
         setLoading(false);
       }
@@ -34,21 +33,21 @@ export const useQuizData = () => {
 };
 
 const Layout = ({ children }) => {
-    return (
-      <>
-        <Sidebar />
-        <div className="site--content pageCenterWidth">
-          <div className="page--title--block">
-            <div
-              className="page--title--block"
-              style={{ background: "white", padding: 20 }}
-            >
-              {children}
-            </div>
+  return (
+    <>
+      <Sidebar />
+      <div className="site--content pageCenterWidth">
+        <div className="page--title--block">
+          <div
+            className="page--title--block"
+            style={{ background: "white", padding: 20 }}
+          >
+            {children}
           </div>
         </div>
-      </>
-    );
-  };
-  
-  export default Layout;
+      </div>
+    </>
+  );
+};
+
+export default Layout;
