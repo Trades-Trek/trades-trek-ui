@@ -3,10 +3,10 @@ const nextConfig = {
   reactStrictMode: true,
   trailingSlash: true,
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: true
   },
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: true
   },
   images: {
     loader: 'imgix',
