@@ -10,13 +10,13 @@ const nextConfig = {
   },
   images: {
     loader: 'imgix',
-    path: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+    path: 'https://trades-trek-prod.vercel.app' || 'http://localhost:3000',
   },
   env: {
-    baseApiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
+    baseApiUrl: 'https://api.tradestrek.com' || 'http://localhost:5000',
   },
   publicRuntimeConfig: {
-    apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
+    apiUrl: 'https://api.tradestrek.com' || 'http://localhost:5000',
     secondaryUrl: process.env.NEXT_PUBLIC_SECONDARY_URL || '',
   },
 };
