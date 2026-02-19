@@ -10,7 +10,6 @@ import Button from "@mui/material/Button";
 import moment from "moment";
 import { stockService } from "../../services/stock.service";
 import { Loader } from "@mantine/core";
-import orderBy from "lodash/orderBy";
 import { sort } from "fast-sort";
 
 import {
