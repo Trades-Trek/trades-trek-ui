@@ -15,9 +15,8 @@ export const useQuizData = () => {
           quizService.getUserProgress(),
           quizService.getLearningModuleGroups(),
         ]);
-
-        setUserProgressData(userProgress.data.data); // { _id, userId, ... }
-        setGroups(learningModuleGroups.data.data);
+        setUserProgressData(userProgress.data);
+        setGroups(learningModuleGroups.data);
       } catch (err) {
         setError(err);
         // Handle error here, e.g., show a toast message

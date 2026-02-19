@@ -7,7 +7,6 @@ import { Loader } from "@mantine/core";
 export default function Quiz() {
   const router = useRouter();
   const { userProgressData, groups, loading, error } = useQuizData();
-
   return (
     <Layout>
       <div>
