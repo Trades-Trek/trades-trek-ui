@@ -8,28 +8,28 @@ export const useQuizData = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [userProgress, learningModuleGroups] = await Promise.all([
-          quizService.getUserProgress(),
-          quizService.getLearningModuleGroups(),
-        ]);
-        setUserProgressData(userProgress.data);
-        setGroups(learningModuleGroups.data);
-      } catch (err) {
-        setError(err);
-        // Handle error here, e.g., show a toast message
-        console.error("Error fetching quiz data:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const [userProgress, learningModuleGroups] = await Promise.all([
+        quizService.getUserProgress(),
+        quizService.getLearningModuleGroups(),
+      ]);
+      setUserProgressData(userProgress.data);
+      setGroups(learningModuleGroups.data);
+    } catch (err) {
+      setError(err);
+      // Handle error here, e.g., show a toast message
+      console.error("Error fetching quiz data:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
-  return { userProgressData, groups, loading, error };
+  return { userProgressData, groups, loading, error, refetchUserProgress: fetchData };
 };
 
 const Layout = ({ children }) => {

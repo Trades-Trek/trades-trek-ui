@@ -103,7 +103,7 @@ export default function Quiz() {
   const [modules, setGroupsModules] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [opened, { open, close }] = useDisclosure(false);
-  const { userProgressData, loading } = useQuizData();
+  const { userProgressData, loading, refetchUserProgress } = useQuizData();
 
   const router = useRouter();
   const { level } = router.query;
@@ -163,7 +163,7 @@ export default function Quiz() {
                 opened={opened}
                 close={close}
                 selectedModule={selectedModule}
-                level={level}
+                refetchUserProgress={refetchUserProgress}
               />
 
               <div style={{ width: "100%" }} className="p-8">
@@ -247,7 +247,7 @@ export default function Quiz() {
   );
 }
 
-const ModuleModal = ({ opened, close, selectedModule, level }) => {
+const ModuleModal = ({ opened, close, selectedModule, refetchUserProgress }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [loading, setIsLoading] = useState(false);
@@ -257,11 +257,33 @@ const ModuleModal = ({ opened, close, selectedModule, level }) => {
   const [responseMessage, setResponseMessage] = useState("");
   const [shouldRetry, setShouldRetry] = useState(false);
   const router = useRouter();
+  const { userProgressData } = useQuizData();
 
   const content = selectedModule?.content
     ? JSON.parse(selectedModule.content)
     : null;
   const questions = selectedModule?.questions || [];
+
+  // Detect if module is in review mode (already completed)
+  const isReviewMode = () => {
+    if (!userProgressData || !userProgressData.groupProgress) return false;
+    const groupProgress = userProgressData.groupProgress[selectedModule?.group];
+    if (!groupProgress) return false;
+    const module = groupProgress.modules?.find(
+      (m) => m.moduleId === selectedModule?._id || m.moduleId?._id === selectedModule?._id
+    );
+    return module?.completed === true;
+  };
+
+  const getReviewModeScore = () => {
+    if (!userProgressData || !userProgressData.groupProgress) return null;
+    const groupProgress = userProgressData.groupProgress[selectedModule?.group];
+    if (!groupProgress) return null;
+    const module = groupProgress.modules?.find(
+      (m) => m.moduleId === selectedModule?._id || m.moduleId?._id === selectedModule?._id
+    );
+    return module?.score ?? null;
+  };
 
   const handleAnswerSubmit = async () => {
     const currentQuestion = questions[currentQuestionIndex];
@@ -300,6 +322,11 @@ const ModuleModal = ({ opened, close, selectedModule, level }) => {
           }
           toast.success(message);
           setResponseMessage(message);
+          
+          // Refetch user progress to update the UI
+          if (refetchUserProgress) {
+            await refetchUserProgress();
+          }
         } catch (error) {
           setIsLoading(false);
         }
@@ -355,6 +382,8 @@ const ModuleModal = ({ opened, close, selectedModule, level }) => {
     close();
   };
 
+  const reviewModeScore = getReviewModeScore();
+
   return (
     <Modal
       opened={opened}
@@ -369,7 +398,33 @@ const ModuleModal = ({ opened, close, selectedModule, level }) => {
         hideProgressBar={false}
       />
 
-      {showContent && content ? (
+      {isReviewMode() ? (
+        // Review Mode - Show results only
+        <div className="result-section" style={{ textAlign: "center", padding: "2rem" }}>
+          <Typography variant="h4" gutterBottom style={{ marginBottom: "1rem" }}>
+            📋 Course Results
+          </Typography>
+          <Typography variant="h5" gutterBottom>
+            Course Completed! 🎉
+          </Typography>
+          <Typography variant="body1" color="textSecondary" gutterBottom style={{ marginTop: "1rem" }}>
+            Score: {reviewModeScore} / {questions.length} (
+            {questions.length > 0
+              ? Math.round((reviewModeScore / questions.length) * 100)
+              : 0}
+            %)
+          </Typography>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 32, maxWidth: 400, margin: "32px auto 0" }}>
+            <Button
+              style={{ background: "blue" }}
+              fullWidth
+              onClick={handleCloseModal}
+            >
+              Back to Courses
+            </Button>
+          </div>
+        </div>
+      ) : showContent && content ? (
         <div className="content-section mb-8">
           <Text size="lg" mb="md">
             {content.blocks.map((block, index) => (
